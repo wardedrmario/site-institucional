@@ -30,7 +30,7 @@ export default function Home() {
     <main className="flex-1 flex flex-col items-center w-full bg-[#fbfbfd]">
       
       {/* 1. HERO SECTION (Estilo Apple Keynote / Clean Store) */}
-      <section className="relative w-full min-h-[90vh] md:min-h-screen flex flex-col justify-center items-center pt-24 md:pt-32 pb-24 px-4 text-center overflow-hidden">
+      <section className="relative w-full min-h-[90vh] md:min-h-screen flex flex-col justify-center items-end pt-24 md:pt-32 pb-24 px-4 md:px-12 lg:px-24 text-right overflow-hidden">
 
         {/* Video Background */}
         <video 
@@ -38,24 +38,24 @@ export default function Home() {
           loop 
           muted 
           playsInline 
-          className="absolute inset-0 w-full h-full object-cover z-0 opacity-40 mix-blend-multiply"
+          className="absolute inset-0 w-full h-full object-cover z-0 opacity-80"
         >
           <source src="/videos/fundo-hero.mp4" type="video/mp4" />
         </video>
 
-        {/* Overlay para suavizar e garantir legibilidade */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#fbfbfd]/70 via-[#fbfbfd]/60 to-[#fbfbfd] z-0 pointer-events-none" />
+        {/* Overlay escuro ao invés de claro para garantir legibilidade do texto branco */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60 z-0 pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col items-center">
+        <div className="relative z-10 flex flex-col items-end w-full max-w-6xl mx-auto">
           {/* Apple-style Master Headline */}
-          <h1 className="text-[44px] sm:text-[64px] md:text-[80px] lg:text-[88px] font-bold tracking-[-0.035em] text-chumbo leading-[1.04] max-w-5xl animate-blur-in-up">
+          <h1 className="text-[44px] sm:text-[64px] md:text-[80px] lg:text-[88px] font-bold tracking-[-0.035em] text-white leading-[1.04] max-w-5xl animate-blur-in-up drop-shadow-md">
             Sua melhor versão. <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-wine via-burgundy to-taupe">
+            <span>
               Aperfeiçoada com arte e rigor.
             </span>
           </h1>
 
-          <p className="mt-6 md:mt-8 text-base md:text-[21px] text-chumbo-light max-w-2xl font-medium leading-relaxed tracking-tight animate-blur-in-up [animation-delay:200ms]">
+          <p className="mt-6 md:mt-8 text-base md:text-[21px] text-white/90 max-w-2xl font-medium leading-relaxed tracking-tight animate-blur-in-up [animation-delay:200ms] drop-shadow">
           A união entre tecnologias médicas de ponta, segurança hospitalar absoluta e a busca por resultados naturais e harmônicos.
         </p>
 
