@@ -27,3 +27,8 @@
   - No provedor onde o domínio foi comprado, alterar a Zona DNS adicionando:
     - Um registro tipo **A** com o valor `76.76.21.21` (para o domínio raiz).
     - Um registro tipo **CNAME** com o nome `www` apontando para `cname.vercel-dns.com`.
+
+**5. Confirmação do Deploy e Próximos Passos**
+- O deploy inicial na Vercel foi concluído com sucesso. O site já está acessível e funcional no link gerado: `https://site-7ny4.vercel.app/`.
+- Verificamos que o projeto está online com o Meta Pixel injetado corretamente.
+- Próximos passos planejados: Pequenos ajustes de textos que serão solicitados futuramente. Graças à integração CI/CD (GitHub ⇄ Vercel), qualquer alteração aprovada subirá automaticamente para o ar.
