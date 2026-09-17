@@ -3,6 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { GoogleTagManager } from '@next/third-parties/google';
 
 export const metadata: Metadata = {
   title: "Dr. Mário Warde | Cirurgia Plástica de Alta Precisão",
@@ -19,6 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className="scroll-smooth">
+      <GoogleTagManager gtmId="GTM-5T7DBGTG" />
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
