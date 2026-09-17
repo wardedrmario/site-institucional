@@ -38,3 +38,8 @@
 - **Google Analytics 4 (GA4):** Criamos a propriedade (`G-GB9N9TCV10`) e a conectamos dentro do GTM através da tag `GA4 - Base` (acionador All Pages).
 - **Governança de Dados:** Para manter a velocidade do projeto, as contas do Google foram criadas no novo e-mail da equipe técnica (garantindo autonomia imediata). O passo seguinte acordado é adicionar o e-mail oficial da clínica (dono do perfil do Google Meu Negócio) como Administrador no GTM e GA4, garantindo que o Dr. Mário mantenha a propriedade vitalícia dos seus dados.
 - Todo o código foi "commitado" e subiu automaticamente via CI/CD para a Vercel.
+
+**7. O "Detox" da Conta e a Planilha VIP (Próximo Passo Estratégico)**
+- **Detox do Gerenciador:** Antes de iniciar as campanhas novas, ficou mapeada a necessidade de expurgar o erro de "Políticas de Saúde" gerado pelo plugin antigo (`Click to Chat by HoliThemes`) usado pela agência anterior, além de revogar seus acessos.
+- **Injeção de Inteligência (Planilha VIP):** A clínica possui um banco de dados ultra-qualificado (pacientes que operaram, com e-mail, endereço/CEP e **valores pagos**). 
+- **Ação Técnica Mapeada:** Faremos o upload criptografado (SHA-256) dessa lista no Meta Ads via *Conversões Offline* atrelando o **Valor de Compra (LTV)**. Isso servirá como a "semente inicial" para treinar a Inteligência Artificial do Meta, forçando o algoritmo a ignorar curiosos e buscar o DNA e o poder aquisitivo exato dos pacientes pagantes.
