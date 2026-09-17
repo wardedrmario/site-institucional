@@ -32,3 +32,9 @@
 - O deploy inicial na Vercel foi concluído com sucesso. O site já está acessível e funcional no link gerado: `https://site-7ny4.vercel.app/`.
 - Verificamos que o projeto está online com o Meta Pixel injetado corretamente.
 - Próximos passos planejados: Pequenos ajustes de textos que serão solicitados futuramente. Graças à integração CI/CD (GitHub ⇄ Vercel), qualquer alteração aprovada subirá automaticamente para o ar.
+
+**6. Implementação de Tracking Avançado (GTM & GA4)**
+- **Google Tag Manager (GTM):** Criamos a conta e o contêiner web (`GTM-5T7DBGTG`). Injetamos o GTM nativamente no Next.js usando o pacote oficial `@next/third-parties` no arquivo `layout.tsx`, preservando a alta performance do site.
+- **Google Analytics 4 (GA4):** Criamos a propriedade (`G-GB9N9TCV10`) e a conectamos dentro do GTM através da tag `GA4 - Base` (acionador All Pages).
+- **Governança de Dados:** Para manter a velocidade do projeto, as contas do Google foram criadas no novo e-mail da equipe técnica (garantindo autonomia imediata). O passo seguinte acordado é adicionar o e-mail oficial da clínica (dono do perfil do Google Meu Negócio) como Administrador no GTM e GA4, garantindo que o Dr. Mário mantenha a propriedade vitalícia dos seus dados.
+- Todo o código foi "commitado" e subiu automaticamente via CI/CD para a Vercel.
