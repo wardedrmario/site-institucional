@@ -4,11 +4,12 @@ import { useState } from 'react';
 
 type Step = 1 | 2 | 3;
 
-export function LeadForm() {
+export function LeadForm({ onClose }: { onClose?: () => void }) {
   const [step, setStep] = useState<Step>(1);
   const [formData, setFormData] = useState({
     procedure: '',
     timeframe: '',
+    timeframeDetails: '',
     name: '',
     phone: '',
     email: '',
@@ -19,6 +20,11 @@ export function LeadForm() {
   const handleNext = (e: React.MouseEvent) => {
     e.preventDefault();
     setStep((prev) => (prev + 1) as Step);
+  };
+
+  const handlePrev = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setStep((prev) => Math.max(1, prev - 1) as Step);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,9 +39,13 @@ export function LeadForm() {
         body: JSON.stringify(formData)
       }).catch(() => null);
       
-      const whatsappNumber = "5511999999999"; 
+      const whatsappNumber = "5511966496116"; 
+      const timeframeText = formData.timeframe === 'Outro, vou te explicar' 
+        ? `Outro (${formData.timeframeDetails})` 
+        : formData.timeframe;
+
       const text = encodeURIComponent(
-        `Olá! Meu nome é ${formData.name}. Gostaria de iniciar meu planejamento cirúrgico com o Dr. Mário Warde para ${formData.procedure} (Previsão: ${formData.timeframe}).`
+        `Olá! Meu nome é ${formData.name}. Gostaria de iniciar meu planejamento cirúrgico com o Dr. Mário Warde para ${formData.procedure} (Previsão: ${timeframeText}).`
       );
       window.location.href = `https://wa.me/${whatsappNumber}?text=${text}`;
     } catch (error) {
@@ -46,13 +56,54 @@ export function LeadForm() {
   };
 
   return (
-    <div className="bg-white/70 backdrop-blur-2xl border border-black/[0.06] p-8 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.04)] rounded-[32px] w-full max-w-2xl mx-auto transition-all">
+    <div className="bg-white/70 backdrop-blur-2xl border border-black/[0.06] p-8 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.04)] rounded-[32px] w-full max-w-2xl mr-auto transition-all">
       
-      {/* Progress Dots */}
-      <div className="flex justify-center items-center gap-2 mb-6">
-        <span className={`h-1.5 rounded-full transition-all duration-300 ${step === 1 ? 'w-8 bg-wine' : 'w-2 bg-black/15'}`} />
-        <span className={`h-1.5 rounded-full transition-all duration-300 ${step === 2 ? 'w-8 bg-wine' : 'w-2 bg-black/15'}`} />
-        <span className={`h-1.5 rounded-full transition-all duration-300 ${step === 3 ? 'w-8 bg-wine' : 'w-2 bg-black/15'}`} />
+      {/* Top Header: Close Button, Progress Dots, Navigation Arrows */}
+      <div className="flex justify-between items-center mb-6">
+        {/* Left: Close (X) */}
+        <button 
+          type="button" 
+          onClick={onClose} 
+          className="p-2 -ml-2 text-chumbo-light hover:text-chumbo transition-colors" 
+          aria-label="Fechar formulário"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        {/* Center: Progress Dots */}
+        <div className="flex items-center gap-2">
+          <span className={`h-1.5 rounded-full transition-all duration-300 ${step === 1 ? 'w-8 bg-wine' : 'w-2 bg-black/15'}`} />
+          <span className={`h-1.5 rounded-full transition-all duration-300 ${step === 2 ? 'w-8 bg-wine' : 'w-2 bg-black/15'}`} />
+          <span className={`h-1.5 rounded-full transition-all duration-300 ${step === 3 ? 'w-8 bg-wine' : 'w-2 bg-black/15'}`} />
+        </div>
+
+        {/* Right: Arrows */}
+        <div className="flex items-center gap-1 -mr-2">
+          <button 
+            type="button" 
+            onClick={handlePrev}
+            disabled={step === 1}
+            className={`p-2 transition-colors ${step === 1 ? 'text-black/10 cursor-not-allowed' : 'text-chumbo-light hover:text-chumbo cursor-pointer'}`}
+            aria-label="Voltar"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button 
+            type="button" 
+            onClick={handleNext}
+            disabled={step === 3}
+            className={`p-2 transition-colors ${step === 3 ? 'text-black/10 cursor-not-allowed' : 'text-chumbo-light hover:text-chumbo cursor-pointer'}`}
+            aria-label="Avançar"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
       </div>
 
       <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-center text-chumbo mb-2">
@@ -62,8 +113,8 @@ export function LeadForm() {
       </h3>
       <p className="text-xs md:text-sm text-chumbo-light text-center mb-8 font-normal">
         {step === 1 && 'Selecione a área de foco para atendimento personalizado'}
-        {step === 2 && 'Isso nos ajuda a calibrar a disponibilidade de agenda cirúrgica'}
-        {step === 3 && 'Converse diretamente com a equipe de atendimento VIP do Dr. Mário'}
+        {step === 2 && 'Isso me ajuda a calibrar a disponibilidade de agenda cirúrgica'}
+        {step === 3 && 'Converse diretamente com minha equipe de atendimento VIP'}
       </p>
       
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -106,14 +157,16 @@ export function LeadForm() {
               'O mais breve possível (próximos 30-60 dias)',
               'Nos próximos 3 a 6 meses',
               'Planejando para o próximo semestre',
-              'Atendimento (Fora de SP / Exterior)'
+              'Outro, vou te explicar'
             ].map((time) => (
               <button
                 key={time}
                 type="button"
                 onClick={(e) => {
                   setFormData({ ...formData, timeframe: time });
-                  handleNext(e);
+                  if (time !== 'Outro, vou te explicar') {
+                    handleNext(e);
+                  }
                 }}
                 className={`w-full text-left px-6 py-4 rounded-2xl transition-all duration-200 text-sm font-medium border ${
                   formData.timeframe === time 
@@ -124,6 +177,26 @@ export function LeadForm() {
                 {time}
               </button>
             ))}
+
+            {formData.timeframe === 'Outro, vou te explicar' && (
+              <div className="animate-blur-in-up mt-4 space-y-3">
+                <textarea
+                  maxLength={200}
+                  placeholder="Explique brevemente (máx 200 caracteres)..."
+                  className="w-full px-5 py-3.5 bg-[#f5f5f7] border border-black/[0.06] rounded-xl focus:outline-none focus:ring-2 focus:ring-wine focus:bg-white transition-all text-sm text-chumbo placeholder:text-chumbo-light/60 resize-none h-24"
+                  value={formData.timeframeDetails}
+                  onChange={(e) => setFormData({...formData, timeframeDetails: e.target.value})}
+                />
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  disabled={!formData.timeframeDetails || formData.timeframeDetails.trim().length === 0}
+                  className="w-full bg-wine hover:bg-black text-white font-medium text-sm px-6 py-4 rounded-xl transition-all duration-300 shadow-md disabled:opacity-50"
+                >
+                  Continuar
+                </button>
+              </div>
+            )}
           </div>
         )}
 
