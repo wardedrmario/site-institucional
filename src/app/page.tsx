@@ -13,8 +13,8 @@ export default function Home() {
 
   const faqs = [
     {
-      q: "COMO FUNCIONA A CONSULTA DE AVALIAÇÃO?",
-      a: "A consulta de avaliação é um momento essencial para que eu possa entender suas queixas, expectativas e características individuais. Durante esse encontro, realizo uma análise detalhada da face ou do corpo, avaliando aspectos como flacidez, excesso de pele, gordura localizada e estrutura anatômica para indicar o procedimento mais adequado, como lipoaspiração, Lipo HD, abdominoplastia ou Deep Plane Facelift. Além disso, é nessa etapa que você poderá tirar todas as suas dúvidas com total transparência. Construo o plano cirúrgico de forma personalizada, com foco em segurança, naturalidade e resultado estético de alto padrão, sempre respeitando seus limites e objetivos."
+      q: "COMO FUNCIONA A PRIMEIRA CONSULTA?",
+      a: "A primeira consulta é um momento essencial para que eu possa entender suas queixas, expectativas e características individuais. Durante esse encontro, realizo uma análise detalhada da face ou do corpo, avaliando aspectos como flacidez, excesso de pele, gordura localizada e estrutura anatômica para indicar o procedimento mais adequado, como lipoaspiração, Lipo HD, abdominoplastia ou Deep Plane Facelift. Além disso, é nessa etapa que você poderá tirar todas as suas dúvidas com total transparência. Construo o plano cirúrgico de forma personalizada, com foco em segurança, naturalidade e resultado estético de alto padrão, sempre respeitando seus limites e objetivos."
     },
     {
       q: "QUAIS PROCEDIMENTOS PODEM SER REALIZADOS?",
