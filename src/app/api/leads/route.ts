@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { neon } from '@neondatabase/serverless';
 
 // Função para formatar e criptografar dados para a Meta (CAPI)
 function hashDataForMeta(value: string): string {
@@ -24,37 +25,46 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { name, phone, email, city, procedure, timeframe, utms } = body;
 
-    // 1. Prepara os dados puros para o NOSSO Banco de Dados (D1/CRM)
+    const leadId = crypto.randomUUID();
+    const utmsJson = JSON.stringify(utms || {});
+
+    // 1. Prepara os dados puros para o NOSSO Banco de Dados (CRM)
     const rawLead = {
-      id: crypto.randomUUID(),
+      id: leadId,
       name,
       phone,
       email,
       city,
       procedure,
       timeframe,
-      utms: JSON.stringify(utms || {}),
+      utms: utmsJson,
       created_at: new Date().toISOString()
     };
 
-    // 2. Prepara os dados CRIPTOGRAFADOS (SHA-256) para a Meta (API de Conversões)
+    // 2. Insere no Banco de Dados Neon (se configurado)
+    if (process.env.DATABASE_URL) {
+      const sql = neon(process.env.DATABASE_URL);
+      await sql`
+        INSERT INTO leads (id, name, phone, email, city, procedure, timeframe, utms)
+        VALUES (${leadId}, ${name}, ${phone}, ${email || ''}, ${city || ''}, ${procedure || ''}, ${timeframe || ''}, ${utmsJson})
+      `;
+    }
+
+    // 3. Prepara os dados CRIPTOGRAFADOS (SHA-256) para a Meta (API de Conversões)
     const metaPayload = {
-      em: hashDataForMeta(email), // Email Hasheado
-      ph: hashDataForMeta(cleanPhoneForMeta(phone)), // Telefone Hasheado
-      fn: hashDataForMeta(name.split(' ')[0]), // Primeiro nome Hasheado
-      ct: hashDataForMeta(city), // Cidade Hasheada
+      em: hashDataForMeta(email),
+      ph: hashDataForMeta(cleanPhoneForMeta(phone)),
+      fn: hashDataForMeta(name.split(' ')[0]),
+      ct: hashDataForMeta(city),
     };
 
     // LOG PARA DEBUG (Vercel)
-    console.log('✅ [NOVO LEAD CAPTURADO]', rawLead);
+    console.log('✅ [NOVO LEAD SALVO]', rawLead);
     console.log('🔒 [DADOS SEGUROS PARA META]', metaPayload);
-
-    // TODO: Disparar inserção HTTP no Cloudflare D1
-    // const d1Response = await fetch('https://api.cloudflare.com/client/v4/accounts/.../d1/database/.../query', { ... })
 
     return NextResponse.json({ 
       success: true, 
-      message: 'Lead registrado e criptografado com sucesso' 
+      message: 'Lead registrado e salvo no banco de dados com sucesso' 
     }, { status: 201 });
 
   } catch (error) {
