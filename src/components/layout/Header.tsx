@@ -7,6 +7,7 @@ import { useState, useRef, useEffect } from 'react';
 export function Header() {
   const pathname = usePathname();
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
@@ -100,6 +101,25 @@ export function Header() {
               )}
             </button>
 
+            {/* Mobile Hamburger Button */}
+            <button 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="w-8 h-8 flex md:hidden items-center justify-center rounded-full bg-wine/5 hover:bg-wine/10 text-wine transition-colors"
+              aria-label="Menu"
+            >
+              {isMobileMenuOpen ? (
+                // Close Icon
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                // Menu Icon
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
+
             {/* Relógio em tempo real - Movido para a direita */}
             {formattedTime && (
               <div className="hidden lg:flex items-center justify-center min-w-[140px] text-[11px] font-medium text-chumbo-light/60 uppercase tracking-widest whitespace-nowrap">
@@ -113,6 +133,26 @@ export function Header() {
 
         </div>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden absolute top-[77px] left-0 w-full bg-white border-b border-black/5 shadow-xl animate-in slide-in-from-top-2">
+          <nav className="flex flex-col px-6 py-6 space-y-6 text-[15px] font-medium text-wine/80">
+            <Link href="#procedimentos" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-wine transition-colors">
+              Procedimentos
+            </Link>
+            <Link href="#metodo" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-wine transition-colors">
+              Na mídia
+            </Link>
+            <Link href="#blog" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-wine transition-colors">
+              Blog
+            </Link>
+            <Link href="#faq" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-wine transition-colors">
+              Dúvidas
+            </Link>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
