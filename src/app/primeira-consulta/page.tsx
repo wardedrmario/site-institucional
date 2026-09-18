@@ -33,29 +33,7 @@ function UTMTracker() {
 }
 
 export default function PrimeiraConsultaLP() {
-  // Handler para o WhatsApp
-  const handleWhatsAppClick = () => {
-    let utmData = '';
-    try {
-      const saved = localStorage.getItem('__mw_utms');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed.camp_id || parsed.utm_campaign) {
-          utmData = `\n\n[Ref: ${parsed.camp_id || parsed.utm_campaign}]`;
-        }
-      }
-    } catch (e) {
-      // ignore
-    }
-
-    const savedUtms = JSON.parse(localStorage.getItem('__mw_utms') || localStorage.getItem('lead_utms') || '{}');
-    const campaignName = savedUtms.utm_campaign || savedUtms.camp_id || 'Orgânico';
-
-    const message = `Olá! Gostaria de agendar minha Primeira Consulta com o Dr. Mário Warde. (Origem: ${campaignName})${utmData}`;
-    const whatsappUrl = `https://wa.me/5511966496116?text=${encodeURIComponent(message)}`;
-    
-    window.open(whatsappUrl, '_blank');
-  };
+  const [showLeadForm, setShowLeadForm] = useState(false);
 
   return (
     <main className="flex flex-col items-center w-full bg-[#fbfbfd]">
@@ -79,12 +57,20 @@ export default function PrimeiraConsultaLP() {
             Um atendimento fundamentado na ética, no rigor técnico e na dignidade do paciente. Planeje a sua transformação com quem tem mais de 30 anos de medicina de excelência.
           </p>
 
-          <button 
-            onClick={handleWhatsAppClick}
-            className="bg-[#ccb9b6] hover:bg-[#b8a6a3] text-[#310f0e] text-lg font-bold px-10 py-4 rounded-full transition-all duration-300 shadow-xl hover:scale-105 animate-blur-in-up [animation-delay:300ms]"
-          >
-            Agendar Primeira Consulta
-          </button>
+          {!showLeadForm && (
+            <button 
+              onClick={() => setShowLeadForm(true)}
+              className="bg-[#ccb9b6] hover:bg-[#b8a6a3] text-[#310f0e] text-lg font-bold px-10 py-4 rounded-full transition-all duration-300 shadow-xl hover:scale-105 animate-blur-in-up [animation-delay:300ms]"
+            >
+              Agendar Primeira Consulta
+            </button>
+          )}
+
+          {showLeadForm && (
+            <div id="triagem" className="w-full max-w-2xl mt-8 animate-blur-in-up text-left">
+              <LeadForm onClose={() => setShowLeadForm(false)} />
+            </div>
+          )}
         </div>
       </section>
 
@@ -178,7 +164,12 @@ export default function PrimeiraConsultaLP() {
           Fale com a nossa equipe de atendimento para alinhar expectativas e reservar o seu horário para a Primeira Consulta.
         </p>
         <button 
-          onClick={handleWhatsAppClick}
+          onClick={() => {
+            setShowLeadForm(true);
+            setTimeout(() => {
+              document.getElementById('triagem')?.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+          }}
           className="bg-white text-[#310f0e] hover:bg-[#ccb9b6] text-lg font-bold px-12 py-4 rounded-full transition-all duration-300 shadow-xl"
         >
           Falar com Atendimento

@@ -44,8 +44,21 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
         ? `Outro (${formData.timeframeDetails})` 
         : formData.timeframe;
 
+      let utmData = '';
+      try {
+        const saved = localStorage.getItem('__mw_utms');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.camp_id || parsed.utm_campaign) {
+            utmData = `\n\n[Ref: ${parsed.camp_id || parsed.utm_campaign}]`;
+          }
+        }
+      } catch (e) {
+        // ignore
+      }
+
       const text = encodeURIComponent(
-        `Olá! Meu nome é ${formData.name}. Gostaria de iniciar meu planejamento cirúrgico com o Dr. Mário Warde para ${formData.procedure} (Previsão: ${timeframeText}).`
+        `Olá! Meu nome é ${formData.name}. Gostaria de iniciar meu planejamento cirúrgico com o Dr. Mário Warde para ${formData.procedure} (Previsão: ${timeframeText}).${utmData}`
       );
       window.location.href = `https://wa.me/${whatsappNumber}?text=${text}`;
     } catch (error) {
