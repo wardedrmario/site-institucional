@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { AppleProcedures } from "@/components/ui/AppleProcedures";
 
-export default function PrimeiraConsultaLP() {
+// 🧲 COMPONENTE INVISÍVEL PARA RASTREAMENTO (CAPI PREPARATION)
+function UTMTracker() {
   const searchParams = useSearchParams();
 
-  // 🧲 RASTREAMENTO INVISÍVEL (CAPI PREPARATION)
   useEffect(() => {
     if (searchParams) {
       const utms = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'camp_id', 'adset_id', 'ad_id'];
@@ -23,17 +23,35 @@ export default function PrimeiraConsultaLP() {
       });
 
       if (hasNewUtms) {
-        localStorage.setItem('lead_utms', JSON.stringify(currentUTMs));
+        currentUTMs.timestamp = new Date().toISOString();
+        localStorage.setItem('__mw_utms', JSON.stringify(currentUTMs));
       }
     }
   }, [searchParams]);
 
+  return null;
+}
+
+export default function PrimeiraConsultaLP() {
   // Handler para o WhatsApp
   const handleWhatsAppClick = () => {
-    const savedUtms = JSON.parse(localStorage.getItem('lead_utms') || '{}');
-    const campaignName = savedUtms.utm_campaign || 'Orgânico';
-    
-    const message = `Olá! Gostaria de agendar minha Primeira Consulta com o Dr. Mário Warde. (Origem: ${campaignName})`;
+    let utmData = '';
+    try {
+      const saved = localStorage.getItem('__mw_utms');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.camp_id || parsed.utm_campaign) {
+          utmData = `\n\n[Ref: ${parsed.camp_id || parsed.utm_campaign}]`;
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+
+    const savedUtms = JSON.parse(localStorage.getItem('__mw_utms') || localStorage.getItem('lead_utms') || '{}');
+    const campaignName = savedUtms.utm_campaign || savedUtms.camp_id || 'Orgânico';
+
+    const message = `Olá! Gostaria de agendar minha Primeira Consulta com o Dr. Mário Warde. (Origem: ${campaignName})${utmData}`;
     const whatsappUrl = `https://wa.me/5511966496116?text=${encodeURIComponent(message)}`;
     
     window.open(whatsappUrl, '_blank');
@@ -41,6 +59,9 @@ export default function PrimeiraConsultaLP() {
 
   return (
     <main className="flex flex-col items-center w-full bg-[#fbfbfd]">
+      <Suspense fallback={null}>
+        <UTMTracker />
+      </Suspense>
       
       {/* 1. HERO SECTION (Foco Total) */}
       <section className="relative w-full min-h-[90vh] flex flex-col justify-center items-center py-20 text-center overflow-hidden bg-black">
