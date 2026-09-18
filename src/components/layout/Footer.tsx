@@ -1,6 +1,15 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export function Footer() {
+  const pathname = usePathname();
+
+  if (pathname === '/primeira-consulta') {
+    return null;
+  }
+
   return (
     <footer className="bg-[#1d1d1f] text-white/80 pt-20 pb-16 border-t border-black/10">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

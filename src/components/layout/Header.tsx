@@ -1,15 +1,18 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
 
 export function Header() {
+  const pathname = usePathname();
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentTime(new Date());
     const interval = setInterval(() => {
       setCurrentTime(new Date());
@@ -37,6 +40,10 @@ export function Header() {
         minute: '2-digit'
       }).format(currentTime).replace('.,', ',') // Remove extra dots in some browsers
     : '';
+
+  if (pathname === '/primeira-consulta') {
+    return null;
+  }
 
   return (
     <header className="w-full bg-white/95 backdrop-blur-md sticky top-0 z-50 border-b border-black/5 transition-all">
