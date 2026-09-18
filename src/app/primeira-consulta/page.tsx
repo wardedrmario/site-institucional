@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { AppleProcedures } from "@/components/ui/AppleProcedures";
+import { LeadForm } from "@/components/ui/LeadForm";
 
 // 🧲 COMPONENTE INVISÍVEL PARA RASTREAMENTO (CAPI PREPARATION)
 function UTMTracker() {
