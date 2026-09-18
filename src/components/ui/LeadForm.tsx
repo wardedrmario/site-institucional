@@ -45,16 +45,34 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
         : formData.timeframe;
 
       let utmData = '';
+      let utmObject = {};
       try {
         const saved = localStorage.getItem('__mw_utms');
         if (saved) {
           const parsed = JSON.parse(saved);
+          utmObject = parsed;
           if (parsed.camp_id || parsed.utm_campaign) {
             utmData = `\n\n[Ref: ${parsed.camp_id || parsed.utm_campaign}]`;
           }
         }
       } catch (e) {
         // ignore
+      }
+
+      // 🧲 ENVIA OS DADOS PARA O NOSSO CRM INVISÍVEL (API)
+      try {
+        await fetch('/api/leads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...formData,
+            timeframe: timeframeText,
+            utms: utmObject
+          })
+        });
+      } catch (apiError) {
+        console.error('Erro ao salvar no CRM:', apiError);
+        // Falha no banco não deve impedir o paciente de ir pro WhatsApp
       }
 
       const text = encodeURIComponent(
