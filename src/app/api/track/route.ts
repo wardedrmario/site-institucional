@@ -16,7 +16,7 @@ function normalizePhone(phone: string): string {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { procedure, timeframe, name, phone, email } = body;
+    const { procedure, timeframe, name, phone, email, testCode } = body;
 
     const normalizedPhone = normalizePhone(phone);
     const hashedEmail = hashData(email);
@@ -27,54 +27,48 @@ export async function POST(request: Request) {
     const clientIp = request.headers.get('x-forwarded-for') || '0.0.0.0';
     const userAgent = request.headers.get('user-agent') || '';
 
-    const makeWebhookUrl = process.env.MAKE_WEBHOOK_URL;
-    if (makeWebhookUrl) {
-      fetch(makeWebhookUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          eventId, timestamp: new Date().toISOString(), procedure, timeframe, name, phone: normalizedPhone, email, source: 'Website Lead Form'
-        })
-      }).catch(err => console.error("Make Webhook Error:", err));
-    }
-
-    // Usando fallback para caso a variável esteja com nome diferente no Vercel
-    const metaPixelId = process.env.META_PIXEL_ID || "4376073622648258"; // ID corrigido da imagem
+    const metaPixelId = process.env.META_PIXEL_ID || "4376073622648258";
     const metaAccessToken = process.env.META_ACCESS_TOKEN || process.env.META_CAPI_TOKEN;
 
     if (metaPixelId && metaAccessToken) {
-      const metaPayload = {
-        data: [
-          {
-            event_name: 'Lead',
-            event_time: eventTime,
-            action_source: 'website',
-            event_id: eventId,
-            user_data: {
-              em: [hashedEmail],
-              ph: [hashedPhone],
-              client_ip_address: clientIp,
-              client_user_agent: userAgent,
-            },
-            custom_data: {
-              procedure: procedure,
-              timeframe: timeframe
-            }
-          }
-        ]
+      const eventData: any = {
+        event_name: 'Lead',
+        event_time: eventTime,
+        action_source: 'website',
+        event_id: eventId,
+        user_data: {
+          em: [hashedEmail],
+          ph: [hashedPhone],
+          client_ip_address: clientIp,
+          client_user_agent: userAgent,
+        },
+        custom_data: {
+          procedure: procedure,
+          timeframe: timeframe
+        }
       };
 
+      // Injeção do código de teste para depuração no painel do Meta
+      if (testCode) {
+        eventData.test_event_code = testCode;
+      }
+
+      const metaPayload = { data: [eventData] };
       const metaUrl = `https://graph.facebook.com/v19.0/${metaPixelId}/events?access_token=${metaAccessToken}`;
       
-      fetch(metaUrl, {
+      const metaResponse = await fetch(metaUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(metaPayload)
-      }).catch(err => console.error("Meta CAPI Error:", err));
+      });
+      
+      const metaResult = await metaResponse.json();
+      console.log("Meta API Response:", metaResult);
     }
 
     return NextResponse.json({ success: true, eventId, message: 'Lead recebido.' });
   } catch (error) {
+    console.error(error);
     return NextResponse.json({ success: false, error: 'Internal Server Error' }, { status: 500 });
   }
 }
