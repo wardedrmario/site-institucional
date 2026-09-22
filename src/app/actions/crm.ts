@@ -23,7 +23,7 @@ interface LeadData {
   email?: string;
   city?: string;
   procedure?: string;
-  [key: string]: unknown;
+  // [key: string]: unknown;
 }
 
 export async function updateLeadStatus(leadId: string, newStatus: string, leadData: LeadData) {

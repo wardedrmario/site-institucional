@@ -106,7 +106,7 @@ export default async function AdminPage({
                       <td colSpan={6} className="p-12 text-center text-[#86868b]">Nenhum registro.</td>
                     </tr>
                   ) : (
-                    leads.map((lead: any) => {
+                    leads.map((lead: unknown) => {
                       const data = new Date(lead.created_at).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' });
                       
                       let utmCampaign = 'Orgânico';
