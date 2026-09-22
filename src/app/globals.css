@@ -10,17 +10,54 @@
   --color-taupe: #9b827d;
   --color-nude: #ccb9b6;
 
+  /* Dynamic System Colors */
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-header: var(--bg-header);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-accent: var(--text-accent);
+  --color-border-subtle: var(--border-subtle);
+
   --font-sans: 'Montserrat', -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
   --font-serif: 'Libre Baskerville', 'Baskerville', Georgia, serif;
 }
 
+:root {
+  /* Light Mode (Default) */
+  --bg-primary: #fbfbfd;
+  --bg-secondary: #ffffff;
+  --bg-header: rgba(255, 255, 255, 0.75);
+  --text-primary: #1d1d1f;
+  --text-secondary: #86868b;
+  --text-accent: #310f0e;
+  --border-subtle: rgba(0, 0, 0, 0.05);
+}
+
+.dark {
+  /* Dark Mode */
+  --bg-primary: #121212;
+  --bg-secondary: #1d1d1f;
+  --bg-header: rgba(18, 18, 18, 0.75);
+  --text-primary: #fbfbfd;
+  --text-secondary: #a1a1a6;
+  --text-accent: #ccb9b6;
+  --border-subtle: rgba(255, 255, 255, 0.1);
+}
+
 body {
-  background-color: var(--color-gelo);
-  color: var(--color-chumbo);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Logos toggle */
+.logo-light { display: block; }
+.logo-dark { display: none; }
+.dark .logo-light { display: none; }
+.dark .logo-dark { display: block; }
 
 /* Apple-style smooth animations */
 @keyframes blur-in-up {

@@ -3,7 +3,8 @@ import Script from "next/script";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { GoogleTagManager } from '@next/third-parties/google';
+import { ThemeProvider } from "@/components/ThemeProvider";
+
 
 export const metadata: Metadata = {
   title: "Dr. Mário Warde | Cirurgia Plástica de Alta Precisão",
@@ -19,9 +20,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className="scroll-smooth">
-      <GoogleTagManager gtmId="GTM-5T7DBGTG" />
+    <html lang="pt-BR" className="scroll-smooth" suppressHydrationWarning>
       <head>
+        <Script id="gtm-server-side" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: `
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://clinica.drmariowarde.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','GTM-VTTJIR7');
+        `}} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link 
@@ -29,33 +36,20 @@ export default function RootLayout({
           rel="stylesheet" 
         />
       </head>
-      <body className="font-sans antialiased text-[#1d1d1f] bg-[#fbfbfd] min-h-screen flex flex-col selection:bg-burgundy/15 selection:text-wine">
-        <Script id="meta-pixel" strategy="afterInteractive">
-          {`
-            !function(f,b,e,v,n,t,s)
-            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)}(window, document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '4376073622648258');
-            fbq('track', 'PageView');
-          `}
-        </Script>
+      <body className="font-sans antialiased text-text-primary bg-bg-primary min-h-screen flex flex-col selection:bg-burgundy/15 selection:text-text-primary">
         <noscript>
-          <img
-            height="1"
-            width="1"
-            style={{ display: "none" }}
-            src="https://www.facebook.com/tr?id=4376073622648258&ev=PageView&noscript=1"
-            alt=""
+          <iframe
+            src="https://clinica.drmariowarde.com/ns.html?id=GTM-VTTJIR7"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
-        <Header />
-        {children}
-        <Footer />
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Header />
+          {children}
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

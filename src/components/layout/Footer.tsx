@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 export function Footer() {
   const pathname = usePathname();
 
-  if (pathname === '/primeira-consulta') {
+  if (pathname === '/primeira-consulta' || pathname.startsWith('/admin')) {
     return null;
   }
 

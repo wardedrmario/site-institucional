@@ -55,7 +55,7 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
             utmData = `\n\n[Ref: ${parsed.camp_id || parsed.utm_campaign}]`;
           }
         }
-      } catch (e) {
+      } catch {
         // ignore
       }
 

@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
-import Image from 'next/image';
+
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 const procedures = [
   { title: "Lipoaspiração", desc: "Redefina suas curvas com uma lipoaspiração que vai além da retirada de gordura, esculpindo o corpo com proporção e elegância.", image: "/images/procedures/lipoaspiracao.jpg", video: "/videos/lipoaspiracao.mp4" },
@@ -50,7 +51,7 @@ export function AppleProcedures() {
     const observer = new IntersectionObserver(
       (entries) => {
         let maxIntersection = 0;
-        let mostVisibleIndex = activeIndex;
+        let mostVisibleIndex = -1;
 
         entries.forEach((entry) => {
           if (entry.isIntersecting && entry.intersectionRatio > maxIntersection) {
@@ -60,8 +61,8 @@ export function AppleProcedures() {
           }
         });
 
-        if (maxIntersection > 0.5 && mostVisibleIndex !== activeIndex) {
-          setActiveIndex(mostVisibleIndex);
+        if (maxIntersection > 0.5 && mostVisibleIndex !== -1) {
+          setActiveIndex((prev) => prev !== mostVisibleIndex ? mostVisibleIndex : prev);
         }
       },
       {
@@ -74,7 +75,7 @@ export function AppleProcedures() {
     items.forEach((item) => observer.observe(item));
 
     return () => observer.disconnect();
-  }, [activeIndex]);
+  }, []);
 
   // When the progress bar finishes filling up
   const handleProgressEnd = () => {
@@ -128,14 +129,14 @@ export function AppleProcedures() {
     <section id="procedimentos" className="w-full bg-[#310f0e] text-white py-24 overflow-hidden relative">
       
       {/* Section Header */}
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12 mb-12 flex items-end justify-between">
+      <ScrollReveal delay={100}><div className="max-w-[1400px] mx-auto px-6 md:px-12 mb-12 flex items-end justify-between">
         <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white">
-          Procedimentos.
+          Procedimentos
         </h2>
-      </div>
+      </div></ScrollReveal>
 
       {/* Horizontal Carousel */}
-      <div 
+      <ScrollReveal delay={300} direction="left"><div 
         ref={scrollRef}
         onMouseDown={handleMouseDown}
         onMouseLeave={handleMouseLeave}
@@ -146,7 +147,7 @@ export function AppleProcedures() {
       >
         {procedures.map((proc, idx) => (
           <div 
-            key={idx}
+            key={proc.title}
             data-index={idx}
             className="carousel-card flex-none w-[85vw] md:w-[60vw] lg:w-[65vw] h-[60vh] md:h-[70vh] snap-center rounded-[40px] relative overflow-hidden group select-none"
           >
@@ -160,6 +161,7 @@ export function AppleProcedures() {
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 pointer-events-none z-0"
               />
             ) : (
+              // eslint-disable-next-line @next/next/no-img-element
               <img 
                 src={proc.image} 
                 alt={proc.title}
@@ -194,7 +196,7 @@ export function AppleProcedures() {
             const isActive = activeIndex === idx;
             return (
               <button
-                key={idx}
+                key={procedures[idx].title}
                 onClick={() => {
                   setIsPlaying(false);
                   scrollTo(idx);
@@ -236,7 +238,7 @@ export function AppleProcedures() {
           )}
         </button>
 
-      </div>
+      </div></ScrollReveal>
       
       {/* Styles for the progress bar animation, hiding scrollbar & ken burns */}
       <style dangerouslySetInnerHTML={{__html: `
