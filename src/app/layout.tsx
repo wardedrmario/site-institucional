@@ -35,6 +35,7 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" 
           rel="stylesheet" 
         />
+        <meta name="facebook-domain-verification" content="3m53d5ki4hjsrbmw9iq5v5gb6lf9o8" />
       </head>
       <body className="font-sans antialiased text-text-primary bg-bg-primary min-h-screen flex flex-col selection:bg-burgundy/15 selection:text-text-primary">
         <noscript>
