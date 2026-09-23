@@ -91,7 +91,12 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
       const text = encodeURIComponent(
         `Olá! Meu nome é ${formData.name}. Gostaria de iniciar meu planejamento cirúrgico com o Dr. Mário Warde para ${formData.procedure} (Previsão: ${timeframeText}).${utmData}`
       );
-      window.location.href = `https://wa.me/${whatsappNumber}?text=${text}`;
+      
+      // Pequeno atraso (800ms) para dar tempo do GTM e do Pixel enviarem o evento antes da página descarregar
+      setTimeout(() => {
+        window.location.href = `https://wa.me/${whatsappNumber}?text=${text}`;
+      }, 800);
+
     } catch (error) {
       console.error(error);
     } finally {
