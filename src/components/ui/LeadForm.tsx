@@ -75,8 +75,10 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
       }
 
       // 📊 DISPARA O EVENTO 'Lead' PARA O DATALAYER (GTM & PIXEL)
-      if (typeof window !== 'undefined' && (window as any).dataLayer) {
-        (window as any).dataLayer.push({
+      if (typeof window !== 'undefined') {
+        const win = window as any;
+        win.dataLayer = win.dataLayer || [];
+        win.dataLayer.push({
           event: 'Lead',
           user_data: {
             email: formData.email,
@@ -85,6 +87,7 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
             city: formData.city
           }
         });
+        console.log("🔥 EVENTO 'Lead' EMPURRADO PARA O DATALAYER COM SUCESSO!", win.dataLayer);
       }
 
       // 🧲 ENVIA OS DADOS PARA O NOSSO CRM INVISÍVEL (API)
