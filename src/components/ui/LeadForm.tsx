@@ -59,6 +59,19 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
         // ignore
       }
 
+      // 📊 DISPARA O EVENTO 'Lead' PARA O DATALAYER (GTM & PIXEL)
+      if (typeof window !== 'undefined' && (window as any).dataLayer) {
+        (window as any).dataLayer.push({
+          event: 'Lead',
+          user_data: {
+            email: formData.email,
+            phone: formData.phone,
+            name: formData.name,
+            city: formData.city
+          }
+        });
+      }
+
       // 🧲 ENVIA OS DADOS PARA O NOSSO CRM INVISÍVEL (API)
       try {
         await fetch('/api/leads', {

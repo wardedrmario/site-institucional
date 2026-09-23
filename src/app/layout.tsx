@@ -27,7 +27,7 @@ export default function RootLayout({
           new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
           j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           'https://clinica.drmariowarde.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-          })(window,document,'script','dataLayer','GTM-VTTJIR7');
+          })(window,document,'script','dataLayer','GTM-FVTTJTR7');
         `}} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -40,7 +40,7 @@ export default function RootLayout({
       <body className="font-sans antialiased text-text-primary bg-bg-primary min-h-screen flex flex-col selection:bg-burgundy/15 selection:text-text-primary">
         <noscript>
           <iframe
-            src="https://clinica.drmariowarde.com/ns.html?id=GTM-VTTJIR7"
+            src="https://clinica.drmariowarde.com/ns.html?id=GTM-FVTTJTR7"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
