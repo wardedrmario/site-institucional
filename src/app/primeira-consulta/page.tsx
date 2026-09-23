@@ -48,15 +48,15 @@ export default function PrimeiraConsulta() {
         <div className="absolute inset-0 w-full h-full z-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
-            src="/images/lifestyle/hero2.jpg" 
+            src="/images/lifestyle/hero3.jpg" 
             alt="Beleza Natural" 
-            className="w-full h-full object-cover object-[center_30%] md:object-center scale-x-[-1]"
+            className="w-full h-full object-cover object-[center_30%] md:object-center"
           />
-          {/* Gradiente branco forte da esquerda para garantir leitura perfeita no desktop e mobile */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent w-full md:w-[80%]" />
+          {/* Gradiente mesclando a cor Nude/Areia para fundir com a foto */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#ccb9b6] via-[#ccb9b6]/80 to-transparent w-full md:w-[80%]" />
           
           {/* Gradiente de baixo para unificar com a próxima seção */}
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-90" />
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/50 to-transparent opacity-90" />
         </div>
         
         {/* Conteúdo sobreposto alinhado à esquerda */}
