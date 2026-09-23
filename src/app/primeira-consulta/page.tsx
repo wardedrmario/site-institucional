@@ -101,9 +101,9 @@ export default function PrimeiraConsulta() {
         </div>
       </section>
 
-      {/* 2. AUTORIDADE ABSOLUTA (White/Clean Layout) */}
-      <section className="w-full bg-[#f5f5f7] py-24 md:py-32 px-6">
-        <div className="max-w-[1080px] mx-auto bg-white rounded-[2rem] md:rounded-[3rem] p-8 md:p-16 shadow-[0_8px_30px_rgb(0,0,0,0.04)] ring-1 ring-black/5">
+      {/* 2. AUTORIDADE ABSOLUTA (Contrast Layout with Brand Color) */}
+      <section className="w-full bg-[#ccb9b6]/30 py-24 md:py-32 px-6">
+        <div className="max-w-[1080px] mx-auto bg-white rounded-[2rem] md:rounded-[3rem] p-8 md:p-16 shadow-[0_20px_60px_rgba(204,185,182,0.4)] ring-1 ring-[#ccb9b6]/50">
           
           <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 items-center">
             
