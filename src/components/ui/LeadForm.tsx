@@ -16,6 +16,21 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
     city: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let val = e.target.value.replace(/\D/g, '');
+    if (val.length > 11) val = val.slice(0, 11);
+    
+    let masked = val;
+    if (val.length > 2) {
+      masked = `(${val.slice(0, 2)}) `;
+      if (val.length > 7) {
+        masked += `${val.slice(2, 7)}-${val.slice(7)}`;
+      } else {
+        masked += val.slice(2);
+      }
+    }
+    setFormData({ ...formData, phone: masked });
+  };
 
   const handleNext = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -92,10 +107,10 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
         `Olá! Meu nome é ${formData.name}. Gostaria de iniciar meu planejamento cirúrgico com o Dr. Mário Warde para ${formData.procedure} (Previsão: ${timeframeText}).${utmData}`
       );
       
-      // Pequeno atraso (800ms) para dar tempo do GTM e do Pixel enviarem o evento antes da página descarregar
+      // Pequeno atraso (2500ms) para garantir que o GTM e o Pixel processem o evento de Lead perfeitamente
       setTimeout(() => {
         window.location.href = `https://wa.me/${whatsappNumber}?text=${text}`;
-      }, 800);
+      }, 2500);
 
     } catch (error) {
       console.error(error);
@@ -266,10 +281,11 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
               <input 
                 required
                 type="tel" 
-                placeholder="WhatsApp (com DDD)" 
+                placeholder="WhatsApp (ex: (11) 99999-9999)" 
                 className="w-full px-5 py-3.5 bg-[#f5f5f7] border border-black/[0.06] rounded-xl focus:outline-none focus:ring-2 focus:ring-wine focus:bg-white transition-all text-sm text-chumbo placeholder:text-chumbo-light/60"
                 value={formData.phone}
-                onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                onChange={handlePhoneChange}
+                maxLength={15}
               />
               <input 
                 type="text" 
