@@ -48,9 +48,9 @@ export default function PrimeiraConsulta() {
         <div className="absolute inset-0 w-full h-full z-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
-            src="/images/lifestyle/hero.jpg" 
+            src="/images/lifestyle/hero2.jpg" 
             alt="Beleza Natural" 
-            className="w-full h-full object-cover object-[center_30%] md:object-center"
+            className="w-full h-full object-cover object-[center_30%] md:object-center scale-x-[-1]"
           />
           {/* Gradiente branco forte da esquerda para garantir leitura perfeita no desktop e mobile */}
           <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent w-full md:w-[80%]" />
