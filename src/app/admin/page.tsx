@@ -2,6 +2,7 @@ import { neon } from '@neondatabase/serverless';
 import Link from 'next/link';
 import Image from 'next/image';
 import KanbanBoard from '@/components/crm/KanbanBoard';
+import LogoutButton from '@/components/crm/LogoutButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,26 +12,7 @@ export default async function AdminPage({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
   const resolvedParams = await searchParams;
-  const pass = resolvedParams.pass;
   const view = resolvedParams.view || 'kanban';
-
-  // Proteção básica para o MVP (senha na URL)
-  if (pass !== 'warde2026') {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#fbfbfd]">
-        <div className="text-center p-8 bg-white rounded-3xl shadow-lg max-w-sm w-full border border-black/5">
-          <div className="w-16 h-16 bg-wine/10 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg className="w-8 h-8 text-wine" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8V7a4 4 0 00-8 0v4h8z" />
-            </svg>
-          </div>
-          <h1 className="text-2xl font-bold text-[#310f0e] mb-2">Acesso Restrito</h1>
-          <p className="text-[#86868b] mb-6 text-sm">Esta área é exclusiva para a equipe de atendimento do Dr. Mário Warde.</p>
-          <p className="text-xs text-black/40">Adicione ?pass=SENHA na URL para acessar.</p>
-        </div>
-      </div>
-    );
-  }
 
   // Busca os leads
   let leads: Record<string, unknown>[] = [];
@@ -63,13 +45,13 @@ export default async function AdminPage({
             {/* View Toggle */}
             <div className="bg-black/10 p-1 rounded-lg flex items-center gap-1">
               <Link 
-                href="?pass=warde2026&view=kanban"
+                href="?view=kanban"
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${view === 'kanban' ? 'bg-white text-[#1d1d1f] shadow-sm' : 'text-white/80 hover:text-white'}`}
               >
                 Colunas
               </Link>
               <Link 
-                href="?pass=warde2026&view=list"
+                href="?view=list"
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${view === 'list' ? 'bg-white text-[#1d1d1f] shadow-sm' : 'text-white/80 hover:text-white'}`}
               >
                 Lista
@@ -81,6 +63,9 @@ export default async function AdminPage({
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
               <span className="text-sm font-medium text-[#1d1d1f]">{leads.length} capturados</span>
             </div>
+
+            {/* Logout Button */}
+            <LogoutButton />
           </div>
         </div>
 
