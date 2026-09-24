@@ -46,23 +46,23 @@ export default function PrimeiraConsulta() {
         
         {/* Imagem de Fundo Full-Bleed */}
         <div className="absolute inset-0 w-full h-full z-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
-            src="/images/lifestyle/hero3.jpg" 
+            src="/images/lifestyle/hero4.jpg" 
             alt="Beleza Natural" 
-            className="w-full h-full object-cover object-[center_30%] md:object-center"
+            className="w-full h-full object-cover object-[80%_center] md:object-[80%_center]"
           />
-          {/* Gradiente mesclando a cor Nude/Areia para fundir com a foto */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#ccb9b6] via-[#ccb9b6]/80 to-transparent w-full md:w-[80%]" />
-          
-          {/* Gradiente de baixo para unificar com a próxima seção */}
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/50 to-transparent opacity-90" />
+          {/* Removidos os degradês complexos. A imagem fica limpa no fundo. */}
+          {/* Gradiente de baixo sutil para a transição */}
+          <div 
+            className="absolute inset-0 opacity-40 pointer-events-none" 
+            style={{ backgroundImage: 'linear-gradient(to top, white 0%, transparent 20%)' }}
+          />
         </div>
         
-        {/* Conteúdo sobreposto alinhado à esquerda */}
-        <div className="relative z-10 w-full max-w-[1200px] mx-auto px-6 mt-16 md:mt-0">
+        {/* Conteúdo sobreposto alinhado à direita, agora encapsulado num Card de Vidro */}
+        <div className="relative z-10 w-full max-w-[1200px] mx-auto px-6 mt-16 md:mt-0 flex justify-end">
           
-          <div className="max-w-2xl animate-blur-in-up">
+          <div className="max-w-2xl animate-blur-in-up bg-white/30 backdrop-blur-2xl p-8 md:p-12 rounded-[2rem] shadow-[0_20px_40px_rgba(0,0,0,0.08)] ring-1 ring-white/50">
             <div className="flex items-center gap-3 mb-6">
               <div className="h-[1px] w-8 bg-[#ccb9b6]" />
               <span className="text-[#86868b] font-medium text-xs md:text-sm uppercase tracking-[0.25em]">
@@ -70,12 +70,12 @@ export default function PrimeiraConsulta() {
               </span>
             </div>
 
-            <h1 className="text-[44px] sm:text-[56px] md:text-[72px] font-semibold tracking-tighter text-[#1d1d1f] leading-[1.05] mb-6">
+            <h1 className="text-[40px] sm:text-[50px] md:text-[64px] font-semibold tracking-tighter text-[#1d1d1f] leading-[1.05] mb-6">
               A elegância mora <br />
-              <span className="text-[#86868b] italic font-light">na naturalidade.</span>
+              <span className="italic font-light">na naturalidade.</span>
             </h1>
             
-            <p className="text-lg md:text-xl text-[#1d1d1f]/70 font-normal leading-relaxed max-w-lg mb-10">
+            <p className="text-lg md:text-xl text-[#1d1d1f]/75 font-normal leading-relaxed max-w-lg mb-10">
               Contornos suaves, harmonia facial e a confiança de se sentir bem na própria pele, esculpidos com mais de 30 anos de rigor técnico.
             </p>
 
