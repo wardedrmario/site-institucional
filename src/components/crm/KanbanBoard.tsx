@@ -209,7 +209,7 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: any[
             key={col.id} 
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, col.id)}
-            className="flex-shrink-0 w-[300px] flex flex-col h-full bg-black/[0.02] rounded-2xl border border-black/5 snap-center transition-colors hover:bg-black/[0.03]"
+            className="flex-shrink-0 w-[300px] flex flex-col h-full bg-white/60 backdrop-blur-md rounded-2xl border border-white/40 shadow-sm snap-center transition-colors hover:bg-white/80"
           >
             {/* Header da Coluna */}
             <div className="p-4 flex items-center justify-between border-b border-black/5">
