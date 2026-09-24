@@ -55,22 +55,22 @@ export default async function AdminPage({
               height={40} 
               className="h-8 w-auto"
             />
-            <div className="hidden sm:block h-6 w-px bg-black/10"></div>
-            <p className="text-[#86868b] text-[15px] font-medium tracking-tight mt-0.5">Gestão de aquisição de pacientes</p>
+            <div className="hidden sm:block h-6 w-px bg-white/30"></div>
+            <p className="text-white/90 text-[15px] font-medium tracking-tight mt-0.5">Gestão de aquisição de pacientes</p>
           </div>
           
           <div className="flex items-center gap-4">
             {/* View Toggle */}
-            <div className="bg-black/5 p-1 rounded-lg flex items-center gap-1">
+            <div className="bg-black/10 p-1 rounded-lg flex items-center gap-1">
               <Link 
                 href="?pass=warde2026&view=kanban"
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${view === 'kanban' ? 'bg-white text-[#1d1d1f] shadow-sm' : 'text-[#86868b] hover:text-[#1d1d1f]'}`}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${view === 'kanban' ? 'bg-white text-[#1d1d1f] shadow-sm' : 'text-white/80 hover:text-white'}`}
               >
                 Colunas
               </Link>
               <Link 
                 href="?pass=warde2026&view=list"
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${view === 'list' ? 'bg-white text-[#1d1d1f] shadow-sm' : 'text-[#86868b] hover:text-[#1d1d1f]'}`}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${view === 'list' ? 'bg-white text-[#1d1d1f] shadow-sm' : 'text-white/80 hover:text-white'}`}
               >
                 Lista
               </Link>
