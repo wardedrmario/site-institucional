@@ -29,8 +29,18 @@ interface LeadData {
 export async function updateLeadStatus(leadId: string, newStatus: string, leadData: LeadData) {
   console.log(`[CRM BACKEND] Movendo lead ${leadId} (${leadData.name}) para a coluna: ${newStatus}`);
   
-  // AQUI FICARÁ O UPDATE NO BANCO NEON NO FUTURO:
-  // UPDATE leads SET status = newStatus WHERE id = leadId
+  // Atualiza no Banco Neon
+  try {
+    if (process.env.DATABASE_URL) {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { neon } = require('@neondatabase/serverless');
+      const sql = neon(process.env.DATABASE_URL);
+      await sql`UPDATE leads SET status = ${newStatus} WHERE id = ${leadId}`;
+      console.log(`✅ [CRM BACKEND] Lead ${leadId} atualizado no Neon Postgres para '${newStatus}'`);
+    }
+  } catch (err) {
+    console.error('❌ [CRM BACKEND] Erro ao atualizar status no Neon:', err);
+  }
   
   // SE O PACIENTE CHEGOU NA COLUNA DE DEPÓSITO -> DISPARA A API DO META!
   if (newStatus === 'deposito') {

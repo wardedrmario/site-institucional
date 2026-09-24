@@ -101,8 +101,53 @@ const INITIAL_MOCK_LEADS: Record<string, Lead[]> = {
   ]
 };
 
-export default function KanbanBoard() {
-  const [columnsData, setColumnsData] = useState<Record<string, Lead[]>>(INITIAL_MOCK_LEADS);
+export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: any[] }) {
+  // Converte a lista plana de leads do BD para o formato de colunas do Kanban
+  const groupedLeads = React.useMemo(() => {
+    const columns: Record<string, Lead[]> = {
+      'triagem': [], 'qualificacao': [], 'consulta': [], 'pos_consulta': [], 'deposito': [], 'pre_op': [], 'pos_op': []
+    };
+    
+    initialLeads.forEach(lead => {
+      let source = 'Orgânico';
+      try {
+        if (lead.utms) {
+          const parsed = typeof lead.utms === 'string' ? JSON.parse(lead.utms) : lead.utms;
+          source = parsed.utm_campaign || parsed.camp_id || 'Orgânico';
+        }
+      } catch { /* ignora */ }
+
+      const mappedLead: Lead = {
+        id: lead.id,
+        name: lead.name,
+        phone: lead.phone,
+        procedure: lead.procedure || '-',
+        timeframe: lead.timeframe || '-',
+        source: source,
+        score: lead.score || 50,
+        scoreLabel: lead.score > 100 ? 'HOT' : lead.score > 60 ? 'WARM' : 'COLD',
+        nextAction: lead.status === 'triagem' ? 'Qualificar via Whats' : '-',
+        createdAt: lead.created_at,
+      };
+
+      const status = lead.status || 'triagem';
+      if (columns[status]) {
+        columns[status].push(mappedLead);
+      } else {
+        columns['triagem'].push(mappedLead);
+      }
+    });
+    
+    return columns;
+  }, [initialLeads]);
+
+  const [columnsData, setColumnsData] = useState<Record<string, Lead[]>>(groupedLeads);
+  
+  // Atualiza as colunas se os leads do banco mudarem (ex: refresh da página)
+  React.useEffect(() => {
+    setColumnsData(groupedLeads);
+  }, [groupedLeads]);
+
   const [draggedLead, setDraggedLead] = useState<{ lead: Lead, fromColumnId: string } | null>(null);
 
   const handleDragStart = (e: React.DragEvent, lead: Lead, fromColumnId: string) => {

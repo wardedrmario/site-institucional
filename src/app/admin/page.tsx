@@ -85,7 +85,7 @@ export default async function AdminPage({
         </div>
 
         {view === 'kanban' ? (
-          <KanbanBoard />
+          <KanbanBoard initialLeads={leads} />
         ) : (
           <div className="bg-white rounded-3xl shadow-sm border border-black/5 overflow-hidden">
             <div className="overflow-x-auto">
