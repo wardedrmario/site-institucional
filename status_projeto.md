@@ -1,14 +1,42 @@
-# Status do Projeto - Fim do Dia 1
+# Status do Projeto - Log de Progressos
 
-## ✅ O que foi concluído hoje
-1. **Domínio e SSL:** `drmariowarde.com` configurado e apontado na Vercel com sucesso.
-2. **Correções de Build:** Resolvido erro de Suspense Boundary que quebrava o build de produção no Next.js.
-3. **Formulário de Qualificação:** `<LeadForm>` criado com as 3 perguntas chaves do site institucional, adicionando fricção intencional.
-4. **Infraestrutura de Banco de Dados:** Neon Serverless Postgres conectado nativamente à Vercel.
-5. **Backend do CRM (API):** Rota `/api/leads` criada com criptografia SHA-256 embutida (preparada para o Meta CAPI) e salvamento automático na tabela.
-6. **Painel Administrativo:** Criada a rota de gestão protegida por senha provisória (`/admin?pass=warde2026`) para a secretária da clínica.
+## ✅ O que foi concluído hoje (Dia 2 - Rastreamento e Design Premium)
+1. **Rastreamento Perfeito (Meta Pixel & CAPI):**
+   - Problema da "corrida" no redirecionamento do WhatsApp resolvido (adicionado um atraso intencional de 2.5s antes de mandar o lead para o whats, dando tempo para o disparo da Tag).
+   - Validação dos dados do `LeadForm` sendo passados via dataLayer.
+   - Constatação e comprovação de eventos chegando impecavelmente na "Visão Geral" do Gerenciador de Eventos da Meta, confirmando a saúde total do disparo Front+Back.
+2. **Máscara de Telefone:** Adicionado padrão e formatação visual `(18) 99999-9999` direto no campo do formulário, aumentando qualidade de dados do usuário.
+3. **Redesign da Landing Page (`/primeira-consulta`):**
+   - **Extreme Makeover:** Layout escuro (dark) deletado em favor de uma estética clínica, super iluminada (brancos, tons de areia e cores nudes da paleta do Dr).
+   - **Full-Bleed Hero Section:** Transição para um poster fotográfico ocupando 100% da tela.
+   - **Testes AB Manuais de Arte:** Avaliamos múltiplas fotos (`hero2`, `hero3`, `hero4`). O layout se consolidou com uso inteligente de efeitos visuais: **flip horizontal** para posicionar melhor a modelo e o incrível **Glassmorphism Card** (cartão de vidro jateado e translúcido). 
+   - **Integração do Formulário:** O form de captação agora se desdobra por dentro desse cartão de vidro no topo, resultando em uma UX perfeitamente polida e de alta conversão.
 
-## 🚧 Próximos Passos (Amanhã)
-1. **Redesign da Landing Page:** Repensar a UI/UX de `/primeira-consulta`. O layout atual abstrato/escuro foi rejeitado; precisamos de algo mais premium, claro, e possivelmente com fotos reais do Doutor/Consultório.
-2. **Detox no Meta BM:** Acessar o Gerenciador de Negócios para limpar pixels antigos e verificar o domínio novo.
-3. **Conversões Offline / CAPI:** Subir a planilha de pacientes VIP para treinar o algoritmo de LTV do Meta Ads.
+## ✅ O que havia sido concluído antes (Dia 1)
+1. **Domínio e SSL:** `drmariowarde.com` configurado e apontado na Vercel.
+2. **Formulário de Qualificação:** `<LeadForm>` criado com as 3 perguntas chaves.
+3. **Infraestrutura e DB:** Neon Serverless Postgres conectado.
+4. **Backend CAPI:** Rota `/api/leads` criada com hash SHA-256 para CAPI.
+5. **Painel Admin:** Rota de gestão protegida por senha provisória para a clínica.
+
+## 🚧 Próximos Passos
+1. **Detox no Meta BM:** Acessar o Gerenciador de Negócios para limpar "fantasmas" dos plugins antigos e verificar o domínio novo.
+2. **Conversões Offline / LTV:** Subir a planilha de pacientes VIP para treinar o algoritmo da Meta.
+3. **Novas Seções e Conteúdos:** Acoplar eventuais depoimentos, FAQ ou vídeos às dobras mais baixas se a estratégia de tráfego exigir.
+
+### Dia 3: 24 de Setembro de 2026 - Otimização Estratégica do Stape e Conexão Real do CRM Kanban
+
+**1. Estratégia de Rastreamento (Stape.io):**
+- **Diagnóstico:** Identificamos que o relatório de nota 67/100 gerado pelo Stape apontava a falta de "Custom Domain" e "Custom Loader" (soluções para burlar bloqueadores e ITP da Apple). Descobrimos que essas funções são bloqueadas no plano Free.
+- **Decisão Estratégica:** Aconselhamos enfaticamente o upgrade para o plano **Pro ($20/mês)**. Justificativa: Tratando-se de cirurgias plásticas High-Ticket, o público majoritariamente utiliza iPhones (Safari), que bloqueiam os rastreadores. Com a mídia restrita a R$ 2.000,00, a perda de 30% dos dados encareceria brutalmente o CPL e poderia custar as comissões de 3% da agência.
+- **Status:** Aguardando liberação do suporte do Stape para concluirmos a configuração no Cloudflare.
+
+**2. Evolução do CRM Administrativo (/admin):**
+- **Responsividade Ultrawide:** Removemos o limite rígido de largura do layout (`max-w-none`), transformando o CRM em uma interface **Edge-to-Edge** (ponta a ponta). Isso garantiu uso perfeito em monitores gigantes (como iMac 24" M1), eliminando as bordas brancas laterais.
+- **Migração de Banco de Dados:** Executamos com sucesso um script de migração no banco de dados Neon (Vercel) para injetar a coluna `status` na tabela `leads`.
+- **Conexão Real do Kanban:** 
+  - Desativamos os Mockups (dados falsos) do Kanban.
+  - Conectamos o Kanban à tabela oficial do Postgres. Agora, qualquer lead oriundo das campanhas ou formulários nasce automaticamente na coluna "Triagem".
+  - O sistema de "arrastar e soltar" (Drag and Drop) foi conectado à Server Action `updateLeadStatus`, atualizando a fase do funil diretamente no Banco de Dados em tempo real.
+- **Redesign de Contraste:** Para elevar a sofisticação visual, aplicamos a cor "Nude" da marca (`#ccb9b6` a 20%) no fundo da tela e utilizamos um efeito *Glassmorphism* branco fosco nas colunas. Os cards dos pacientes ganharam um destaque absoluto, facilitando a leitura da secretária.
+- **Status:** Sistema CRM 100% no ar, responsivo e operacional.
