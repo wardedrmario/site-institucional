@@ -40,3 +40,11 @@
   - O sistema de "arrastar e soltar" (Drag and Drop) foi conectado à Server Action `updateLeadStatus`, atualizando a fase do funil diretamente no Banco de Dados em tempo real.
 - **Redesign de Contraste:** Para elevar a sofisticação visual, aplicamos a cor "Nude" da marca (`#ccb9b6` a 20%) no fundo da tela e utilizamos um efeito *Glassmorphism* branco fosco nas colunas. Os cards dos pacientes ganharam um destaque absoluto, facilitando a leitura da secretária.
 - **Status:** Sistema CRM 100% no ar, responsivo e operacional.
+
+**3. Atualizações Finais (Fim do Dia 3):**
+- **Refinamento de Design (CRM):** O contraste inicial da cor Nude foi ajustado. Removemos a opacidade e aplicamos o fundo **Nude Sólido 100% (#ccb9b6)**. O texto do cabeçalho (logo, divisória e botões) foi alterado de cinza para branco translúcido, garantindo legibilidade perfeita e mantendo a sofisticação visual exigida.
+- **Sistema de Autenticação e Segurança (LGPD):** 
+  - Abandonamos a trava rudimentar via URL (`?pass=...`).
+  - Implementamos uma **Página de Login Protegida** (`/admin/login`) utilizando criptografia JWT (JSON Web Token) via pacote `jose`.
+  - O sistema agora exige uma senha mestra (configurada via Variáveis de Ambiente) e gera um cookie de sessão seguro (`crm_session`) válido por 30 dias. Adicionamos também um botão de "Sair" (Logout) funcional no painel do CRM para trancar a sessão instantaneamente.
+- **Limpeza do Banco de Dados:** Executamos com sucesso um "flush" em todo o banco Neon, apagando todos os leads gerados durante a fase de testes. O CRM está limpo e preparado para entrar em produção recebendo dados da Landing Page.
