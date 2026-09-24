@@ -45,7 +45,7 @@ export default async function AdminPage({
 
   return (
     <div className="min-h-screen bg-[#fbfbfd] p-4 sm:p-8">
-      <div className="max-w-[1400px] mx-auto overflow-hidden">
+      <div className="w-full max-w-none mx-auto overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
           <div className="flex items-center gap-3">
             <Image 
