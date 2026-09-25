@@ -77,13 +77,20 @@ export function AppleProcedures() {
     return () => observer.disconnect();
   }, []);
 
-  // When the progress bar finishes filling up
-  const handleProgressEnd = () => {
-    if (isPlaying) {
-      const nextIndex = (activeIndex + 1) % procedures.length;
-      scrollTo(nextIndex);
-    }
-  };
+  // Auto-play interval for robust carousel rotation
+  useEffect(() => {
+    if (!isPlaying) return;
+    
+    const timer = setInterval(() => {
+      setActiveIndex((current) => {
+        const nextIndex = (current + 1) % procedures.length;
+        scrollTo(nextIndex);
+        return nextIndex;
+      });
+    }, 4500); // 4.5 seconds per slide
+    
+    return () => clearInterval(timer);
+  }, [isPlaying, scrollTo]);
 
   // Mouse drag handlers
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -208,9 +215,9 @@ export function AppleProcedures() {
               >
                 {isActive && (
                   <div 
+                    key={activeIndex}
                     className="absolute top-0 left-0 h-full bg-white animate-fill"
                     style={{ animationPlayState: isPlaying ? 'running' : 'paused' }}
-                    onAnimationEnd={handleProgressEnd}
                   />
                 )}
               </button>
