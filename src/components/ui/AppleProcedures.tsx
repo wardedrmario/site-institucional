@@ -34,12 +34,24 @@ export function AppleProcedures() {
     const cards = container.querySelectorAll('.carousel-card');
     if (cards[index]) {
       const card = cards[index] as HTMLElement;
-      const scrollPosition = card.offsetLeft - (container.clientWidth / 2) + (card.clientWidth / 2);
+      
+      // Calculate exact center position
+      const scrollPosition = card.offsetLeft - container.offsetLeft - (container.clientWidth / 2) + (card.clientWidth / 2);
+      
+      // Safari bug fix: temporarily disable snap during programmatic smooth scroll
+      container.style.scrollSnapType = 'none';
       
       container.scrollTo({
         left: scrollPosition,
         behavior: 'smooth'
       });
+
+      // Restore snap after smooth scroll duration (roughly 600ms)
+      setTimeout(() => {
+        if (scrollRef.current) {
+          scrollRef.current.style.scrollSnapType = '';
+        }
+      }, 600);
     }
   }, []);
 
