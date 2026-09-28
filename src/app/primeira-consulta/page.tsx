@@ -50,7 +50,7 @@ export default function PrimeiraConsulta() {
           <img 
             src="/images/lifestyle/hero5.jpg" 
             alt="Beleza Natural" 
-            className="w-full h-full object-cover object-[80%_center] md:object-[80%_center]"
+            className="w-full h-full object-cover object-[20%_center] md:object-[20%_center]"
           />
           {/* Removidos os degradês complexos. A imagem fica limpa no fundo. */}
           {/* Gradiente de baixo sutil para a transição */}
