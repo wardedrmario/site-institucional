@@ -3,11 +3,11 @@ import { neon } from '@neondatabase/serverless';
 
 export async function GET() {
   try {
-    if (!process.env.DATABASE_URL) {
+    if (!(process.env.DATABASE_URL || process.env.POSTGRES_URL)) {
       return NextResponse.json({ error: 'DATABASE_URL não configurada' }, { status: 500 });
     }
 
-    const sql = neon(process.env.DATABASE_URL);
+    const sql = neon((process.env.DATABASE_URL || process.env.POSTGRES_URL));
 
     // Cria a tabela de Leads se não existir
     await sql`

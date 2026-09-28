@@ -31,10 +31,10 @@ export async function updateLeadStatus(leadId: string, newStatus: string, leadDa
   
   // Atualiza no Banco Neon
   try {
-    if (process.env.DATABASE_URL) {
+    if ((process.env.DATABASE_URL || process.env.POSTGRES_URL)) {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { neon } = require('@neondatabase/serverless');
-      const sql = neon(process.env.DATABASE_URL);
+      const sql = neon((process.env.DATABASE_URL || process.env.POSTGRES_URL));
       await sql`UPDATE leads SET status = ${newStatus} WHERE id = ${leadId}`;
       console.log(`✅ [CRM BACKEND] Lead ${leadId} atualizado no Neon Postgres para '${newStatus}'`);
     }
