@@ -7,8 +7,29 @@ const defaultTestimonials = [
     name: "May Zioti", 
     subtitle: "Local Guide · 11 avaliações · 4 fotos",
     date: "um ano atrás",
-    avatar: "https://i.pravatar.cc/150?u=may", // Placeholder para foto real
-    text: '"Fiz minha cirurgia com ele e, desde o primeiro momento, demonstrou ser um profissional ímpar, excelente, que transmite confiança. A atenção da equipe no atendimento, durante e após a cirurgia, é algo que poucas clínicas oferecem. Indico ele de olhos fechados, um profissional exemplar!"\nFernanda um amor com atendimento\nLetícia tirou todas minhas duvidas sobre alimentação pré e pós.\nParabéns para equipe nota 1000!!!!' 
+    avatar: "https://ui-avatars.com/api/?name=May+Zioti&background=00897b&color=fff&size=150",
+    text: "\"Fiz minha cirurgia com ele e, desde o primeiro momento, demonstrou ser um profissional ímpar, excelente, que transmite confiança. A atenção da equipe no atendimento, durante e após a cirurgia, é algo que poucas clínicas oferecem. Indico ele de olhos fechados, um profissional exemplar!\"\nFernanda um amor com atendimento\nLetícia tirou todas minhas duvidas sobre alimentação pré e pós.\nParabéns para equipe nota 1000!!!!" 
+  },
+  { 
+    name: "Marcelo Weber", 
+    subtitle: "6 avaliações",
+    date: "um ano atrás",
+    avatar: "https://ui-avatars.com/api/?name=Marcelo+Weber&background=0288d1&color=fff&size=150",
+    text: "Dr. Mário é um profissional fantástico em todos dos sentidos. Como médico, domínio pleno da Cirurgia Plástica, procedimentos e resultados. Como indivíduo, sempre pronto para explicar tudo nos mínimos detalhes. Dando segurança e tranquilidade ao paciente. Muito obrigado por tudo Meu Amigo🙌 ..." 
+  },
+  { 
+    name: "João Pedro Warde", 
+    subtitle: "2 avaliações",
+    date: "um ano atrás",
+    avatar: "https://ui-avatars.com/api/?name=Joao+Pedro+Warde&background=c2185b&color=fff&size=150",
+    text: "Impecável! Desde o atendimento da equipe até o acompanhamento pós cirúrgico.\nAtenção aos detalhes e responde as dúvidas antes e depois de operar. Os Resultados foram melhores que os esperados nas conversas pré e a recuperação foi super tranquila! Podem agendar sem medo pois é um profissional ímpar." 
+  },
+  { 
+    name: "Camila Montandon", 
+    subtitle: "7 avaliações",
+    date: "um ano atrás",
+    avatar: "https://ui-avatars.com/api/?name=Camila+Montandon&background=e65100&color=fff&size=150",
+    text: "Fiz um procedimento facial e fiquei muito satisfeita! Sou uma paciente com muitos medos e ele foi extremamente cuidados! Meu limiar de dor é baixíssimo e senti em suas mãos leveza e segurança de quem sabe muito bem o que está fazendo! Olhar minucioso, atendimento perfeito, mãos talentosas!" 
   },
   { 
     name: "Michaela E.", 
@@ -16,63 +37,7 @@ const defaultTestimonials = [
     date: "5 meses atrás",
     avatar: "https://ui-avatars.com/api/?name=Michaela+E&background=8d6e63&color=fff&size=150",
     text: "Dr Mario é absolutamente THE BEST! Conheço e confio há mais 25 anos.\n\nSua dedicação, seu conhecimento, sua paciência, o carinho e atenção a todos os mínimos detalhes, são excepcionais!\nEle trata seus pacientes como se fossem os únicos, passando-lhes uma tranquilidade indescritível e sempre dá tudo mais do que certo!\n\nGratidão e indicações, sempre!! :)" 
-  },
-  { 
-    name: "Camila Montandon", 
-    subtitle: "7 avaliações",
-    date: "um ano atrás",
-    avatar: "https://ui-avatars.com/api/?name=Camila+Montandon&background=e65100&color=fff&size=150",
-    text: "Fiz um procedimento facial e fiquei muito satisfeita! Sou uma paciente com muitos medos e ele foi extremamente cuidadoso! Meu limiar de dor é baixíssimo e senti em suas mãos leveza e segurança de quem sabe muito bem o que está fazendo! Olhar minucioso, atendimento perfeito, mãos talentosas!" 
-  },
-  { 
-    name: "Marcelo Weber", 
-    subtitle: "6 avaliações",
-    date: "um ano atrás",
-    avatar: "https://ui-avatars.com/api/?name=Marcelo+Weber&background=0288d1&color=fff&size=150",
-    text: "Dr. Mário é um profissional fantástico em todos dos sentidos. Como médico, domínio pleno da Cirurgia Plástica, procedimentos e resultados. Como indivíduo, sempre pronto para explicar tudo nos mínimos detalhes. Dando segurança e tranquilidade ao paciente. Muito obrigado por tudo Meu Amigo🙌" 
-  },
-  { 
-    name: "Bete Villalobos", 
-    subtitle: "8 avaliações · 5 fotos",
-    date: "um ano atrás",
-    avatar: "https://ui-avatars.com/api/?name=Bete+Villalobos&background=bf360c&color=fff&size=150",
-    text: "O Dr Mario transmite segurança e habilidade ao conhecê-lo e ao vc ser paciente dele, terá apoio e resultados maravilhosos! Um médico completo, responsável, eficiente e carinhoso! Adoro e indico muito!" 
-  },
-  { 
-    name: "João Pedro Warde", 
-    subtitle: "2 avaliações",
-    date: "um ano atrás",
-    avatar: "https://ui-avatars.com/api/?name=Joao+Pedro+Warde&background=c2185b&color=fff&size=150",
-    text: "Impecável! Desde o atendimento da equipe até o acompanhamento pós cirúrgico. Atenção aos detalhes e responde as dúvidas antes e depois de operar. Os Resultados foram melhores que os esperados nas conversas pré e a recuperação foi super tranquila! Podem agendar sem medo pois é um profissional ímpar." 
-  },
-  { 
-    name: "João Abrahão", 
-    subtitle: "11 avaliações · 9 fotos",
-    date: "um ano atrás",
-    avatar: "https://i.pravatar.cc/150?u=joao_abrahao",
-    text: "Profissional fantástico! Mais que excelência técnica, o cuidado com as pessoas que faz toda a diferença!" 
-  },
-  { 
-    name: "Juliana Silva", 
-    subtitle: "4 avaliações",
-    date: "2 anos atrás",
-    avatar: "https://ui-avatars.com/api/?name=Juliana+Silva&background=9c27b0&color=fff&size=150",
-    text: "Tive a honra de fazer uma lipo com o Dr Mário em 2014. Hoje, eu com 52 anos, ainda vejo nitidamente o resultado da cirurgia, fazendo com que eu me sinta melhor fisicamente e psicologicamente. Agradeço imensamente o carinho e o cuidado em todas as consultas de retorno. Recomendo sempre!" 
-  },
-  { 
-    name: "Vanessa Carvalho", 
-    subtitle: "9 avaliações · 2 fotos",
-    date: "8 meses atrás",
-    avatar: "https://ui-avatars.com/api/?name=Vanessa+Carvalho&background=4caf50&color=fff&size=150",
-    text: "Ahhh o que dizer desse meu cirurgião lindo e maravilhoso? Sou suspeita gente, estou mega ansiosa pra realizar meu sonho com ele e com essas mãos abençoadas que ele tem. Parabéns pelo sucesso e super recomendo. Equipe impecável do início ao fim!" 
-  },
-  { 
-    name: "Patrícia Gomes", 
-    subtitle: "Local Guide · 23 avaliações",
-    date: "um ano atrás",
-    avatar: "https://ui-avatars.com/api/?name=Patricia+Gomes&background=ff9800&color=fff&size=150",
-    text: "Cirurgião excepcional. Me operou há alguns anos e até hoje os resultados são perfeitos. Muito atencioso no pós operatório, sempre disponível no WhatsApp para tirar dúvidas de medicação e repouso. Confio 100% no trabalho dele." 
-  },
+  }
 ];
 
 export function TestimonialsCarousel({ testimonials = defaultTestimonials }: { testimonials?: typeof defaultTestimonials }) {
@@ -176,7 +141,7 @@ export function TestimonialsCarousel({ testimonials = defaultTestimonials }: { t
   };
 
   return (
-    <section className="w-full bg-[#fbfbfd] py-24 md:py-32 overflow-hidden flex flex-col relative border-t border-black/5">
+    <section className="w-full bg-[#f0eae9] py-24 md:py-32 overflow-hidden flex flex-col relative border-t border-black/5">
       
       <div className="text-center mb-16 px-6">
         <span className="text-[#86868b] font-medium text-xs uppercase tracking-[0.2em] mb-4 block">

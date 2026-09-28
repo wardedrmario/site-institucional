@@ -1,5 +1,5 @@
 const sharp = require('sharp');
-sharp('/Users/marcelogomes/.gemini/antigravity/brain/36cd574f-6075-4d97-a3a3-c1d475d92870/.user_uploaded/media_1790624196579.png')
+sharp('/Users/marcelogomes/.gemini/antigravity/brain/36cd574f-6075-4d97-a3a3-c1d475d92870/.user_uploaded/media_1790625306263.png')
   .resize(1, 1)
   .raw()
   .toBuffer((err, data, info) => {
