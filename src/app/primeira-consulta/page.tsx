@@ -72,12 +72,12 @@ export default function PrimeiraConsulta() {
             </div>
 
             <h1 className="text-[40px] sm:text-[50px] md:text-[64px] font-semibold tracking-tighter text-[#1d1d1f] leading-[1.05] mb-6">
-              A elegância mora <br />
-              <span className="italic font-light">na naturalidade.</span>
+              Sinta-se segura <br />
+              <span className="italic font-light">na própria pele.</span>
             </h1>
             
             <p className="text-lg md:text-xl text-[#1d1d1f]/75 font-normal leading-relaxed max-w-lg mb-10">
-              Contornos suaves, harmonia facial e a confiança de se sentir bem na própria pele, esculpidos com mais de 30 anos de rigor técnico.
+              O domínio pleno da Alta Cirurgia Plástica. Há mais de 30 anos aliando rigor técnico, segurança absoluta e contornos naturais para revelar a sua melhor versão.
             </p>
 
             {!showLeadForm && (
