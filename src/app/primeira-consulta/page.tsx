@@ -409,6 +409,24 @@ export default function PrimeiraConsulta() {
           </p>
           <div className="w-full h-px bg-white/10 my-4"></div>
           <p>&copy; {new Date().getFullYear()} Clínica Dr. Mário Warde. Todos os direitos reservados.</p>
+          <div className="w-full h-px bg-white/10 my-6"></div>
+          
+          <div className="w-full flex flex-col md:flex-row items-center justify-between gap-6 text-[12px] text-white/50">
+            <div className="flex items-center gap-6">
+              <a href="#" className="hover:text-white transition-colors">Privacidade de Dados</a>
+              <a href="#" className="hover:text-white transition-colors">Termos Médicos</a>
+            </div>
+            
+            <div className="hidden md:block w-px h-4 bg-white/20"></div>
+
+            <div className="flex items-center gap-3">
+              <span>Desenvolvido por</span>
+              <a href="https://unioo.com.br" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 group">
+                <img src="/images/logo-unioo.svg" alt="Unio" className="h-4 opacity-70 group-hover:opacity-100 transition-opacity" />
+                <span className="font-medium tracking-[0.15em] opacity-70 group-hover:opacity-100 transition-opacity mt-0.5">COMUNICAÇÃO E MARKETING</span>
+              </a>
+            </div>
+          </div>
         </div>
       </footer>
 
