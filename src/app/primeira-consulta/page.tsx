@@ -372,16 +372,13 @@ export default function PrimeiraConsulta() {
               { q: "Pacientes de fora de São Paulo podem realizar a cirurgia?", a: "Sim. Grande parte das nossas pacientes são de outras cidades ou do exterior. O processo começa com uma consulta por telemedicina para alinhamento inicial e indicação. Posteriormente, desenhamos o cronograma logístico para que você venha a SP apenas no período cirúrgico." },
               { q: "Qual é o hospital onde as cirurgias são realizadas?", a: "Operamos exclusivamente em hospitais de altíssimo padrão em São Paulo, equipados com UTI e que seguem protocolos mundiais de segurança (como o Hospital Sírio-Libanês, Vila Nova Star, entre outros, dependendo do procedimento)." }
             ].map((faq, i) => (
-              <details key={i} className="group bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-black/5 cursor-pointer hover:border-black/10 transition-colors">
-                <summary className="text-[17px] font-semibold text-[#1d1d1f] list-none [&::-webkit-details-marker]:hidden flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="text-[#86868b] font-medium">Q.</span>
-                    {faq.q}
-                  </div>
-                  <svg className="w-5 h-5 text-[#86868b] transform transition-transform duration-300 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+              <details key={i} className="group cursor-pointer border-b border-white/10 pb-6 transition-colors last:border-b-0">
+                <summary className="text-[15px] md:text-[16px] font-semibold text-[#f5f5f7] uppercase tracking-wide list-none [&::-webkit-details-marker]:hidden flex items-center justify-between">
+                  <span className="pr-6">{faq.q}</span>
+                  <svg className="w-5 h-5 text-white/40 shrink-0 transform transition-transform duration-300 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                 </summary>
-                <div className="mt-4 pl-8">
-                  <p className="text-[#1d1d1f]/70 text-[15px] leading-relaxed">
+                <div className="mt-5 pr-8 md:pr-12">
+                  <p className="text-white/60 text-[15px] leading-relaxed">
                     {faq.a}
                   </p>
                 </div>
