@@ -118,9 +118,9 @@ export default function PrimeiraConsulta() {
               <div className="w-full aspect-[4/5] rounded-3xl overflow-hidden shadow-[0_12px_40px_rgb(0,0,0,0.3)] relative group">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
-                  src="/images/dr-mario/about.jpg" 
+                  src="/images/dr-mario/0J4A2251-wine.jpg" 
                   alt="Dr. Mário Warde" 
-                  className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+                  className="w-full h-full object-cover object-top transition-transform duration-1000 ease-out group-hover:scale-105"
                 />
               </div>
               
