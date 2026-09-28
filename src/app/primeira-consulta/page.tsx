@@ -350,13 +350,6 @@ export default function PrimeiraConsulta() {
 
       {/* 5. FAQ */}
       <section className="relative w-full bg-[#310f0e] py-24 px-6 border-t border-gray-200 overflow-hidden">
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
-          <img 
-            src="/images/mw-background.svg" 
-            alt="MW Logo" 
-            className="w-[800px] max-w-full object-contain"
-          />
-        </div>
         
         <div className="relative max-w-3xl mx-auto z-10">
           <div className="text-center mb-16">
