@@ -277,7 +277,7 @@ export default function PrimeiraConsulta() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {/* Endereço */}
             <div className="bg-[#f5f5f7] p-10 rounded-3xl flex flex-col items-start transition-all hover:bg-[#f0f0f2]">
-              <div className="w-12 h-12 rounded-full bg-[#1d1d1f] text-white flex items-center justify-center mb-6">
+              <div className="w-12 h-12 rounded-full bg-[#1d1d1f] text-white flex items-center justify-center mb-6 shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 hover:bg-[#310f0e] hover:shadow-[0_12px_24px_rgba(49,15,14,0.2)] hover:-translate-y-1 cursor-pointer">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
               </div>
               <h3 className="text-xl font-semibold text-[#1d1d1f] mb-3">Localização Privilegiada</h3>
@@ -309,7 +309,7 @@ export default function PrimeiraConsulta() {
 
             {/* Formatos de Atendimento */}
             <div className="bg-[#f5f5f7] p-10 rounded-3xl flex flex-col items-start transition-all hover:bg-[#f0f0f2]">
-              <div className="w-12 h-12 rounded-full bg-[#1d1d1f] text-white flex items-center justify-center mb-6">
+              <div className="w-12 h-12 rounded-full bg-[#1d1d1f] text-white flex items-center justify-center mb-6 shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 hover:bg-[#310f0e] hover:shadow-[0_12px_24px_rgba(49,15,14,0.2)] hover:-translate-y-1 cursor-pointer">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15.6 11.6L22 7v10l-6.4-4.5v-1zM4 5h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2z"></path></svg>
               </div>
               <h3 className="text-xl font-semibold text-[#1d1d1f] mb-3">Formatos de Atendimento</h3>
@@ -330,7 +330,7 @@ export default function PrimeiraConsulta() {
 
             {/* Pagamentos */}
             <div className="bg-[#f5f5f7] p-10 rounded-3xl flex flex-col items-start transition-all hover:bg-[#f0f0f2]">
-              <div className="w-12 h-12 rounded-full bg-[#1d1d1f] text-white flex items-center justify-center mb-6">
+              <div className="w-12 h-12 rounded-full bg-[#1d1d1f] text-white flex items-center justify-center mb-6 shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 hover:bg-[#310f0e] hover:shadow-[0_12px_24px_rgba(49,15,14,0.2)] hover:-translate-y-1 cursor-pointer">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
               </div>
               <h3 className="text-xl font-semibold text-[#1d1d1f] mb-3">Honorários & Reembolsos</h3>
