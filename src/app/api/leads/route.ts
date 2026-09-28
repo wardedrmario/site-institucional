@@ -42,8 +42,9 @@ export async function POST(request: Request) {
     };
 
     // 2. Insere no Banco de Dados Neon (se configurado)
-    if ((process.env.DATABASE_URL || process.env.POSTGRES_URL)) {
-      const sql = neon((process.env.DATABASE_URL || process.env.POSTGRES_URL));
+    const dbUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+    if (dbUrl) {
+      const sql = neon(dbUrl as string);
       await sql`
         INSERT INTO leads (id, name, phone, email, city, procedure, timeframe, utms)
         VALUES (${leadId}, ${name}, ${phone}, ${email || ''}, ${city || ''}, ${procedure || ''}, ${timeframe || ''}, ${utmsJson})

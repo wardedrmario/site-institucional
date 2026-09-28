@@ -17,8 +17,9 @@ export default async function AdminPage({
   // Busca os leads
   let leads: Record<string, unknown>[] = [];
   try {
-    if ((process.env.DATABASE_URL || process.env.POSTGRES_URL)) {
-      const sql = neon((process.env.DATABASE_URL || process.env.POSTGRES_URL));
+    const dbUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+    if (dbUrl) {
+      const sql = neon(dbUrl as string);
       leads = await sql`SELECT * FROM leads ORDER BY created_at DESC LIMIT 200`;
     }
   } catch (error) {

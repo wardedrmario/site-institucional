@@ -144,7 +144,7 @@ export default function PrimeiraConsulta() {
                 {/* Quote Box Clean */}
                 <div className="mt-10 p-6 bg-[#FAFAFA] rounded-2xl border border-black/5">
                   <p className="text-[#1d1d1f] font-medium text-lg md:text-xl leading-relaxed tracking-tight italic">
-                    "Meu consultório é o destino de quem não negocia a própria segurança. Entregamos uma experiência médica pautada na excelência técnica, na previsibilidade e no respeito absoluto à anatomia de cada paciente."
+                    &quot;Meu consultório é o destino de quem não negocia a própria segurança. Entregamos uma experiência médica pautada na excelência técnica, na previsibilidade e no respeito absoluto à anatomia de cada paciente.&quot;
                   </p>
                 </div>
               </div>
@@ -403,8 +403,8 @@ export default function PrimeiraConsulta() {
           
           <div className="w-full flex flex-col md:flex-row items-center justify-between gap-6 text-[12px] text-white/50">
             <div className="flex items-center gap-6">
-              <a href="#" className="hover:text-white transition-colors">Privacidade de Dados</a>
-              <a href="#" className="hover:text-white transition-colors">Termos Médicos</a>
+              <a href="/privacidade" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Privacidade de Dados</a>
+              <a href="/termos" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Termos Médicos</a>
             </div>
             
             <div className="hidden md:block w-px h-4 bg-white/20"></div>
