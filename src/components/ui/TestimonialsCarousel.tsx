@@ -188,7 +188,7 @@ export function TestimonialsCarousel({ testimonials = defaultTestimonials }: { t
           <div 
             key={idx}
             data-index={idx}
-            className="testimonial-card flex-none w-[85vw] md:w-[500px] snap-center bg-white border border-black/5 rounded-[2rem] p-8 md:p-10 flex flex-col justify-between shadow-sm transition-transform duration-300 select-none"
+            className="testimonial-card flex-none w-[320px] md:w-[420px] snap-center bg-white border border-black/5 rounded-[2rem] p-8 md:p-10 flex flex-col justify-between shadow-sm transition-transform duration-300 select-none"
           >
             <div className="flex items-center gap-4 mb-6">
               {/* Profile Picture */}
