@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { LeadForm } from "@/components/ui/LeadForm";
-import { TestimonialsGrid } from "@/components/ui/TestimonialsGrid";
+import { TestimonialsCarousel } from "@/components/ui/TestimonialsCarousel";
 
 // 🧲 COMPONENTE INVISÍVEL PARA RASTREAMENTO (CAPI PREPARATION)
 function UTMTracker() {
@@ -221,7 +221,7 @@ export default function PrimeiraConsulta() {
       </div>
 
       {/* 3.5. DEPOIMENTOS (SOCIAL PROOF) */}
-      <TestimonialsGrid />
+      <TestimonialsCarousel />
 
       {/* 4. FINAL CTA (Soft & Elegant) */}
       <section className="w-full bg-[#f5f5f7] py-24 md:py-32 px-6 text-center">
