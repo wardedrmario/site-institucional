@@ -193,7 +193,7 @@ export function TestimonialsCarousel({ testimonials = defaultTestimonials }: { t
         onMouseLeave={handleMouseLeave}
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
-        className="flex items-start overflow-x-auto snap-x snap-mandatory gap-6 px-6 md:px-[30vw] pb-12 pt-4 no-scrollbar cursor-grab active:cursor-grabbing"
+        className="flex items-stretch overflow-x-auto snap-x snap-mandatory gap-6 px-6 md:px-[30vw] pb-12 pt-4 no-scrollbar cursor-grab active:cursor-grabbing"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {testimonials.map((item, idx) => {
@@ -202,7 +202,7 @@ export function TestimonialsCarousel({ testimonials = defaultTestimonials }: { t
             <div 
               key={idx}
               data-index={idx}
-              className="testimonial-card flex-none w-[340px] md:w-[420px] snap-center bg-white border border-[#e0e0e0] rounded-xl p-5 md:p-6 flex flex-col shadow-sm transition-all duration-300 select-none"
+              className="testimonial-card flex-none w-[340px] md:w-[420px] h-auto snap-center bg-white border border-[#e0e0e0] rounded-xl p-5 md:p-6 flex flex-col shadow-sm transition-all duration-300 select-none"
             >
               {/* HEADER (Google Maps Style) */}
               <div className="flex items-start justify-between mb-4">
@@ -254,7 +254,7 @@ export function TestimonialsCarousel({ testimonials = defaultTestimonials }: { t
               </div>
 
               {/* FOOTER BUTTONS */}
-              <div className="flex items-center gap-6 pt-1">
+              <div className="flex items-center gap-6 pt-1 mt-auto">
                 <button className="flex items-center gap-2 text-[#3c4043] font-medium text-[14px] hover:bg-gray-50 px-2 py-1.5 -ml-2 rounded-md transition-colors">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
