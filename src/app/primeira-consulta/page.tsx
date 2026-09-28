@@ -103,14 +103,19 @@ export default function PrimeiraConsulta() {
       </section>
 
       {/* 2. AUTORIDADE ABSOLUTA (Contrast Layout with Brand Color) */}
-      <section className="w-full bg-[#ccb9b6]/30 py-24 md:py-32 px-6">
-        <div className="max-w-[1080px] mx-auto bg-white rounded-[2rem] md:rounded-[3rem] p-8 md:p-16 shadow-[0_20px_60px_rgba(204,185,182,0.4)] ring-1 ring-[#ccb9b6]/50">
+      <section 
+        className="w-full py-24 md:py-32 px-6 relative overflow-hidden"
+        style={{ backgroundImage: "url('/images/bg-charcoal-texture.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}
+      >
+        <div className="absolute inset-0 bg-[#1d1d1f]/40 mix-blend-multiply pointer-events-none"></div>
+
+        <div className="max-w-[1080px] mx-auto relative z-10">
           
           <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 items-center">
             
             {/* Foto Dr. Mário - Agora com fundo claro ao redor e respiro */}
             <div className="md:col-span-5 relative">
-              <div className="w-full aspect-[4/5] rounded-3xl overflow-hidden shadow-[0_12px_40px_rgb(0,0,0,0.08)] relative group">
+              <div className="w-full aspect-[4/5] rounded-3xl overflow-hidden shadow-[0_12px_40px_rgb(0,0,0,0.3)] relative group">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src="/images/dr-mario/about.jpg" 
@@ -120,30 +125,30 @@ export default function PrimeiraConsulta() {
               </div>
               
               {/* Crachá flutuante */}
-              <div className="absolute -bottom-6 -right-6 md:-right-10 bg-white p-5 rounded-2xl shadow-xl ring-1 ring-black/5 animate-blur-in-up [animation-delay:300ms]">
-                <p className="text-[#1d1d1f] font-semibold text-lg tracking-tight">Dr. Mário Warde</p>
+              <div className="absolute -bottom-6 -right-6 md:-right-10 bg-[#2d2d2f] p-5 rounded-2xl shadow-xl ring-1 ring-white/10 animate-blur-in-up [animation-delay:300ms]">
+                <p className="text-white font-semibold text-lg tracking-tight">Dr. Mário Warde</p>
                 <p className="text-[#86868b] text-[11px] font-medium uppercase tracking-[0.15em] mt-1">CRM 81.741 • RQE 18.343</p>
               </div>
             </div>
 
             {/* Texto Manifesto */}
             <div className="md:col-span-7 flex flex-col justify-center mt-10 md:mt-0">
-              <h2 className="text-3xl md:text-5xl font-semibold text-[#1d1d1f] mb-8 tracking-tighter leading-[1.1]">
+              <h2 className="text-3xl md:text-5xl font-semibold text-white mb-8 tracking-tighter leading-[1.1]">
                 Maestria forjada na alta complexidade. <br/>
                 <span className="text-[#86868b] italic font-light">Refinada para a estética.</span>
               </h2>
               
-              <div className="space-y-6 text-[#1d1d1f]/75 text-[17px] leading-[1.7] font-normal">
+              <div className="space-y-6 text-white/80 text-[17px] leading-[1.7] font-normal">
                 <p>
-                  Minha assinatura cirúrgica carrega quase três décadas de rigor acadêmico e prático. Como médico formado pela <strong className="font-semibold text-[#1d1d1f]">Universidade de São Paulo (USP)</strong> e especialista pelo Hospital das Clínicas (1994), construí minha base onde a medicina é mais desafiadora: a reconstrução profunda.
+                  Minha assinatura cirúrgica carrega quase três décadas de rigor acadêmico e prático. Como médico formado pela <strong className="font-semibold text-white">Universidade de São Paulo (USP)</strong> e especialista pelo Hospital das Clínicas (1994), construí minha base onde a medicina é mais desafiadora: a reconstrução profunda.
                 </p>
                 <p>
                   A experiência à frente de setores cirúrgicos complexos consolidou minha filosofia de trabalho. Hoje, transfiro toda a precisão e o rigor exigidos em cirurgias de reconstrução para o refinamento estético, proporcionando às minhas pacientes um nível de segurança e naturalidade que apenas a verdadeira experiência pode oferecer.
                 </p>
                 
                 {/* Quote Box Clean */}
-                <div className="mt-10 p-6 bg-[#FAFAFA] rounded-2xl border border-black/5">
-                  <p className="text-[#1d1d1f] font-medium text-lg md:text-xl leading-relaxed tracking-tight italic">
+                <div className="mt-10 p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
+                  <p className="text-white/90 font-medium text-lg md:text-xl leading-relaxed tracking-tight italic">
                     &quot;Meu consultório é o destino de quem não negocia a própria segurança. Entregamos uma experiência médica pautada na excelência técnica, na previsibilidade e no respeito absoluto à anatomia de cada paciente.&quot;
                   </p>
                 </div>
