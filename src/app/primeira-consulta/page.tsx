@@ -349,10 +349,18 @@ export default function PrimeiraConsulta() {
       </section>
 
       {/* 5. FAQ */}
-      <section className="w-full bg-[#f5f5f7] py-24 px-6 border-t border-gray-200">
-        <div className="max-w-3xl mx-auto">
+      <section className="relative w-full bg-[#310f0e] py-24 px-6 border-t border-gray-200 overflow-hidden">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
+          <img 
+            src="/images/mw-background.svg" 
+            alt="MW Logo" 
+            className="w-[800px] max-w-full object-contain"
+          />
+        </div>
+        
+        <div className="relative max-w-3xl mx-auto z-10">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-semibold text-[#1d1d1f] tracking-tighter mb-4">
+            <h2 className="text-3xl md:text-4xl font-semibold text-[#f5f5f7] tracking-tighter mb-4">
               Perguntas Frequentes
             </h2>
           </div>
