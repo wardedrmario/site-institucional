@@ -156,14 +156,27 @@ export default function PrimeiraConsulta() {
 
       {/* 3. PROCEDIMENTOS ASSINATURA (Clean Grid) */}
       <div className="w-full py-24 md:py-32 bg-white relative">
-        <div className="max-w-[1200px] mx-auto px-6">
-          <div className="text-center mb-16 md:mb-24">
-            <span className="text-[#86868b] font-medium text-xs uppercase tracking-[0.2em] mb-4 block">
-              Protocolos Cirúrgicos
-            </span>
-            <h2 className="text-4xl md:text-5xl font-semibold text-[#1d1d1f] tracking-tighter">
-              Procedimentos com Assinatura
-            </h2>
+        <div className="max-w-[1200px] mx-auto px-6 relative">
+          
+          <div className="relative text-center mb-16 md:mb-24 flex flex-col items-center justify-center min-h-[250px]">
+            {/* SVG Background - Absolute and centered behind the text */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
+              <img 
+                src="/images/mw-background.svg" 
+                alt="MW Logo" 
+                className="w-[800px] max-w-full object-contain"
+              />
+            </div>
+            
+            {/* Text Content - Relative to sit on top of SVG */}
+            <div className="relative z-10">
+              <span className="text-[#86868b] font-medium text-xs uppercase tracking-[0.2em] mb-4 block">
+                Protocolos Cirúrgicos
+              </span>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-[#1d1d1f] tracking-tighter">
+                Procedimentos com assinatura
+              </h2>
+            </div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
