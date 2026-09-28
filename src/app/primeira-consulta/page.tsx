@@ -281,9 +281,6 @@ export default function PrimeiraConsulta() {
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
               </div>
               <h3 className="text-xl font-semibold text-[#1d1d1f] mb-3">Localização Privilegiada</h3>
-              <p className="text-[#1d1d1f]/70 leading-relaxed mb-4">
-                Nosso consultório está localizado em uma das regiões mais nobres de São Paulo.
-              </p>
               <address className="text-[#1d1d1f]/90 not-italic font-medium mb-4 text-sm">
                 R. Jericó, 255 - Cj 81<br/>
                 Sumarezinho, São Paulo - SP<br/>
