@@ -240,13 +240,17 @@ export default function PrimeiraConsulta() {
 
 
       {/* 6. FINAL CTA (Soft & Elegant) */}
-      <section className="w-full bg-[#f5f5f7] py-24 md:py-32 px-6 text-center">
+      <section 
+        className="w-full py-24 md:py-32 px-6 text-center relative overflow-hidden"
+        style={{ backgroundImage: "url('/images/bg-wine-texture.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}
+      >
+        <div className="absolute inset-0 bg-[#310f0e]/20 mix-blend-multiply pointer-events-none"></div>
 
-        <div className="max-w-2xl mx-auto flex flex-col items-center">
-          <h2 className="text-4xl md:text-5xl font-semibold text-[#1d1d1f] mb-6 tracking-tighter leading-tight">
+        <div className="max-w-2xl mx-auto flex flex-col items-center relative z-10">
+          <h2 className="text-4xl md:text-5xl font-semibold text-white mb-6 tracking-tighter leading-tight">
             Pronta para dar <br/> o primeiro passo?
           </h2>
-          <p className="text-[#1d1d1f]/60 text-[18px] mb-12 leading-relaxed">
+          <p className="text-white/80 text-[18px] mb-12 leading-relaxed">
             Nossa equipe de atendimento está preparada para entender suas expectativas e desenhar a jornada da sua primeira consulta.
           </p>
           
@@ -255,7 +259,7 @@ export default function PrimeiraConsulta() {
               setShowLeadForm(true);
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className="group relative inline-flex items-center justify-center gap-3 rounded-full bg-[#1d1d1f] px-10 py-5 text-[16px] font-medium text-white transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(0,0,0,0.12)] active:scale-[0.98]"
+            className="group relative inline-flex items-center justify-center gap-3 rounded-full bg-white px-10 py-5 text-[16px] font-semibold text-[#310f0e] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(255,255,255,0.15)] active:scale-[0.98]"
           >
             Falar com Atendimento
           </button>
