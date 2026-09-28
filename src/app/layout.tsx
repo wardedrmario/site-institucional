@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { SmoothScroll } from "@/components/SmoothScroll";
 
 
 export const metadata: Metadata = {
@@ -47,6 +48,7 @@ export default function RootLayout({
           />
         </noscript>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <SmoothScroll />
           <Header />
           {children}
           <Footer />
