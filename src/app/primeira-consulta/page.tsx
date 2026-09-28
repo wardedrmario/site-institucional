@@ -48,7 +48,7 @@ export default function PrimeiraConsulta() {
         {/* Imagem de Fundo Full-Bleed */}
         <div className="absolute inset-0 w-full h-full z-0">
           <img 
-            src="/images/lifestyle/hero4.jpg" 
+            src="/images/lifestyle/hero5.jpg" 
             alt="Beleza Natural" 
             className="w-full h-full object-cover object-[80%_center] md:object-[80%_center]"
           />
