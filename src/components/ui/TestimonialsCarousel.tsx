@@ -37,6 +37,41 @@ const defaultTestimonials = [
     date: "5 meses atrás",
     avatar: "https://ui-avatars.com/api/?name=Michaela+E&background=8d6e63&color=fff&size=150",
     text: "Dr Mario é absolutamente THE BEST! Conheço e confio há mais 25 anos.\n\nSua dedicação, seu conhecimento, sua paciência, o carinho e atenção a todos os mínimos detalhes, são excepcionais!\nEle trata seus pacientes como se fossem os únicos, passando-lhes uma tranquilidade indescritível e sempre dá tudo mais do que certo!\n\nGratidão e indicações, sempre!! :)" 
+  },
+  { 
+    name: "Bete Villalobos", 
+    subtitle: "8 avaliações · 5 fotos",
+    date: "um ano atrás",
+    avatar: "https://ui-avatars.com/api/?name=Bete+Villalobos&background=bf360c&color=fff&size=150",
+    text: "O Dr Mario transmite segurança e habilidade ao conhecê-lo e ao vc ser paciente dele, terá apoio e resultados maravilhosos! Um médico completo, responsável, eficiente e carinhoso! Adoro e indico muito!" 
+  },
+  { 
+    name: "João Abrahão", 
+    subtitle: "11 avaliações · 9 fotos",
+    date: "um ano atrás",
+    avatar: "https://ui-avatars.com/api/?name=Joao+Abrahao&background=1e88e5&color=fff&size=150",
+    text: "Profissional fantástico! Mais que excelência técnica, o cuidado com as pessoas que faz toda a diferença!" 
+  },
+  { 
+    name: "Juliana Silva", 
+    subtitle: "4 avaliações",
+    date: "2 anos atrás",
+    avatar: "https://ui-avatars.com/api/?name=Juliana+Silva&background=9c27b0&color=fff&size=150",
+    text: "Tive a honra de fazer uma lipo com o Dr Mário em 2014. Hoje, eu com 52 anos, ainda vejo nitidamente o resultado da cirurgia, fazendo com que eu me sinta melhor fisicamente e psicologicamente. Agradeço imensamente o carinho e o cuidado em todas as consultas de retorno. Recomendo sempre!" 
+  },
+  { 
+    name: "Vanessa Carvalho", 
+    subtitle: "9 avaliações · 2 fotos",
+    date: "8 meses atrás",
+    avatar: "https://ui-avatars.com/api/?name=Vanessa+Carvalho&background=4caf50&color=fff&size=150",
+    text: "Ahhh o que dizer desse meu cirurgião lindo e maravilhoso? Sou suspeita gente, estou mega ansiosa pra realizar meu sonho com ele e com essas mãos abençoadas que ele tem. Parabéns pelo sucesso e super recomendo. Equipe impecável do início ao fim!" 
+  },
+  { 
+    name: "Patrícia Gomes", 
+    subtitle: "Local Guide · 23 avaliações",
+    date: "um ano atrás",
+    avatar: "https://ui-avatars.com/api/?name=Patricia+Gomes&background=ff9800&color=fff&size=150",
+    text: "Cirurgião excepcional. Me operou há alguns anos e até hoje os resultados são perfeitos. Muito atencioso no pós operatório, sempre disponível no WhatsApp para tirar dúvidas de medicação e repouso. Confio 100% no trabalho dele." 
   }
 ];
 
