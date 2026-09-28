@@ -129,22 +129,22 @@ export default function PrimeiraConsulta() {
             {/* Texto Manifesto */}
             <div className="md:col-span-7 flex flex-col justify-center mt-10 md:mt-0">
               <h2 className="text-3xl md:text-5xl font-semibold text-[#1d1d1f] mb-8 tracking-tighter leading-[1.1]">
-                A verdadeira excelência não grita. <br/>
-                <span className="text-[#86868b] italic font-light">Ela se constrói.</span>
+                Maestria forjada na alta complexidade. <br/>
+                <span className="text-[#86868b] italic font-light">Refinada para a estética.</span>
               </h2>
               
               <div className="space-y-6 text-[#1d1d1f]/75 text-[17px] leading-[1.7] font-normal">
                 <p>
-                  Formado pela <strong className="font-semibold text-[#1d1d1f]">Universidade de São Paulo (USP)</strong> em 1994, com residência médica no Hospital das Clínicas. A base da minha carreira não foi construída na estética, mas forjada na altíssima complexidade da reconstrução.
+                  Minha assinatura cirúrgica carrega quase três décadas de rigor acadêmico e prático. Como médico formado pela <strong className="font-semibold text-[#1d1d1f]">Universidade de São Paulo (USP)</strong> e especialista pelo Hospital das Clínicas (1994), construí minha base onde a medicina é mais desafiadora: a reconstrução profunda.
                 </p>
                 <p>
-                  Coordenei o setor de sequela de queimaduras no Hospital do Servidor Público (SP) e a cirurgia plástica para lipodistrofias no Instituto Emílio Ribas. Essa bagagem me ensinou que o corpo humano exige respeito absoluto aos seus limites.
+                  A experiência à frente de setores cirúrgicos complexos consolidou minha filosofia de trabalho. Hoje, transfiro toda a precisão e o rigor exigidos em cirurgias de reconstrução para o refinamento estético, proporcionando às minhas pacientes um nível de segurança e naturalidade que apenas a verdadeira experiência pode oferecer.
                 </p>
                 
                 {/* Quote Box Clean */}
                 <div className="mt-10 p-6 bg-[#FAFAFA] rounded-2xl border border-black/5">
                   <p className="text-[#1d1d1f] font-medium text-lg md:text-xl leading-relaxed tracking-tight italic">
-                    "Não busco pacientes que procuram apenas por um preço. Nosso foco é em quem exige qualidade na prestação de serviço, segurança inegociável e dignidade."
+                    "Meu consultório é o destino de quem não negocia a própria segurança. Entregamos uma experiência médica pautada na excelência técnica, na previsibilidade e no respeito absoluto à anatomia de cada paciente."
                   </p>
                 </div>
               </div>
