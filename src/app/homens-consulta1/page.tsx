@@ -74,7 +74,7 @@ export default function PrimeiraConsultaHomens() {
             </div>
 
             <h1 className="text-[36px] sm:text-[44px] md:text-[54px] font-semibold tracking-tighter text-[#1d1d1f] leading-[1.05] mb-4">
-              A excelência da sua trajetória <br />
+              A excelência da sua trajetória <br className="hidden sm:block" />
               <span className="italic font-light">refletida na sua aparência.</span>
             </h1>
             
@@ -129,7 +129,7 @@ export default function PrimeiraConsultaHomens() {
               </ScrollReveal>
               
               {/* Crachá flutuante */}
-              <ScrollReveal variant="fade-up" delay={250} duration={800} className="absolute -bottom-6 -right-6 md:-right-10 z-20">
+              <ScrollReveal variant="fade-up" delay={250} duration={800} className="absolute -bottom-6 right-0 sm:-right-6 md:-right-10 z-20">
                 <div className="bg-[#2d2d2f] p-5 rounded-2xl shadow-xl ring-1 ring-white/10">
                   <p className="text-white font-semibold text-lg tracking-tight">Dr. Mário Warde</p>
                   <p className="text-[#86868b] text-[11px] font-medium uppercase tracking-[0.15em] mt-1">CRM 81.741 • RQE 18.343</p>
@@ -138,7 +138,7 @@ export default function PrimeiraConsultaHomens() {
             </div>
 
             {/* Texto Manifesto */}
-            <div className="md:col-span-7 flex flex-col justify-center mt-10 md:mt-0">
+            <div className="md:col-span-7 flex flex-col justify-center">
               <ScrollReveal variant="fade-up" delay={150}>
                 <h2 className="text-3xl md:text-5xl font-semibold text-white mb-8 tracking-tighter leading-[1.1]">
                   O novo padrão da estética. <br/>

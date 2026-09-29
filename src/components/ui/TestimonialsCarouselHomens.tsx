@@ -167,7 +167,7 @@ export function TestimonialsCarouselHomens({ testimonials = defaultTestimonials 
             <div 
               key={idx}
               data-index={idx}
-              className="testimonial-card flex-none w-[340px] md:w-[420px] h-auto snap-center bg-white border border-[#e0e0e0] rounded-xl p-5 md:p-6 flex flex-col shadow-sm transition-all duration-300 select-none"
+              className="testimonial-card flex-none w-[85vw] sm:w-[340px] md:w-[420px] h-auto snap-center bg-white border border-[#e0e0e0] rounded-xl p-5 md:p-6 flex flex-col shadow-sm transition-all duration-300 select-none"
             >
               {/* HEADER (Google Maps Style) */}
               <div className="flex items-start justify-between mb-4">
