@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type LeadScore = 'HOT' | 'WARM' | 'COLD';
+type LeadScore = 'HOT' | 'WARM' | 'COLD';
 
 export interface Lead {
   id: string;
