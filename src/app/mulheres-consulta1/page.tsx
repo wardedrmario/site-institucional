@@ -45,7 +45,7 @@ export default function PrimeiraConsulta() {
         <UTMTracker />
       </Suspense>
 
-      <section className="relative w-full min-h-[100vh] flex items-center overflow-hidden bg-white py-24 md:py-32">
+      <section className="relative w-full min-h-[100dvh] flex items-center overflow-hidden bg-white pt-24 pb-[calc(6rem+env(safe-area-inset-bottom))] md:py-32">
         
         {/* Imagem de Fundo Full-Bleed */}
         <div className="absolute inset-0 w-full h-full z-0">
@@ -106,7 +106,7 @@ export default function PrimeiraConsulta() {
 
       {/* 2. AUTORIDADE ABSOLUTA (Contrast Layout with Brand Color) */}
       <section 
-        className="w-full py-24 md:py-32 px-6 relative overflow-hidden"
+        className="w-full pt-24 pb-[calc(6rem+env(safe-area-inset-bottom))] md:py-32 px-6 relative overflow-hidden"
         style={{ backgroundImage: "url('/images/bg-charcoal-texture.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}
       >
         <div className="absolute inset-0 bg-[#1d1d1f]/40 mix-blend-multiply pointer-events-none"></div>
@@ -174,7 +174,7 @@ export default function PrimeiraConsulta() {
       </section>
 
       {/* 3. PROCEDIMENTOS ASSINATURA (Clean Grid) */}
-      <div className="w-full py-24 md:py-32 bg-white relative">
+      <div className="w-full pt-24 pb-[calc(6rem+env(safe-area-inset-bottom))] md:py-32 bg-white relative">
         <div className="max-w-[1200px] mx-auto px-6 relative">
           
           <ScrollReveal variant="fade-up" duration={800}>
@@ -268,7 +268,7 @@ export default function PrimeiraConsulta() {
 
       {/* 6. FINAL CTA (Soft & Elegant) */}
       <section 
-        className="w-full py-24 md:py-32 px-6 text-center relative overflow-hidden"
+        className="w-full pt-24 pb-[calc(6rem+env(safe-area-inset-bottom))] md:py-32 px-6 text-center relative overflow-hidden"
         style={{ backgroundImage: "url('/images/bg-wine-texture.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}
       >
         <div className="absolute inset-0 bg-[#310f0e]/20 mix-blend-multiply pointer-events-none"></div>

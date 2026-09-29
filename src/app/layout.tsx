@@ -7,6 +7,13 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { SmoothScroll } from "@/components/SmoothScroll";
 
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export const metadata: Metadata = {
   title: "Dr. Mário Warde | Cirurgia Plástica de Alta Precisão",
   description: "A fusão entre o rigor cirúrgico, proporções naturais e acolhimento exclusivo.",

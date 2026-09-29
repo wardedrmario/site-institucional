@@ -250,7 +250,7 @@ export function LeadFormHomens({ onClose }: { onClose?: () => void }) {
                 <textarea
                   maxLength={200}
                   placeholder="Explique brevemente (máx 200 caracteres)..."
-                  className="w-full px-5 py-3.5 bg-[#f5f5f7] border border-black/[0.06] rounded-xl focus:outline-none focus:ring-2 focus:ring-wine focus:bg-white transition-all text-sm text-chumbo placeholder:text-chumbo-light/60 resize-none h-24"
+                  className="w-full px-5 py-3.5 bg-[#f5f5f7] border border-black/[0.06] rounded-xl focus:outline-none focus:ring-2 focus:ring-wine focus:bg-white transition-all text-base md:text-sm text-chumbo placeholder:text-chumbo-light/60 resize-none h-24"
                   value={formData.timeframeDetails}
                   onChange={(e) => setFormData({...formData, timeframeDetails: e.target.value})}
                 />
@@ -275,7 +275,7 @@ export function LeadFormHomens({ onClose }: { onClose?: () => void }) {
                 required
                 type="text" 
                 placeholder="Nome completo" 
-                className="w-full px-5 py-3.5 bg-[#f5f5f7] border border-black/[0.06] rounded-xl focus:outline-none focus:ring-2 focus:ring-wine focus:bg-white transition-all text-sm text-chumbo placeholder:text-chumbo-light/60"
+                className="w-full px-5 py-3.5 bg-[#f5f5f7] border border-black/[0.06] rounded-xl focus:outline-none focus:ring-2 focus:ring-wine focus:bg-white transition-all text-base md:text-sm text-chumbo placeholder:text-chumbo-light/60"
                 value={formData.name}
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
               />
@@ -285,7 +285,7 @@ export function LeadFormHomens({ onClose }: { onClose?: () => void }) {
                 required
                 type="tel" 
                 placeholder="WhatsApp (ex: (11) 99999-9999)" 
-                className="w-full px-5 py-3.5 bg-[#f5f5f7] border border-black/[0.06] rounded-xl focus:outline-none focus:ring-2 focus:ring-wine focus:bg-white transition-all text-sm text-chumbo placeholder:text-chumbo-light/60"
+                className="w-full px-5 py-3.5 bg-[#f5f5f7] border border-black/[0.06] rounded-xl focus:outline-none focus:ring-2 focus:ring-wine focus:bg-white transition-all text-base md:text-sm text-chumbo placeholder:text-chumbo-light/60"
                 value={formData.phone}
                 onChange={handlePhoneChange}
                 maxLength={15}
@@ -293,7 +293,7 @@ export function LeadFormHomens({ onClose }: { onClose?: () => void }) {
               <input 
                 type="text" 
                 placeholder="Sua cidade / estado" 
-                className="w-full px-5 py-3.5 bg-[#f5f5f7] border border-black/[0.06] rounded-xl focus:outline-none focus:ring-2 focus:ring-wine focus:bg-white transition-all text-sm text-chumbo placeholder:text-chumbo-light/60"
+                className="w-full px-5 py-3.5 bg-[#f5f5f7] border border-black/[0.06] rounded-xl focus:outline-none focus:ring-2 focus:ring-wine focus:bg-white transition-all text-base md:text-sm text-chumbo placeholder:text-chumbo-light/60"
                 value={formData.city}
                 onChange={(e) => setFormData({...formData, city: e.target.value})}
               />
@@ -303,7 +303,7 @@ export function LeadFormHomens({ onClose }: { onClose?: () => void }) {
                 required
                 type="email" 
                 placeholder="E-mail principal" 
-                className="w-full px-5 py-3.5 bg-[#f5f5f7] border border-black/[0.06] rounded-xl focus:outline-none focus:ring-2 focus:ring-wine focus:bg-white transition-all text-sm text-chumbo placeholder:text-chumbo-light/60"
+                className="w-full px-5 py-3.5 bg-[#f5f5f7] border border-black/[0.06] rounded-xl focus:outline-none focus:ring-2 focus:ring-wine focus:bg-white transition-all text-base md:text-sm text-chumbo placeholder:text-chumbo-light/60"
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
               />
