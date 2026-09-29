@@ -211,9 +211,9 @@ export default function PrimeiraConsulta() {
                     className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
                   />
                 </div>
-                <h3 className="text-2xl font-semibold text-[#1d1d1f] mb-3 tracking-tight px-2">Harmonia Facial</h3>
+                <h3 className="text-2xl font-semibold text-[#1d1d1f] mb-3 tracking-tight px-2">Harmonia da Face</h3>
                 <p className="text-[#1d1d1f]/60 leading-relaxed text-[16px] px-2">
-                  Lifting Facial e Rinoplastia com foco na preservação da identidade visual e contornos naturais da face.
+                  Lifting facial (Deep Plane Face Lifting) e outros procedimentos faciais com foco na preservação da identidade visual e contornos naturais da face.
                 </p>
               </div>
             </ScrollReveal>
