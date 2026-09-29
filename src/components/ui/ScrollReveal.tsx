@@ -1,71 +1,110 @@
 'use client';
 
-import { useEffect, useRef, useState, ReactNode } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface ScrollRevealProps {
-  children: ReactNode;
+  children: React.ReactNode;
   className?: string;
-  delay?: number;
-  direction?: 'up' | 'down' | 'left' | 'right' | 'none';
-  distance?: string;
+  variant?: 'fade-up' | 'scale-up' | 'fade-in' | 'fade-left' | 'fade-right';
+  direction?: 'up' | 'down' | 'left' | 'right' | string;
+  delay?: number; // Delay in milliseconds
+  duration?: number; // Duration in milliseconds
+  threshold?: number;
+  once?: boolean;
 }
 
-export function ScrollReveal({ 
-  children, 
-  className = '', 
+export function ScrollReveal({
+  children,
+  className = '',
+  variant,
+  direction,
   delay = 0,
-  direction = 'up',
-  distance = '40px'
+  duration = 900,
+  threshold = 0.15,
+  once = true,
 }: ScrollRevealProps) {
   const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const elementRef = useRef<HTMLDivElement>(null);
+
+  // Normalize variant from either variant or direction prop
+  const activeVariant = variant || (
+    direction === 'left' ? 'fade-left' :
+    direction === 'right' ? 'fade-right' :
+    'fade-up'
+  );
 
   useEffect(() => {
-    const currentRef = ref.current;
-    
+    // Respect user's motion preferences
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      setIsVisible(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setTimeout(() => setIsVisible(true), delay);
-          if (currentRef) {
-            observer.unobserve(currentRef);
+          setIsVisible(true);
+          if (once && elementRef.current) {
+            observer.unobserve(elementRef.current);
           }
+        } else if (!once) {
+          setIsVisible(false);
         }
       },
-      { 
-        threshold: 0.1, 
-        rootMargin: '0px 0px -50px 0px' 
+      {
+        threshold,
+        rootMargin: '0px 0px -60px 0px',
       }
     );
 
-    if (currentRef) {
-      observer.observe(currentRef);
+    const currentEl = elementRef.current;
+    if (currentEl) {
+      observer.observe(currentEl);
     }
 
     return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
+      if (currentEl) {
+        observer.unobserve(currentEl);
       }
     };
-  }, [delay]);
+  }, [once, threshold]);
 
-  let transformInitial = '';
-  switch (direction) {
-    case 'up': transformInitial = `translateY(${distance})`; break;
-    case 'down': transformInitial = `translateY(-${distance})`; break;
-    case 'left': transformInitial = `translateX(${distance})`; break;
-    case 'right': transformInitial = `translateX(-${distance})`; break;
-    case 'none': transformInitial = 'translateY(0)'; break;
-  }
+  const getVariantStyles = () => {
+    switch (activeVariant) {
+      case 'scale-up':
+        return isVisible
+          ? 'opacity-100 scale-100 translate-y-0 filter-none'
+          : 'opacity-0 scale-[0.96] translate-y-4 blur-[2px]';
+      case 'fade-in':
+        return isVisible
+          ? 'opacity-100 filter-none'
+          : 'opacity-0 blur-[2px]';
+      case 'fade-left':
+        return isVisible
+          ? 'opacity-100 translate-x-0'
+          : 'opacity-0 -translate-x-8';
+      case 'fade-right':
+        return isVisible
+          ? 'opacity-100 translate-x-0'
+          : 'opacity-0 translate-x-8';
+      case 'fade-up':
+      default:
+        return isVisible
+          ? 'opacity-100 translate-y-0 filter-none'
+          : 'opacity-0 translate-y-8 blur-[1px]';
+    }
+  };
 
   return (
     <div
-      ref={ref}
-      className={`transition-all duration-[1200ms] cubic-bezier(0.16, 1, 0.3, 1) ${className}`}
+      ref={elementRef}
+      className={`transform-gpu transition-all ${getVariantStyles()} ${className}`}
       style={{
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? 'translate(0, 0)' : transformInitial,
-        filter: isVisible ? 'blur(0)' : 'blur(4px)',
+        transitionDuration: `${duration}ms`,
+        transitionDelay: `${delay}ms`,
+        transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+        willChange: 'transform, opacity, filter',
       }}
     >
       {children}

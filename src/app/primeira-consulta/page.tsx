@@ -4,6 +4,8 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { LeadForm } from "@/components/ui/LeadForm";
 import { TestimonialsCarousel } from "@/components/ui/TestimonialsCarousel";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { ScrollProgressBar } from "@/components/ui/ScrollProgressBar";
 
 // 🧲 COMPONENTE INVISÍVEL PARA RASTREAMENTO (CAPI PREPARATION)
 function UTMTracker() {
@@ -38,6 +40,7 @@ export default function PrimeiraConsulta() {
 
   return (
     <main className="min-h-screen bg-white selection:bg-[#ccb9b6]/30 selection:text-[#310f0e]">
+      <ScrollProgressBar />
       <Suspense fallback={null}>
         <UTMTracker />
       </Suspense>
@@ -115,43 +118,55 @@ export default function PrimeiraConsulta() {
             
             {/* Foto Dr. Mário - Agora com fundo claro ao redor e respiro */}
             <div className="md:col-span-5 relative">
-              <div className="w-full aspect-[4/5] rounded-3xl overflow-hidden shadow-[0_12px_40px_rgb(0,0,0,0.3)] relative group">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img 
-                  src="/images/dr-mario/0J4A2251-wine.jpg" 
-                  alt="Dr. Mário Warde" 
-                  className="w-full h-full object-cover object-top transition-transform duration-1000 ease-out group-hover:scale-105"
-                />
-              </div>
+              <ScrollReveal variant="scale-up" duration={1000}>
+                <div className="w-full aspect-[4/5] rounded-3xl overflow-hidden shadow-[0_12px_40px_rgb(0,0,0,0.3)] relative group">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img 
+                    src="/images/dr-mario/0J4A2251-wine.jpg" 
+                    alt="Dr. Mário Warde" 
+                    className="w-full h-full object-cover object-top transition-transform duration-1000 ease-out group-hover:scale-105"
+                  />
+                </div>
+              </ScrollReveal>
               
               {/* Crachá flutuante */}
-              <div className="absolute -bottom-6 -right-6 md:-right-10 bg-[#2d2d2f] p-5 rounded-2xl shadow-xl ring-1 ring-white/10 animate-blur-in-up [animation-delay:300ms]">
-                <p className="text-white font-semibold text-lg tracking-tight">Dr. Mário Warde</p>
-                <p className="text-[#86868b] text-[11px] font-medium uppercase tracking-[0.15em] mt-1">CRM 81.741 • RQE 18.343</p>
-              </div>
+              <ScrollReveal variant="fade-up" delay={250} duration={800} className="absolute -bottom-6 -right-6 md:-right-10 z-20">
+                <div className="bg-[#2d2d2f] p-5 rounded-2xl shadow-xl ring-1 ring-white/10">
+                  <p className="text-white font-semibold text-lg tracking-tight">Dr. Mário Warde</p>
+                  <p className="text-[#86868b] text-[11px] font-medium uppercase tracking-[0.15em] mt-1">CRM 81.741 • RQE 18.343</p>
+                </div>
+              </ScrollReveal>
             </div>
 
             {/* Texto Manifesto */}
             <div className="md:col-span-7 flex flex-col justify-center mt-10 md:mt-0">
-              <h2 className="text-3xl md:text-5xl font-semibold text-white mb-8 tracking-tighter leading-[1.1]">
-                Maestria forjada na alta complexidade. <br/>
-                <span className="text-[#86868b] italic font-light">Refinada para a estética.</span>
-              </h2>
+              <ScrollReveal variant="fade-up" delay={150}>
+                <h2 className="text-3xl md:text-5xl font-semibold text-white mb-8 tracking-tighter leading-[1.1]">
+                  Maestria forjada na alta complexidade. <br/>
+                  <span className="text-[#86868b] italic font-light">Refinada para a estética.</span>
+                </h2>
+              </ScrollReveal>
               
               <div className="space-y-6 text-white/80 text-[17px] leading-[1.7] font-normal">
-                <p>
-                  Minha assinatura cirúrgica carrega quase três décadas de rigor acadêmico e prático. Como médico formado pela <strong className="font-semibold text-white">Universidade de São Paulo (USP)</strong> e especialista pelo Hospital das Clínicas (1994), construí minha base onde a medicina é mais desafiadora: a reconstrução profunda.
-                </p>
-                <p>
-                  A experiência à frente de setores cirúrgicos complexos consolidou minha filosofia de trabalho. Hoje, transfiro toda a precisão e o rigor exigidos em cirurgias de reconstrução para o refinamento estético, proporcionando às minhas pacientes um nível de segurança e naturalidade que apenas a verdadeira experiência pode oferecer.
-                </p>
+                <ScrollReveal variant="fade-up" delay={250}>
+                  <p>
+                    Minha assinatura cirúrgica carrega quase três décadas de rigor acadêmico e prático. Como médico formado pela <strong className="font-semibold text-white">Universidade de São Paulo (USP)</strong> e especialista pelo Hospital das Clínicas (1994), construí minha base onde a medicina é mais desafiadora: a reconstrução profunda.
+                  </p>
+                </ScrollReveal>
+                <ScrollReveal variant="fade-up" delay={350}>
+                  <p>
+                    A experiência à frente de setores cirúrgicos complexos consolidou minha filosofia de trabalho. Hoje, transfiro toda a precisão e o rigor exigidos em cirurgias de reconstrução para o refinamento estético, proporcionando às minhas pacientes um nível de segurança e naturalidade que apenas a verdadeira experiência pode oferecer.
+                  </p>
+                </ScrollReveal>
                 
                 {/* Quote Box Clean */}
-                <div className="mt-10 p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
-                  <p className="text-white/90 font-medium text-lg md:text-xl leading-relaxed tracking-tight italic">
-                    &quot;Meu consultório é o destino de quem não negocia a própria segurança. Entregamos uma experiência médica pautada na excelência técnica, na previsibilidade e no respeito absoluto à anatomia de cada paciente.&quot;
-                  </p>
-                </div>
+                <ScrollReveal variant="fade-up" delay={450}>
+                  <div className="mt-10 p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
+                    <p className="text-white/90 font-medium text-lg md:text-xl leading-relaxed tracking-tight italic">
+                      &quot;Meu consultório é o destino de quem não negocia a própria segurança. Entregamos uma experiência médica pautada na excelência técnica, na previsibilidade e no respeito absoluto à anatomia de cada paciente.&quot;
+                    </p>
+                  </div>
+                </ScrollReveal>
               </div>
             </div>
 
@@ -163,76 +178,84 @@ export default function PrimeiraConsulta() {
       <div className="w-full py-24 md:py-32 bg-white relative">
         <div className="max-w-[1200px] mx-auto px-6 relative">
           
-          <div className="relative text-center mb-16 md:mb-24 flex flex-col items-center justify-center min-h-[250px]">
-            {/* SVG Background - Absolute and centered behind the text */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
-              <img 
-                src="/images/mw-background.svg" 
-                alt="MW Logo" 
-                className="w-[800px] max-w-full object-contain"
-              />
+          <ScrollReveal variant="fade-up" duration={800}>
+            <div className="relative text-center mb-16 md:mb-24 flex flex-col items-center justify-center min-h-[250px]">
+              {/* SVG Background - Absolute and centered behind the text */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
+                <img 
+                  src="/images/mw-background.svg" 
+                  alt="MW Logo" 
+                  className="w-[800px] max-w-full object-contain"
+                />
+              </div>
+              
+              {/* Text Content - Relative to sit on top of SVG */}
+              <div className="relative z-10">
+                <span className="text-[#86868b] font-medium text-xs uppercase tracking-[0.2em] mb-4 block">
+                  Protocolos Cirúrgicos
+                </span>
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-[#1d1d1f] tracking-tighter">
+                  Procedimentos com assinatura
+                </h2>
+              </div>
             </div>
-            
-            {/* Text Content - Relative to sit on top of SVG */}
-            <div className="relative z-10">
-              <span className="text-[#86868b] font-medium text-xs uppercase tracking-[0.2em] mb-4 block">
-                Protocolos Cirúrgicos
-              </span>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-[#1d1d1f] tracking-tighter">
-                Procedimentos com assinatura
-              </h2>
-            </div>
-          </div>
+          </ScrollReveal>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
             
             {/* Facial */}
-            <div className="group cursor-pointer flex flex-col">
-              <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden mb-8 ring-1 ring-black/5 shadow-sm transition-shadow duration-500 group-hover:shadow-xl">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img 
-                  src="/images/procedures/facial.jpg" 
-                  alt="Harmonia Facial" 
-                  className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
-                />
+            <ScrollReveal variant="fade-up" delay={0} duration={850}>
+              <div className="group cursor-pointer flex flex-col">
+                <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden mb-8 ring-1 ring-black/5 shadow-sm transition-shadow duration-500 group-hover:shadow-xl">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img 
+                    src="/images/procedures/facial.jpg" 
+                    alt="Harmonia Facial" 
+                    className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+                  />
+                </div>
+                <h3 className="text-2xl font-semibold text-[#1d1d1f] mb-3 tracking-tight px-2">Harmonia Facial</h3>
+                <p className="text-[#1d1d1f]/60 leading-relaxed text-[16px] px-2">
+                  Lifting Facial e Rinoplastia com foco na preservação da identidade visual e contornos naturais da face.
+                </p>
               </div>
-              <h3 className="text-2xl font-semibold text-[#1d1d1f] mb-3 tracking-tight px-2">Harmonia Facial</h3>
-              <p className="text-[#1d1d1f]/60 leading-relaxed text-[16px] px-2">
-                Lifting Facial e Rinoplastia com foco na preservação da identidade visual e contornos naturais da face.
-              </p>
-            </div>
+            </ScrollReveal>
 
             {/* Mamas */}
-            <div className="group cursor-pointer flex flex-col">
-              <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden mb-8 ring-1 ring-black/5 shadow-sm transition-shadow duration-500 group-hover:shadow-xl">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img 
-                  src="/images/procedures/breast.jpg" 
-                  alt="Cirurgia Mamária" 
-                  className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
-                />
+            <ScrollReveal variant="fade-up" delay={160} duration={850}>
+              <div className="group cursor-pointer flex flex-col">
+                <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden mb-8 ring-1 ring-black/5 shadow-sm transition-shadow duration-500 group-hover:shadow-xl">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img 
+                    src="/images/procedures/breast.jpg" 
+                    alt="Cirurgia Mamária" 
+                    className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+                  />
+                </div>
+                <h3 className="text-2xl font-semibold text-[#1d1d1f] mb-3 tracking-tight px-2">Elegância Mamária</h3>
+                <p className="text-[#1d1d1f]/60 leading-relaxed text-[16px] px-2">
+                  Mamoplastia e Mastopexia desenhadas para proporções que respeitam o biotipo estrutural da paciente.
+                </p>
               </div>
-              <h3 className="text-2xl font-semibold text-[#1d1d1f] mb-3 tracking-tight px-2">Elegância Mamária</h3>
-              <p className="text-[#1d1d1f]/60 leading-relaxed text-[16px] px-2">
-                Mamoplastia e Mastopexia desenhadas para proporções que respeitam o biotipo estrutural da paciente.
-              </p>
-            </div>
+            </ScrollReveal>
 
             {/* Contorno Corporal */}
-            <div className="group cursor-pointer flex flex-col">
-              <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden mb-8 ring-1 ring-black/5 shadow-sm transition-shadow duration-500 group-hover:shadow-xl">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img 
-                  src="/images/procedures/body.jpg" 
-                  alt="Contorno Corporal" 
-                  className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
-                />
+            <ScrollReveal variant="fade-up" delay={320} duration={850}>
+              <div className="group cursor-pointer flex flex-col">
+                <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden mb-8 ring-1 ring-black/5 shadow-sm transition-shadow duration-500 group-hover:shadow-xl">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img 
+                    src="/images/procedures/body.jpg" 
+                    alt="Contorno Corporal" 
+                    className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+                  />
+                </div>
+                <h3 className="text-2xl font-semibold text-[#1d1d1f] mb-3 tracking-tight px-2">Contorno Corporal</h3>
+                <p className="text-[#1d1d1f]/60 leading-relaxed text-[16px] px-2">
+                  Lipoaspiração de alta definição e Abdominoplastia esculpidas com rigor técnico e refinamento.
+                </p>
               </div>
-              <h3 className="text-2xl font-semibold text-[#1d1d1f] mb-3 tracking-tight px-2">Contorno Corporal</h3>
-              <p className="text-[#1d1d1f]/60 leading-relaxed text-[16px] px-2">
-                Lipoaspiração de alta definição e Abdominoplastia esculpidas com rigor técnico e refinamento.
-              </p>
-            </div>
+            </ScrollReveal>
 
           </div>
         </div>
