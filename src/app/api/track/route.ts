@@ -16,7 +16,7 @@ function normalizePhone(phone: string): string {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { procedure, timeframe, name, phone, email, testCode } = body;
+    const { procedure, timeframe, phone, email, testCode } = body;
 
     const normalizedPhone = normalizePhone(phone);
     const hashedEmail = hashData(email);
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
     const metaAccessToken = process.env.META_ACCESS_TOKEN || process.env.META_CAPI_TOKEN;
 
     if (metaPixelId && metaAccessToken) {
-      const eventData: any = {
+      const eventData: Record<string, unknown> = {
         event_name: 'Lead',
         event_time: eventTime,
         action_source: 'website',

@@ -48,7 +48,7 @@ export function Header() {
       }).format(currentTime).replace('.,', ',') // Remove extra dots in some browsers
     : '';
 
-  if (pathname === '/primeira-consulta' || pathname.startsWith('/admin')) {
+  if (pathname === '/mulheres-consulta1' || pathname === '/homens-consulta1' || pathname.startsWith('/admin')) {
     return null;
   }
 

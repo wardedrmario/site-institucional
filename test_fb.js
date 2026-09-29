@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const crypto = require('crypto');
 async function test() {
   const metaPixelId = "4376073622648258";

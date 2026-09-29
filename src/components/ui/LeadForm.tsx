@@ -76,7 +76,7 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
 
       // 📊 DISPARA O EVENTO 'Lead' PARA O DATALAYER (GTM & PIXEL)
       if (typeof window !== 'undefined') {
-        const win = window as any;
+        const win = window as Window & typeof globalThis & { dataLayer?: Record<string, unknown>[] };
         win.dataLayer = win.dataLayer || [];
         win.dataLayer.push({
           event: 'Lead',

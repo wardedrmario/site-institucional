@@ -37,7 +37,7 @@ export function ScrollReveal({
     // Respect user's motion preferences
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) {
-      setIsVisible(true);
+      setTimeout(() => setIsVisible(true), 0);
       return;
     }
 

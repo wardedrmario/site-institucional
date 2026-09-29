@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
     const secret = new TextEncoder().encode(process.env.JWT_SECRET || 'fallback_secret_key_123');
     await jwtVerify(token, secret);
     return NextResponse.next();
-  } catch (error) {
+  } catch {
     // Token inválido ou expirado
     return NextResponse.redirect(new URL('/admin/login', request.url));
   }

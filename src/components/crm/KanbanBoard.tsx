@@ -14,94 +14,19 @@ const COLUMNS = [
   { id: 'pos_op', title: 'Pós-operatório / Recorrência' },
 ];
 
-const INITIAL_MOCK_LEADS: Record<string, Lead[]> = {
-  'triagem': [
-    {
-      id: '1',
-      name: 'Maria Eduarda Silva',
-      phone: '(11) 98765-4321',
-      procedure: 'Rinoplastia',
-      timeframe: 'O quanto antes (Até 1 mês)',
-      source: 'Meta Ads | Lipo',
-      score: 145,
-      scoreLabel: 'HOT',
-      nextAction: 'Ligar para Agendar',
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: '2',
-      name: 'Ana Carolina',
-      phone: '(11) 91234-5678',
-      procedure: 'Botox / Preenchimento',
-      timeframe: 'Pesquisando',
-      source: 'Google Ads',
-      score: 45,
-      scoreLabel: 'COLD',
-      nextAction: 'Enviar material educativo',
-      createdAt: new Date().toISOString(),
-    }
-  ],
-  'qualificacao': [
-    {
-      id: '3',
-      name: 'Juliana Costa',
-      phone: '(21) 99999-8888',
-      procedure: 'Prótese de Mama',
-      timeframe: 'Próximos 3 meses',
-      source: 'Indicação (Fernanda)',
-      score: 110,
-      scoreLabel: 'WARM',
-      nextAction: 'Tirar dúvidas de recuperação',
-      createdAt: new Date().toISOString(),
-    }
-  ],
-  'consulta': [
-    {
-      id: '4',
-      name: 'Beatriz Souza',
-      phone: '(31) 97777-6666',
-      procedure: 'Lipo HD',
-      timeframe: 'O quanto antes',
-      source: 'Instagram Orgânico',
-      score: 160,
-      scoreLabel: 'HOT',
-      nextAction: 'Preparar ficha médica',
-      createdAt: new Date().toISOString(),
-    }
-  ],
-  'pos_consulta': [
-    {
-      id: '5',
-      name: 'Carla Dias',
-      phone: '(11) 95555-4444',
-      procedure: 'Rinoplastia',
-      timeframe: 'O quanto antes',
-      source: 'Meta Ads',
-      score: 135,
-      scoreLabel: 'HOT',
-      nextAction: 'Follow-up 24h (Resumo)',
-      createdAt: new Date().toISOString(),
-    }
-  ],
-  'deposito': [],
-  'pre_op': [],
-  'pos_op': [
-    {
-      id: '6',
-      name: 'Fernanda Lima',
-      phone: '(11) 94444-3333',
-      procedure: 'Botox (Terço Superior)',
-      timeframe: 'Feito há 4 meses',
-      source: 'Paciente Antiga',
-      score: 80,
-      scoreLabel: 'WARM',
-      nextAction: 'Enviar Lembrete de Retorno',
-      createdAt: new Date().toISOString(),
-    }
-  ]
-};
+export interface DbLead {
+  id: string;
+  name: string;
+  phone: string;
+  procedure?: string;
+  timeframe?: string;
+  utms?: string | Record<string, string>;
+  score?: number;
+  status?: string;
+  created_at: string;
+}
 
-export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: any[] }) {
+export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLead[] }) {
   // Converte a lista plana de leads do BD para o formato de colunas do Kanban
   const groupedLeads = React.useMemo(() => {
     const columns: Record<string, Lead[]> = {
@@ -125,7 +50,7 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: any[
         timeframe: lead.timeframe || '-',
         source: source,
         score: lead.score || 50,
-        scoreLabel: lead.score > 100 ? 'HOT' : lead.score > 60 ? 'WARM' : 'COLD',
+        scoreLabel: (lead.score || 50) > 100 ? 'HOT' : (lead.score || 50) > 60 ? 'WARM' : 'COLD',
         nextAction: lead.status === 'triagem' ? 'Qualificar via Whats' : '-',
         createdAt: lead.created_at,
       };
@@ -145,6 +70,7 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: any[
   
   // Atualiza as colunas se os leads do banco mudarem (ex: refresh da página)
   React.useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setColumnsData(groupedLeads);
   }, [groupedLeads]);
 

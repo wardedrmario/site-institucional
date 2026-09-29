@@ -1,7 +1,7 @@
 import { neon } from '@neondatabase/serverless';
 import Link from 'next/link';
 import Image from 'next/image';
-import KanbanBoard from '@/components/crm/KanbanBoard';
+import KanbanBoard, { DbLead } from '@/components/crm/KanbanBoard';
 import LogoutButton from '@/components/crm/LogoutButton';
 
 export const dynamic = 'force-dynamic';
@@ -15,12 +15,12 @@ export default async function AdminPage({
   const view = resolvedParams.view || 'kanban';
 
   // Busca os leads
-  let leads: Record<string, unknown>[] = [];
+  let leads: DbLead[] = [];
   try {
     const dbUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL;
     if (dbUrl) {
       const sql = neon(dbUrl as string);
-      leads = await sql`SELECT * FROM leads ORDER BY created_at DESC LIMIT 200`;
+      leads = (await sql`SELECT * FROM leads ORDER BY created_at DESC LIMIT 200`) as DbLead[];
     }
   } catch (error) {
     console.error('Erro ao buscar leads:', error);
