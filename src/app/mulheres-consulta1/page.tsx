@@ -65,24 +65,24 @@ export default function PrimeiraConsulta() {
         {/* Conteúdo sobreposto alinhado à direita, agora encapsulado num Card de Vidro */}
         <div className="relative z-10 w-full max-w-[1200px] mx-auto px-6 mt-16 md:mt-0 flex justify-end">
           
-          <div className="max-w-2xl animate-blur-in-up bg-white/30 backdrop-blur-2xl p-8 md:p-12 rounded-[2rem] shadow-[0_20px_40px_rgba(0,0,0,0.08)] ring-1 ring-white/50">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="h-[1px] w-8 bg-[#ccb9b6]" />
-              <span className="text-[#86868b] font-medium text-xs md:text-sm uppercase tracking-[0.25em]">
-                Alta Cirurgia Plástica
-              </span>
-            </div>
+          {!showLeadForm ? (
+            <div className="max-w-2xl animate-blur-in-up bg-white/30 backdrop-blur-2xl p-8 md:p-12 rounded-[2rem] shadow-[0_20px_40px_rgba(0,0,0,0.08)] ring-1 ring-white/50">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="h-[1px] w-8 bg-[#ccb9b6]" />
+                <span className="text-[#86868b] font-medium text-xs md:text-sm uppercase tracking-[0.25em]">
+                  Alta Cirurgia Plástica
+                </span>
+              </div>
 
-            <h1 className="text-[40px] sm:text-[50px] md:text-[64px] font-semibold tracking-tighter text-[#1d1d1f] leading-[1.05] mb-6">
-              Sinta-se segura <br />
-              <span className="italic font-light">na própria pele.</span>
-            </h1>
-            
-            <p className="text-lg md:text-xl text-[#1d1d1f]/75 font-normal leading-relaxed max-w-lg mb-10">
-              O domínio pleno da Alta Cirurgia Plástica. Há mais de 30 anos aliando rigor técnico, segurança absoluta e contornos naturais para revelar a sua melhor versão.
-            </p>
+              <h1 className="text-[40px] sm:text-[50px] md:text-[64px] font-semibold tracking-tighter text-[#1d1d1f] leading-[1.05] mb-6">
+                Sinta-se segura <br />
+                <span className="italic font-light">na própria pele.</span>
+              </h1>
+              
+              <p className="text-lg md:text-xl text-[#1d1d1f]/75 font-normal leading-relaxed max-w-lg mb-10">
+                O domínio pleno da Alta Cirurgia Plástica. Há mais de 30 anos aliando rigor técnico, segurança absoluta e contornos naturais para revelar a sua melhor versão.
+              </p>
 
-            {!showLeadForm && (
               <button 
                 onClick={() => setShowLeadForm(true)}
                 className="group relative inline-flex items-center justify-center gap-3 rounded-full bg-[#1d1d1f] px-8 py-4 text-[15px] font-medium text-white shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 hover:bg-[#310f0e] hover:shadow-[0_12px_24px_rgba(49,15,14,0.2)] hover:-translate-y-0.5 active:scale-[0.98]"
@@ -92,14 +92,12 @@ export default function PrimeiraConsulta() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
               </button>
-            )}
-
-            {showLeadForm && (
-              <div id="triagem" className="w-full max-w-lg mt-4 animate-blur-in-up shadow-2xl ring-1 ring-black/5 rounded-[32px] overflow-hidden">
-                <LeadForm onClose={() => setShowLeadForm(false)} />
-              </div>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div id="triagem" className="w-full max-w-lg animate-blur-in-up">
+              <LeadForm onClose={() => setShowLeadForm(false)} />
+            </div>
+          )}
 
         </div>
       </section>
