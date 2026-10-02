@@ -48,12 +48,17 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
     
     try {
       // Envia para o tracking endpoint se configurado
+      // Gera um ID único para este Lead (para desduplicação)
+      const leadEventId = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2) + Date.now().toString(36);
+
+      // Envia para o tracking endpoint se configurado
       await fetch('/api/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
-          sourceUrl: window.location.origin + window.location.pathname
+          sourceUrl: window.location.origin + window.location.pathname,
+          eventId: leadEventId
         })
       }).catch(() => null);
       
@@ -83,6 +88,7 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
         win.dataLayer = win.dataLayer || [];
         win.dataLayer.push({
           event: 'Lead',
+          event_id: leadEventId,
           user_data: {
             email: formData.email,
             phone: formData.phone,

@@ -16,12 +16,12 @@ function normalizePhone(phone: string): string {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { phone, email, testCode, sourceUrl } = body;
+    const { phone, email, testCode, sourceUrl, eventId } = body;
 
     const normalizedPhone = normalizePhone(phone);
     const hashedEmail = hashData(email);
     const hashedPhone = hashData(normalizedPhone);
-    const eventId = crypto.randomUUID();
+    const finalEventId = eventId || crypto.randomUUID();
     const eventTime = Math.floor(Date.now() / 1000);
     
     const clientIp = request.headers.get('x-forwarded-for') || '0.0.0.0';
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
         event_time: eventTime,
         action_source: 'website',
         event_source_url: sourceUrl || 'https://drmariowarde.com/',
-        event_id: eventId,
+        event_id: finalEventId,
         user_data: {
           em: [hashedEmail],
           ph: [hashedPhone],
