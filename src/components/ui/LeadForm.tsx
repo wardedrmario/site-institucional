@@ -51,7 +51,10 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
       await fetch('/api/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          ...formData,
+          sourceUrl: window.location.origin + window.location.pathname
+        })
       }).catch(() => null);
       
       const whatsappNumber = "5511966496116"; 

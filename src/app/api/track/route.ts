@@ -16,7 +16,7 @@ function normalizePhone(phone: string): string {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { procedure, timeframe, phone, email, testCode } = body;
+    const { phone, email, testCode, sourceUrl } = body;
 
     const normalizedPhone = normalizePhone(phone);
     const hashedEmail = hashData(email);
@@ -35,16 +35,13 @@ export async function POST(request: Request) {
         event_name: 'Lead',
         event_time: eventTime,
         action_source: 'website',
+        event_source_url: sourceUrl || 'https://drmariowarde.com/',
         event_id: eventId,
         user_data: {
           em: [hashedEmail],
           ph: [hashedPhone],
           client_ip_address: clientIp,
           client_user_agent: userAgent,
-        },
-        custom_data: {
-          procedure: procedure,
-          timeframe: timeframe
         }
       };
 
