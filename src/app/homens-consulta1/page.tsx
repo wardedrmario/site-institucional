@@ -2,8 +2,10 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { LeadFormHomens } from "@/components/ui/LeadFormHomens";
-import { TestimonialsCarouselHomens } from "@/components/ui/TestimonialsCarouselHomens";
+const TestimonialsCarouselHomens = dynamic(() => import('@/components/ui/TestimonialsCarouselHomens').then(mod => mod.TestimonialsCarouselHomens));
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { ScrollProgressBar } from "@/components/ui/ScrollProgressBar";
 
@@ -49,10 +51,13 @@ export default function PrimeiraConsultaHomens() {
         
         {/* Imagem de Fundo Full-Bleed */}
         <div className="absolute inset-0 w-full h-full z-0">
-          <img 
+          <Image 
             src="/images/lifestyle/hero6.jpeg" 
             alt="Beleza e Autoconfiança Masculina" 
-            className="w-full h-full object-cover object-[20%_center] md:object-[20%_center]"
+            fill
+            priority
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover object-[20%_center] md:object-[20%_center]"
           />
           {/* Removidos os degradês complexos. A imagem fica limpa no fundo. */}
           {/* Gradiente de baixo sutil para a transição */}
@@ -85,7 +90,7 @@ export default function PrimeiraConsultaHomens() {
 
               <button 
                 onClick={() => setShowLeadForm(true)}
-                className="group relative inline-flex items-center justify-center gap-3 rounded-full bg-[#1d1d1f] px-8 py-4 text-[15px] font-medium text-white shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 hover:bg-[#310f0e] hover:shadow-[0_12px_24px_rgba(49,15,14,0.2)] hover:-translate-y-0.5 active:scale-[0.98]"
+                className="group w-full sm:w-auto relative inline-flex items-center justify-center gap-3 rounded-full bg-[#1d1d1f] px-8 py-4 text-[15px] font-medium text-white shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 hover:bg-[#310f0e] hover:shadow-[0_12px_24px_rgba(49,15,14,0.2)] hover:-translate-y-0.5 active:scale-[0.98]"
               >
                 Solicitar Planejamento
                 <svg className="w-4 h-4 text-white/70 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -284,7 +289,7 @@ export default function PrimeiraConsultaHomens() {
               setShowLeadForm(true);
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className="group relative inline-flex items-center justify-center gap-3 rounded-full bg-white px-10 py-5 text-[16px] font-semibold text-[#310f0e] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(255,255,255,0.15)] active:scale-[0.98]"
+            className="group w-full sm:w-auto relative inline-flex items-center justify-center gap-3 rounded-full bg-white px-10 py-5 text-[16px] font-semibold text-[#310f0e] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(255,255,255,0.15)] active:scale-[0.98]"
           >
             Falar com Atendimento
           </button>
@@ -396,12 +401,12 @@ export default function PrimeiraConsultaHomens() {
               { q: "Como funciona o reembolso pelo plano de saúde?", a: "Se o seu convênio tiver cobertura de reembolso (Livre Escolha), nós fornecemos todos os laudos, relatórios e notas fiscais exigidas para que você possa dar entrada na operadora de saúde." },
               { q: "Pacientes de fora de São Paulo podem realizar a cirurgia?", a: "Sim. Grande parte dos nossos pacientes são de outras cidades ou do exterior. O processo começa com uma consulta por telemedicina para alinhamento inicial. Posteriormente, desenhamos o cronograma logístico para sua vinda a SP apenas no período cirúrgico." }
             ].map((faq, i) => (
-              <details key={i} className="group cursor-pointer border-b border-white/10 pb-6 transition-colors last:border-b-0">
-                <summary className="text-[15px] md:text-[16px] font-semibold text-[#f5f5f7] uppercase tracking-wide list-none [&::-webkit-details-marker]:hidden flex items-center justify-between">
+              <details key={i} className="group cursor-pointer border-b border-white/10 transition-colors last:border-b-0">
+                <summary className="py-6 text-[15px] md:text-[16px] font-semibold text-[#f5f5f7] uppercase tracking-wide list-none [&::-webkit-details-marker]:hidden flex items-center justify-between">
                   <span className="pr-6">{faq.q}</span>
                   <svg className="w-5 h-5 text-white/40 shrink-0 transform transition-transform duration-300 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                 </summary>
-                <div className="mt-5 pr-8 md:pr-12">
+                <div className="mt-2 pb-6 pr-8 md:pr-12">
                   <p className="text-white/60 text-[15px] leading-relaxed">
                     {faq.a}
                   </p>

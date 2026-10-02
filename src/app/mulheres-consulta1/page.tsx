@@ -2,8 +2,10 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { LeadForm } from "@/components/ui/LeadForm";
-import { TestimonialsCarousel } from "@/components/ui/TestimonialsCarousel";
+const TestimonialsCarousel = dynamic(() => import('@/components/ui/TestimonialsCarousel').then(mod => mod.TestimonialsCarousel));
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { ScrollProgressBar } from "@/components/ui/ScrollProgressBar";
 
@@ -49,10 +51,13 @@ export default function PrimeiraConsulta() {
         
         {/* Imagem de Fundo Full-Bleed */}
         <div className="absolute inset-0 w-full h-full z-0">
-          <img 
+          <Image 
             src="/images/lifestyle/hero5.jpg" 
             alt="Beleza Natural" 
-            className="w-full h-full object-cover object-[20%_center] md:object-[20%_center]"
+            fill
+            priority
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover object-[20%_center] md:object-[20%_center]"
           />
           {/* Removidos os degradês complexos. A imagem fica limpa no fundo. */}
           {/* Gradiente de baixo sutil para a transição */}
@@ -66,26 +71,26 @@ export default function PrimeiraConsulta() {
         <div className="relative z-10 w-full max-w-[1200px] mx-auto px-6 mt-16 md:mt-0 flex justify-end">
           
           {!showLeadForm ? (
-            <div className="max-w-2xl animate-blur-in-up bg-white/30 backdrop-blur-2xl p-8 md:p-12 rounded-[2rem] shadow-[0_20px_40px_rgba(0,0,0,0.08)] ring-1 ring-white/50">
-              <div className="flex items-center gap-3 mb-6">
+            <div className="max-w-2xl animate-blur-in-up bg-white/30 backdrop-blur-2xl p-6 sm:p-8 md:p-12 rounded-[2rem] shadow-[0_20px_40px_rgba(0,0,0,0.08)] ring-1 ring-white/50">
+              <div className="flex items-center gap-3 mb-5 md:mb-6">
                 <div className="h-[1px] w-8 bg-[#ccb9b6]" />
                 <span className="text-[#86868b] font-medium text-xs md:text-sm uppercase tracking-[0.25em]">
                   Alta Cirurgia Plástica
                 </span>
               </div>
 
-              <h1 className="text-[40px] sm:text-[50px] md:text-[64px] font-semibold tracking-tighter text-[#1d1d1f] leading-[1.05] mb-6">
+              <h1 className="text-[40px] sm:text-[50px] md:text-[64px] font-semibold tracking-tighter text-[#1d1d1f] leading-[1.05] mb-5 md:mb-6">
                 Sinta-se segura <br />
                 <span className="italic font-light">na própria pele.</span>
               </h1>
               
-              <p className="text-lg md:text-xl text-[#1d1d1f]/75 font-normal leading-relaxed max-w-lg mb-10">
+              <p className="text-base md:text-xl text-[#1d1d1f]/75 font-normal leading-relaxed max-w-lg mb-8 md:mb-10">
                 O domínio pleno da Alta Cirurgia Plástica. Há mais de 30 anos aliando rigor técnico, segurança absoluta e contornos naturais para revelar a sua melhor versão.
               </p>
 
               <button 
                 onClick={() => setShowLeadForm(true)}
-                className="group relative inline-flex items-center justify-center gap-3 rounded-full bg-[#1d1d1f] px-8 py-4 text-[15px] font-medium text-white shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 hover:bg-[#310f0e] hover:shadow-[0_12px_24px_rgba(49,15,14,0.2)] hover:-translate-y-0.5 active:scale-[0.98]"
+                className="group w-full sm:w-auto relative inline-flex items-center justify-center gap-3 rounded-full bg-[#1d1d1f] px-8 py-4 text-[15px] font-medium text-white shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 hover:bg-[#310f0e] hover:shadow-[0_12px_24px_rgba(49,15,14,0.2)] hover:-translate-y-0.5 active:scale-[0.98]"
               >
                 Solicitar Planejamento
                 <svg className="w-4 h-4 text-white/70 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -127,8 +132,8 @@ export default function PrimeiraConsulta() {
               </ScrollReveal>
               
               {/* Crachá flutuante */}
-              <ScrollReveal variant="fade-up" delay={250} duration={800} className="absolute -bottom-6 -right-6 md:-right-10 z-20">
-                <div className="bg-[#2d2d2f] p-5 rounded-2xl shadow-xl ring-1 ring-white/10">
+              <ScrollReveal variant="fade-up" delay={250} duration={800} className="absolute -bottom-6 right-0 sm:-right-6 md:-right-10 z-20">
+                <div className="bg-[#2d2d2f] p-4 md:p-5 rounded-2xl shadow-xl ring-1 ring-white/10">
                   <p className="text-white font-semibold text-lg tracking-tight">Dr. Mário Warde</p>
                   <p className="text-[#86868b] text-[11px] font-medium uppercase tracking-[0.15em] mt-1">CRM 81.741 • RQE 18.343</p>
                 </div>
@@ -284,7 +289,7 @@ export default function PrimeiraConsulta() {
               setShowLeadForm(true);
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className="group relative inline-flex items-center justify-center gap-3 rounded-full bg-white px-10 py-5 text-[16px] font-semibold text-[#310f0e] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(255,255,255,0.15)] active:scale-[0.98]"
+            className="group w-full sm:w-auto relative inline-flex items-center justify-center gap-3 rounded-full bg-white px-10 py-5 text-[16px] font-semibold text-[#310f0e] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(255,255,255,0.15)] active:scale-[0.98]"
           >
             Falar com Atendimento
           </button>
@@ -394,12 +399,12 @@ export default function PrimeiraConsulta() {
               { q: "Pacientes de fora de São Paulo podem realizar a cirurgia?", a: "Sim. Grande parte das nossas pacientes são de outras cidades ou do exterior. O processo começa com uma consulta por telemedicina para alinhamento inicial e indicação. Posteriormente, desenhamos o cronograma logístico para que você venha a SP apenas no período cirúrgico." },
               { q: "Qual é o hospital onde as cirurgias são realizadas?", a: "Operamos exclusivamente em hospitais de altíssimo padrão em São Paulo, equipados com UTI e que seguem protocolos mundiais de segurança (como o Hospital Sírio-Libanês, Vila Nova Star, entre outros, dependendo do procedimento)." }
             ].map((faq, i) => (
-              <details key={i} className="group cursor-pointer border-b border-white/10 pb-6 transition-colors last:border-b-0">
-                <summary className="text-[15px] md:text-[16px] font-semibold text-[#f5f5f7] uppercase tracking-wide list-none [&::-webkit-details-marker]:hidden flex items-center justify-between">
+              <details key={i} className="group cursor-pointer border-b border-white/10 transition-colors last:border-b-0">
+                <summary className="py-6 text-[15px] md:text-[16px] font-semibold text-[#f5f5f7] uppercase tracking-wide list-none [&::-webkit-details-marker]:hidden flex items-center justify-between">
                   <span className="pr-6">{faq.q}</span>
                   <svg className="w-5 h-5 text-white/40 shrink-0 transform transition-transform duration-300 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                 </summary>
-                <div className="mt-5 pr-8 md:pr-12">
+                <div className="mt-2 pb-6 pr-8 md:pr-12">
                   <p className="text-white/60 text-[15px] leading-relaxed">
                     {faq.a}
                   </p>

@@ -19,8 +19,8 @@
   --color-text-accent: var(--text-accent);
   --color-border-subtle: var(--border-subtle);
 
-  --font-sans: 'Montserrat', -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
-  --font-serif: 'Libre Baskerville', 'Baskerville', Georgia, serif;
+  --font-sans: var(--font-montserrat), -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  --font-serif: var(--font-libre-baskerville), 'Baskerville', Georgia, serif;
 }
 
 :root {

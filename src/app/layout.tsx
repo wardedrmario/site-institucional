@@ -1,7 +1,24 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Libre_Baskerville, Montserrat } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
+
+const libreBaskerville = Libre_Baskerville({
+  weight: ['400', '700'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-libre-baskerville',
+});
+
+const montserrat = Montserrat({
+  weight: ['300', '400', '500', '600', '700', '800'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-montserrat',
+});
 import { Footer } from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { SmoothScroll } from "@/components/SmoothScroll";
@@ -35,14 +52,10 @@ export default function RootLayout({
         `}} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
-        <link 
-          href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" 
-          rel="stylesheet" 
-        />
+
         <meta name="facebook-domain-verification" content="3m53d5ki4hjsrbmw9iq5v5gb6lf9o8" />
       </head>
-      <body className="font-sans antialiased text-text-primary bg-bg-primary min-h-screen flex flex-col selection:bg-burgundy/15 selection:text-text-primary">
+      <body className={`font-sans antialiased text-text-primary bg-bg-primary min-h-screen flex flex-col selection:bg-burgundy/15 selection:text-text-primary ${libreBaskerville.variable} ${montserrat.variable}`}>
         <noscript>
           <iframe
             src="https://clinica.drmariowarde.com/ns.html?id=GTM-FVTTJTR7"
