@@ -63,9 +63,9 @@ export async function POST(request: Request) {
     console.log('✅ [NOVO LEAD SALVO]', rawLead);
     console.log('🔒 [DADOS SEGUROS PARA META]', metaPayload);
 
-    return NextResponse.json({ 
-      success: true, 
-      message: 'Lead registrado e salvo no banco de dados com sucesso' 
+    return NextResponse.json({
+      success: true,
+      message: 'Lead registrado e salvo no banco de dados com sucesso'
     }, { status: 201 });
 
   } catch (error) {
