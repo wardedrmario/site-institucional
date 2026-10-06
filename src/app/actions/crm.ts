@@ -57,7 +57,7 @@ export async function updateLeadStatus(leadId: string, newStatus: string, leadDa
       // enviar eventos padrões médicos ou Purchase pode ser bloqueado.
       // Solução da Inteligência: Usar um EVENTO PERSONALIZADO de altíssimo valor.
       
-      let eventName = 'CRM_Paciente_Pagante';
+      let eventName = 'CRM_Paciente_Cirurgia';
       let eventValue = 20000.00; // Ticket médio fictício (Cirurgia)
       
       if (leadData.procedure) {
