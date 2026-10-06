@@ -24,8 +24,8 @@ async function generateAISuggestion(leadData: any): Promise<string> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return '';
 
-  const prompt = `Atue como Ana Paula, a Concierge comercial de cirurgia plástica de alto padrão do Dr. Mário Warde.
-Analise este lead recém-cadastrado e sugira uma ÚNICA PRÓXIMA AÇÃO de vendas em no máximo 10 a 12 palavras, baseada no Playbook Comercial "White Glove".
+  const prompt = `Atue como o Dr. Mário Warde, cirurgião plástico de alto padrão.
+Analise este lead recém-cadastrado e sugira para a sua equipe uma ÚNICA PRÓXIMA AÇÃO comercial em no máximo 10 a 12 palavras, baseada no Playbook "White Glove".
 
 Regras do Playbook:
 1. NUNCA use a palavra "Avaliação", use SEMPRE "Primeira Consulta".
