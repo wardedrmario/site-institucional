@@ -56,7 +56,22 @@ export async function updateLeadStatus(leadId: string, newStatus: string, leadDa
       // IMPORTANTE: Como o pixel está sob Shadowban de Políticas de Saúde, 
       // enviar eventos padrões médicos ou Purchase pode ser bloqueado.
       // Solução da Inteligência: Usar um EVENTO PERSONALIZADO de altíssimo valor.
-      const eventName = 'CRM_Paciente_Pagante';
+      
+      let eventName = 'CRM_Paciente_Pagante';
+      let eventValue = 20000.00; // Ticket médio fictício (Cirurgia)
+      
+      if (leadData.procedure) {
+        const procLower = leadData.procedure.toLowerCase();
+        if (
+          procLower.includes('botox') || procLower.includes('toxina') || procLower.includes('preenchimento') || 
+          procLower.includes('fios') || procLower.includes('bioestimulador') || procLower.includes('dermatologia') || 
+          procLower.includes('peeling') || procLower.includes('laser') || procLower.includes('estética') || procLower.includes('consulta')
+        ) {
+          eventName = 'CRM_Paciente_Clinico'; // Evento separado para não sujar a inteligência de cirurgia
+          eventValue = 400.00; // Valor médio clínico
+        }
+      }
+
       const eventTime = Math.floor(Date.now() / 1000);
       
       const payload = {
@@ -74,7 +89,7 @@ export async function updateLeadStatus(leadId: string, newStatus: string, leadDa
             },
             custom_data: {
               currency: "BRL",
-              value: 20000.00, // Ticket médio fictício configurado para adestrar a inteligência
+              value: eventValue,
               procedimento_interesse: leadData.procedure
             }
           }
