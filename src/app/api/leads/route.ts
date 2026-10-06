@@ -90,7 +90,7 @@ export async function POST(request: Request) {
     (rawLead as any).ai_suggestion = aiSuggestion;
 
     // 2. Insere no Banco de Dados Neon (se configurado)
-    const dbUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+    const dbUrl = process.env.POSTGRES_URL || process.env.DATABASE_URL;
     if (dbUrl) {
       const sql = neon(dbUrl as string);
       
