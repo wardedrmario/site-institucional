@@ -58,17 +58,32 @@ export async function updateLeadStatus(leadId: string, newStatus: string, leadDa
       // Solução da Inteligência: Usar um EVENTO PERSONALIZADO de altíssimo valor.
       
       let eventName = 'CRM_Paciente_Cirurgia';
-      let eventValue = 20000.00; // Ticket médio fictício (Cirurgia)
+      let eventValue = 45000.00; // Ticket médio base alto (Cirurgia Genérica)
       
       if (leadData.procedure) {
         const procLower = leadData.procedure.toLowerCase();
+        
+        // 1. Triagem de Baixo Ticket (Clínico)
         if (
           procLower.includes('botox') || procLower.includes('toxina') || procLower.includes('preenchimento') || 
           procLower.includes('fios') || procLower.includes('bioestimulador') || procLower.includes('dermatologia') || 
           procLower.includes('peeling') || procLower.includes('laser') || procLower.includes('estética') || procLower.includes('consulta')
         ) {
-          eventName = 'CRM_Paciente_Clinico'; // Evento separado para não sujar a inteligência de cirurgia
-          eventValue = 400.00; // Valor médio clínico
+          eventName = 'CRM_Paciente_Clinico';
+          eventValue = 400.00; 
+        } 
+        // 2. Triagem de Altíssimo Ticket (Cirurgias Complexas/Premium)
+        else if (procLower.includes('face') || procLower.includes('lifting') || procLower.includes('ritidoplastia') || procLower.includes('pescoço')) {
+          eventValue = 75000.00;
+        }
+        else if (procLower.includes('lipo') || procLower.includes('abd') || procLower.includes('contorno')) {
+          eventValue = 55000.00;
+        }
+        else if (procLower.includes('rino') || procLower.includes('nariz')) {
+          eventValue = 45000.00;
+        }
+        else if (procLower.includes('mama') || procLower.includes('mastopexia') || procLower.includes('silicone') || procLower.includes('prótese')) {
+          eventValue = 35000.00;
         }
       }
 
