@@ -27,6 +27,8 @@ export interface DbLead {
   status?: string;
   ai_suggestion?: string;
   created_at: string;
+  followup_date?: string;
+  followup_note?: string;
 }
 
 export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLead[] }) {
@@ -109,6 +111,8 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
         nextAction: lead.ai_suggestion || (lead.status === 'triagem' ? 'Qualificar via Whats' : '-'),
         createdAt: lead.created_at,
         isClinical: isClinical,
+        followupDate: lead.followup_date || null,
+        followupNote: lead.followup_note || null,
       };
 
       const status = lead.status || 'triagem';
@@ -117,6 +121,33 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
       } else {
         columns['triagem'].push(mappedLead);
       }
+    });
+
+    // Ordenar as colunas por Status do Follow Up (Atrasados > Hoje > Outros)
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    
+    Object.keys(columns).forEach(key => {
+      columns[key].sort((a, b) => {
+        let weightA = 0;
+        let weightB = 0;
+
+        if (a.followupDate) {
+          const aDate = new Date(a.followupDate);
+          aDate.setHours(0,0,0,0);
+          if (aDate < today) weightA = 2; // Late
+          else if (aDate.getTime() === today.getTime()) weightA = 1; // Today
+        }
+
+        if (b.followupDate) {
+          const bDate = new Date(b.followupDate);
+          bDate.setHours(0,0,0,0);
+          if (bDate < today) weightB = 2; // Late
+          else if (bDate.getTime() === today.getTime()) weightB = 1; // Today
+        }
+
+        return weightB - weightA;
+      });
     });
     
     return columns;

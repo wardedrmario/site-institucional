@@ -189,3 +189,24 @@ Responda apenas a ação, sem aspas.`;
     return { success: false, error: 'Erro interno' };
   }
 }
+
+export async function updateLeadFollowup(leadId: string, followupDate: string | null, followupNote: string | null) {
+  try {
+    if (process.env.DATABASE_URL || process.env.POSTGRES_URL) {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { neon } = require('@neondatabase/serverless');
+      const sql = neon((process.env.DATABASE_URL || process.env.POSTGRES_URL));
+      
+      if (followupDate) {
+        await sql`UPDATE leads SET followup_date = ${followupDate}, followup_note = ${followupNote} WHERE id = ${leadId}`;
+      } else {
+        await sql`UPDATE leads SET followup_date = NULL, followup_note = NULL WHERE id = ${leadId}`;
+      }
+      return { success: true };
+    }
+    return { success: false, error: 'Database URL not found' };
+  } catch (err: any) {
+    console.error('Erro ao atualizar follow-up:', err);
+    return { success: false, error: err.message };
+  }
+}
