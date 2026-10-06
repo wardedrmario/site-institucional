@@ -18,7 +18,10 @@ export default async function AdminPage({
   // Busca os leads
   let leads: DbLead[] = [];
   try {
-    const dbUrl = process.env.POSTGRES_URL || process.env.DATABASE_URL;
+    let dbUrl = process.env.POSTGRES_URL || process.env.DATABASE_URL;
+    if (dbUrl && !dbUrl.startsWith('postgres')) {
+      dbUrl = process.env.DATABASE_URL && process.env.DATABASE_URL.startsWith('postgres') ? process.env.DATABASE_URL : undefined;
+    }
     if (dbUrl) {
       const sql = neon(dbUrl as string);
       leads = (await sql`SELECT * FROM leads ORDER BY created_at DESC LIMIT 200`) as DbLead[];

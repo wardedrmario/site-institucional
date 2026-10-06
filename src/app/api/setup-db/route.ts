@@ -3,11 +3,13 @@ import { neon } from '@neondatabase/serverless';
 
 export async function GET() {
   try {
-    if (!(process.env.POSTGRES_URL || process.env.DATABASE_URL)) {
-      return NextResponse.json({ error: 'DATABASE_URL não configurada' }, { status: 500 });
+    let dbUrl = process.env.POSTGRES_URL || process.env.DATABASE_URL;
+    if (dbUrl && !dbUrl.startsWith('postgres')) {
+       dbUrl = process.env.DATABASE_URL && process.env.DATABASE_URL.startsWith('postgres') ? process.env.DATABASE_URL : null;
     }
-
-    const dbUrl = process.env.POSTGRES_URL || process.env.DATABASE_URL;
+    if (!dbUrl || !dbUrl.startsWith('postgres')) {
+      return NextResponse.json({ error: 'Nenhuma URL válida (começando com postgres://) foi encontrada nas variáveis de ambiente. Verifique a Vercel.' }, { status: 500 });
+    }
     const sql = neon(dbUrl as string);
 
     // Cria a tabela de Leads se não existir
