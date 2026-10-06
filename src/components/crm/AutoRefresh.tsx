@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function AutoRefresh({ intervalMs = 600000, leadsCount }: { intervalMs?: number, leadsCount?: number }) {
+export default function AutoRefresh({ intervalMs = 300000, leadsCount }: { intervalMs?: number, leadsCount?: number }) {
   const router = useRouter();
   const prevCount = useRef(leadsCount);
 
