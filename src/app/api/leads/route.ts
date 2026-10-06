@@ -24,15 +24,24 @@ async function generateAISuggestion(leadData: any): Promise<string> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return '';
 
-  const prompt = `Atue como um assessor comercial de uma clínica de cirurgia plástica de alto padrão (Dr. Mário Warde).
-Analise o lead recém-cadastrado e sugira uma ÚNICA PRÓXIMA AÇÃO de vendas em no máximo 10 palavras.
+  const prompt = `Atue como Ana Paula, a Concierge comercial de cirurgia plástica de alto padrão do Dr. Mário Warde.
+Analise este lead recém-cadastrado e sugira uma ÚNICA PRÓXIMA AÇÃO de vendas em no máximo 10 a 12 palavras, baseada no Playbook Comercial "White Glove".
+
+Regras do Playbook:
+1. NUNCA use a palavra "Avaliação", use SEMPRE "Primeira Consulta".
+2. Se o lead abandonou sem mandar mensagem, a ação é o "Script de Resgate".
+3. Mantenha um tom sofisticado, acolhedor e focado na dor/sonho da paciente.
+
 Dados do Lead:
 - Procedimento: ${leadData.procedure || 'Não informado'}
 - Urgência: ${leadData.timeframe || 'Não informada'}
 - Cidade: ${leadData.city || 'Não informada'}
 
-Exemplo de resposta: "Ligar agora para agendar consulta de Mama."
-Não use aspas na sua resposta.`;
+Exemplos de resposta esperada: 
+"Enviar script de resgate para Primeira Consulta de Mama."
+"Perguntar sobre a dor atual antes de agendar Primeira Consulta."
+
+Responda apenas a ação, sem aspas.`;
 
   try {
     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
