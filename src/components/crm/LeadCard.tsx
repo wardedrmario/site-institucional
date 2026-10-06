@@ -15,6 +15,7 @@ export interface Lead {
   scoreLabel: LeadScore;
   nextAction: string;
   createdAt: string;
+  isClinical?: boolean;
 }
 
 interface LeadCardProps {
@@ -51,14 +52,21 @@ export default function LeadCard({ lead }: LeadCardProps) {
   const whatsLink = `https://wa.me/${cleanPhone.length <= 11 ? '55'+cleanPhone : cleanPhone}`;
 
   return (
-    <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-4 hover:shadow-md transition-shadow cursor-grab active:cursor-grabbing mb-3 group flex flex-col gap-3">
-      {/* Top Header: Score & Source */}
+    <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-4 hover:shadow-md transition-shadow cursor-grab active:cursor-grabbing mb-3 group flex flex-col gap-3 relative overflow-hidden">
+      {/* Top Header: Score & Source & Tag */}
       <div className="flex items-center justify-between">
-        <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold ${currentConfig.bg} ${currentConfig.color} ${currentConfig.border} border`}>
-          <span>{currentConfig.icon}</span>
-          <span>{lead.score} pts</span>
+        <div className="flex items-center gap-2">
+          <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold ${currentConfig.bg} ${currentConfig.color} ${currentConfig.border} border`}>
+            <span>{currentConfig.icon}</span>
+            <span>{lead.score} pts</span>
+          </div>
+          {lead.isClinical && (
+            <span className="text-[10px] font-bold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-full border border-indigo-200 uppercase tracking-wider">
+              Clínico
+            </span>
+          )}
         </div>
-        <span className="text-[10px] font-medium text-black/40 bg-black/5 px-2 py-1 rounded-md uppercase tracking-wider">
+        <span className="text-[10px] font-medium text-black/40 bg-black/5 px-2 py-1 rounded-md uppercase tracking-wider max-w-[80px] truncate text-right">
           {lead.source}
         </span>
       </div>

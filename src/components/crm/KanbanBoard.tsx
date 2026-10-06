@@ -47,10 +47,30 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
 
       // --- MOTOR DE LEAD SCORING (Cálculo Térmico) ---
       let calculatedScore = lead.score || 50; // Pontuação base
+      let isClinical = false;
       
-      // 1. Procedimento (Demonstra interesse ativo): +15
+      // 1. Procedimento (Demonstra interesse ativo): +15 ou -30
       if (lead.procedure && lead.procedure.trim() !== '') {
-        calculatedScore += 15;
+        const procLower = lead.procedure.toLowerCase();
+        
+        // Identifica se é um procedimento não-cirúrgico / baixo ticket
+        if (
+          procLower.includes('botox') || 
+          procLower.includes('toxina') || 
+          procLower.includes('preenchimento') || 
+          procLower.includes('fios') || 
+          procLower.includes('bioestimulador') || 
+          procLower.includes('dermatologia') || 
+          procLower.includes('peeling') || 
+          procLower.includes('laser') || 
+          procLower.includes('estética') ||
+          procLower.includes('consulta')
+        ) {
+          isClinical = true;
+          calculatedScore -= 30; // Penaliza pesadamente para sempre cair como COLD
+        } else {
+          calculatedScore += 15; // Procedimentos cirúrgicos ganham pontos
+        }
       }
       
       // 2. Urgência / Timeframe:
@@ -88,6 +108,7 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
         scoreLabel: calculatedScore > 130 ? 'HOT' : calculatedScore >= 60 ? 'WARM' : 'COLD',
         nextAction: lead.ai_suggestion || (lead.status === 'triagem' ? 'Qualificar via Whats' : '-'),
         createdAt: lead.created_at,
+        isClinical: isClinical,
       };
 
       const status = lead.status || 'triagem';
