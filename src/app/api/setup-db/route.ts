@@ -5,7 +5,7 @@ export async function GET() {
   try {
     let dbUrl = process.env.POSTGRES_URL || process.env.DATABASE_URL;
     if (dbUrl && !dbUrl.startsWith('postgres')) {
-       dbUrl = process.env.DATABASE_URL && process.env.DATABASE_URL.startsWith('postgres') ? process.env.DATABASE_URL : null;
+       dbUrl = process.env.DATABASE_URL && process.env.DATABASE_URL.startsWith('postgres') ? process.env.DATABASE_URL : undefined;
     }
     if (!dbUrl || !dbUrl.startsWith('postgres')) {
       return NextResponse.json({ error: 'Nenhuma URL válida (começando com postgres://) foi encontrada nas variáveis de ambiente. Verifique a Vercel.' }, { status: 500 });
