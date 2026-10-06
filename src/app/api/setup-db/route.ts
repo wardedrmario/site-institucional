@@ -23,6 +23,8 @@ export async function GET() {
         utms JSONB,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       );
+      
+      ALTER TABLE leads ADD COLUMN IF NOT EXISTS ai_suggestion TEXT;
     `;
 
     return NextResponse.json({ success: true, message: 'Tabela leads criada/verificada com sucesso!' });

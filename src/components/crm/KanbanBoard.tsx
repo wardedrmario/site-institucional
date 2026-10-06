@@ -18,11 +18,14 @@ export interface DbLead {
   id: string;
   name: string;
   phone: string;
+  email?: string;
+  city?: string;
   procedure?: string;
   timeframe?: string;
   utms?: string | Record<string, string>;
   score?: number;
   status?: string;
+  ai_suggestion?: string;
   created_at: string;
 }
 
@@ -42,6 +45,38 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
         }
       } catch { /* ignora */ }
 
+      // --- MOTOR DE LEAD SCORING (Cálculo Térmico) ---
+      let calculatedScore = lead.score || 50; // Pontuação base
+      
+      // 1. Procedimento (Demonstra interesse ativo): +15
+      if (lead.procedure && lead.procedure.trim() !== '') {
+        calculatedScore += 15;
+      }
+      
+      // 2. Urgência / Timeframe:
+      if (lead.timeframe) {
+        const timeLower = lead.timeframe.toLowerCase();
+        if (timeLower.includes('< 1 mês') || timeLower.includes('menos') || timeLower.includes('imediato') || timeLower.includes('urgente')) {
+          calculatedScore += 25;
+        } else if (timeLower.includes('1 a 3 meses') || timeLower.includes('este ano') || timeLower.includes('30-60 dias') || timeLower.includes('3 a 6 meses')) {
+          calculatedScore += 15;
+        }
+      }
+      
+      // 3. CEP de Alta Renda (Bairros focais de SP): +20
+      if (lead.city) {
+        const cityLower = lead.city.toLowerCase();
+        if (cityLower.includes('alphaville') || cityLower.includes('itaim') || cityLower.includes('jardins') || cityLower.includes('moema') || cityLower.includes('vila mariana') || cityLower.includes('pinheiros')) {
+          calculatedScore += 20;
+        }
+      }
+      
+      // 4. Orçamento Alinhado & Status Avançado:
+      if (lead.status && ['consulta', 'pos_consulta', 'deposito', 'pre_op', 'pos_op'].includes(lead.status)) {
+        calculatedScore += 40; // Ganha pontos pesados por já estar avançado no funil
+      }
+      // ------------------------------------------------
+
       const mappedLead: Lead = {
         id: lead.id,
         name: lead.name,
@@ -49,9 +84,9 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
         procedure: lead.procedure || '-',
         timeframe: lead.timeframe || '-',
         source: source,
-        score: lead.score || 50,
-        scoreLabel: (lead.score || 50) > 100 ? 'HOT' : (lead.score || 50) > 60 ? 'WARM' : 'COLD',
-        nextAction: lead.status === 'triagem' ? 'Qualificar via Whats' : '-',
+        score: calculatedScore,
+        scoreLabel: calculatedScore > 130 ? 'HOT' : calculatedScore >= 60 ? 'WARM' : 'COLD',
+        nextAction: lead.ai_suggestion || (lead.status === 'triagem' ? 'Qualificar via Whats' : '-'),
         createdAt: lead.created_at,
       };
 

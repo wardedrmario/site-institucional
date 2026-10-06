@@ -22,9 +22,9 @@ interface LeadCardProps {
 export default function LeadCard({ lead }: LeadCardProps) {
   // Configuração visual baseada no Score
   const scoreConfig = {
-    HOT: { color: 'text-red-600', bg: 'bg-red-50', border: 'border-red-100', icon: '🔥' },
+    HOT: { color: 'text-red-600', bg: 'bg-red-50', border: 'border-red-100', icon: '🔴' },
     WARM: { color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-100', icon: '🟡' },
-    COLD: { color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-100', icon: '❄️' },
+    COLD: { color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-100', icon: '🔵' },
   };
 
   const currentConfig = scoreConfig[lead.scoreLabel];

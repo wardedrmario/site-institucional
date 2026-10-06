@@ -20,6 +20,41 @@ function cleanPhoneForMeta(phone: string): string {
   return clean;
 }
 
+async function generateAISuggestion(leadData: any): Promise<string> {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) return '';
+
+  const prompt = `Atue como um assessor comercial de uma clínica de cirurgia plástica de alto padrão (Dr. Mário Warde).
+Analise o lead recém-cadastrado e sugira uma ÚNICA PRÓXIMA AÇÃO de vendas em no máximo 10 palavras.
+Dados do Lead:
+- Procedimento: ${leadData.procedure || 'Não informado'}
+- Urgência: ${leadData.timeframe || 'Não informada'}
+- Cidade: ${leadData.city || 'Não informada'}
+
+Exemplo de resposta: "Ligar agora para agendar consulta de Mama."
+Não use aspas na sua resposta.`;
+
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.7, maxOutputTokens: 25 }
+      })
+    });
+    
+    if (!res.ok) return '';
+    const data = await res.json();
+    const suggestion = data.candidates?.[0]?.content?.parts?.[0]?.text?.replace(/["\n]/g, '').trim();
+    return suggestion || '';
+  } catch (e) {
+    console.error('Erro na geração da IA:', e);
+    return '';
+  }
+}
+
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -41,13 +76,25 @@ export async function POST(request: Request) {
       created_at: new Date().toISOString()
     };
 
+    // Gera a sugestão de IA assincronamente (se a chave estiver configurada)
+    const aiSuggestion = await generateAISuggestion(rawLead);
+    (rawLead as any).ai_suggestion = aiSuggestion;
+
     // 2. Insere no Banco de Dados Neon (se configurado)
     const dbUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL;
     if (dbUrl) {
       const sql = neon(dbUrl as string);
+      
+      // Garante que a coluna ai_suggestion existe antes de inserir
+      try {
+        await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS ai_suggestion TEXT;`;
+      } catch (e) {
+        console.log('Ignorando erro ao tentar criar coluna:', e);
+      }
+
       await sql`
-        INSERT INTO leads (id, name, phone, email, city, procedure, timeframe, utms)
-        VALUES (${leadId}, ${name}, ${phone}, ${email || ''}, ${city || ''}, ${procedure || ''}, ${timeframe || ''}, ${utmsJson})
+        INSERT INTO leads (id, name, phone, email, city, procedure, timeframe, utms, ai_suggestion)
+        VALUES (${leadId}, ${name}, ${phone}, ${email || ''}, ${city || ''}, ${procedure || ''}, ${timeframe || ''}, ${utmsJson}, ${aiSuggestion || ''})
       `;
     }
 

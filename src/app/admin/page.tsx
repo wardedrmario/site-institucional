@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import KanbanBoard, { DbLead } from '@/components/crm/KanbanBoard';
 import LogoutButton from '@/components/crm/LogoutButton';
+import AutoRefresh from '@/components/crm/AutoRefresh';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,6 +29,7 @@ export default async function AdminPage({
 
   return (
     <div className="min-h-screen bg-[#ccb9b6] p-4 sm:p-8">
+      <AutoRefresh leadsCount={leads.length} />
       <div className="w-full max-w-none mx-auto overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
           <div className="flex items-center gap-3">
