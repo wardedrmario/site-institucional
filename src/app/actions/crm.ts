@@ -106,3 +106,56 @@ export async function updateLeadStatus(leadId: string, newStatus: string, leadDa
 
   return { success: true };
 }
+
+export async function generateAiForLead(leadId: string, leadData: { procedure?: string, timeframe?: string, city?: string }) {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) return { success: false, error: 'Sem API Key do Gemini' };
+
+  const prompt = `Atue como o Dr. Mário Warde, cirurgião plástico de alto padrão.
+Analise este lead recém-cadastrado e sugira para a sua equipe uma ÚNICA PRÓXIMA AÇÃO comercial em no máximo 10 a 12 palavras, baseada no Playbook "White Glove".
+
+Regras do Playbook:
+1. NUNCA use a palavra "Avaliação", use SEMPRE "Primeira Consulta".
+2. Se o lead abandonou sem mandar mensagem, a ação é o "Script de Resgate".
+3. Mantenha um tom sofisticado, acolhedor e focado na dor/sonho da paciente.
+
+Dados do Lead:
+- Procedimento: ${leadData.procedure || 'Não informado'}
+- Urgência: ${leadData.timeframe || 'Não informada'}
+- Cidade: ${leadData.city || 'Não informada'}
+
+Exemplos de resposta esperada: 
+"Enviar script de resgate para Primeira Consulta de Mama."
+"Perguntar sobre a dor atual antes de agendar Primeira Consulta."
+
+Responda apenas a ação, sem aspas.`;
+
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.7, maxOutputTokens: 25 }
+      })
+    });
+    
+    if (!res.ok) return { success: false, error: 'Erro na chamada ao Gemini' };
+    const data = await res.json();
+    const suggestion = data.candidates?.[0]?.content?.parts?.[0]?.text?.replace(/["\n]/g, '').trim();
+    
+    if (suggestion) {
+      if (process.env.DATABASE_URL || process.env.POSTGRES_URL) {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const { neon } = require('@neondatabase/serverless');
+        const sql = neon((process.env.DATABASE_URL || process.env.POSTGRES_URL));
+        await sql`UPDATE leads SET ai_suggestion = ${suggestion} WHERE id = ${leadId}`;
+      }
+      return { success: true, suggestion };
+    }
+    return { success: false, error: 'Nenhuma sugestão retornada' };
+  } catch (err) {
+    console.error('Erro na IA:', err);
+    return { success: false, error: 'Erro interno' };
+  }
+}

@@ -161,7 +161,7 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
   };
 
   return (
-    <div className="flex gap-4 overflow-x-auto pb-8 pt-4 h-[calc(100vh-140px)] items-start snap-x select-none">
+    <div className="flex gap-4 overflow-x-auto pb-8 pt-4 h-[calc(100vh-140px)] items-stretch snap-x select-none">
       {COLUMNS.map((col) => {
         const leads = columnsData[col.id] || [];
         
@@ -170,7 +170,7 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
             key={col.id} 
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, col.id)}
-            className="flex-shrink-0 w-[300px] flex flex-col h-full bg-white/60 backdrop-blur-md rounded-2xl border border-white/40 shadow-sm snap-center transition-colors hover:bg-white/80"
+            className="flex-shrink-0 w-[300px] flex flex-col overflow-hidden bg-white/60 backdrop-blur-md rounded-2xl border border-white/40 shadow-sm snap-center transition-colors hover:bg-white/80"
           >
             {/* Header da Coluna */}
             <div className="p-4 flex items-center justify-between border-b border-black/5">
@@ -181,7 +181,7 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
             </div>
             
             {/* Corpo da Coluna (Lista de Cards) */}
-            <div className="flex-1 overflow-y-auto p-3 space-y-3">
+            <div className="flex-1 overflow-y-auto min-h-0 overscroll-contain p-3 space-y-3">
               {leads.map(lead => (
                 <div
                   key={lead.id}

@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+import React, { useState, useTransition } from 'react';
+import { generateAiForLead } from '@/app/actions/crm';
 
 type LeadScore = 'HOT' | 'WARM' | 'COLD';
 
@@ -20,6 +22,22 @@ interface LeadCardProps {
 }
 
 export default function LeadCard({ lead }: LeadCardProps) {
+  const [isPending, startTransition] = useTransition();
+  const [localNextAction, setLocalNextAction] = useState(lead.nextAction);
+
+  const handleGenerateAi = () => {
+    startTransition(async () => {
+      const res = await generateAiForLead(lead.id, {
+        procedure: lead.procedure,
+        timeframe: lead.timeframe,
+        // (A cidade precisaria vir do DB, mas enviamos o básico que já temos no objeto Lead)
+      });
+      if (res?.success && res.suggestion) {
+        setLocalNextAction(res.suggestion);
+      }
+    });
+  };
+
   // Configuração visual baseada no Score
   const scoreConfig = {
     HOT: { color: 'text-red-600', bg: 'bg-red-50', border: 'border-red-100', icon: '🔴' },
@@ -70,8 +88,18 @@ export default function LeadCard({ lead }: LeadCardProps) {
       {/* Next Action & WhatsApp */}
       <div className="mt-2 pt-3 border-t border-black/5 flex items-center justify-between">
         <div className="text-[11px] text-[#86868b]">
-          <span className="block text-[9px] uppercase tracking-wider text-black/40 font-semibold mb-0.5">Sugestão (IA)</span>
-          <span className="font-medium text-[#1d1d1f]">{lead.nextAction}</span>
+          <span className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-black/40 font-semibold mb-0.5">
+            Sugestão (IA)
+            <button 
+              onClick={handleGenerateAi} 
+              disabled={isPending}
+              className="hover:bg-black/5 p-0.5 rounded transition-colors disabled:opacity-50 cursor-pointer"
+              title="Gerar/Atualizar sugestão com IA"
+            >
+              ✨
+            </button>
+          </span>
+          <span className="font-medium text-[#1d1d1f]">{isPending ? 'Analisando...' : localNextAction}</span>
         </div>
         <a 
           href={whatsLink} 
