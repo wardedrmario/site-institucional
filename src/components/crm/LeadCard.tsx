@@ -36,9 +36,9 @@ export default function LeadCard({ lead }: LeadCardProps) {
     <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-4 hover:shadow-md transition-shadow cursor-grab active:cursor-grabbing mb-3 group flex flex-col gap-3">
       {/* Top Header: Score & Source */}
       <div className="flex items-center justify-between">
-        <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-semibold ${currentConfig.bg} ${currentConfig.color} ${currentConfig.border} border`}>
+        <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold ${currentConfig.bg} ${currentConfig.color} ${currentConfig.border} border`}>
           <span>{currentConfig.icon}</span>
-          <span>{lead.scoreLabel} ({lead.score} pts)</span>
+          <span>{lead.score} pts</span>
         </div>
         <span className="text-[10px] font-medium text-black/40 bg-black/5 px-2 py-1 rounded-md uppercase tracking-wider">
           {lead.source}
