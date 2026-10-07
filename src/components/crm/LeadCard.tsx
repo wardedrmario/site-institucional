@@ -65,7 +65,8 @@ export default function LeadCard({ lead }: LeadCardProps) {
 
   const currentConfig = scoreConfig[lead.scoreLabel];
   const cleanPhone = lead.phone.replace(/\D/g, '');
-  const whatsLink = `https://wa.me/${cleanPhone.length <= 11 ? '55'+cleanPhone : cleanPhone}`;
+  const encodedMessage = encodeURIComponent(localNextAction || '');
+  const whatsLink = `https://wa.me/${cleanPhone.length <= 11 ? '55'+cleanPhone : cleanPhone}?text=${encodedMessage}`;
 
   // Logica de Alerta de Follow-Up
   let fupStatus = 'none';
