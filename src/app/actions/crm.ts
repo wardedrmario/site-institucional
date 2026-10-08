@@ -1,6 +1,16 @@
 'use server';
 
 import crypto from 'crypto';
+import { revalidatePath } from 'next/cache';
+
+// Helper para obter a string de conexão correta
+function getDbUrl() {
+  let dbUrl = process.env.POSTGRES_URL || process.env.DATABASE_URL;
+  if (dbUrl && !dbUrl.startsWith('postgres')) {
+    dbUrl = process.env.DATABASE_URL && process.env.DATABASE_URL.startsWith('postgres') ? process.env.DATABASE_URL : undefined;
+  }
+  return dbUrl;
+}
 
 // Função para criptografar dados no padrão exigido pelo Facebook (SHA-256)
 function hashData(value: string) {
@@ -31,12 +41,15 @@ export async function updateLeadStatus(leadId: string, newStatus: string, leadDa
   
   // Atualiza no Banco Neon
   try {
-    if ((process.env.DATABASE_URL || process.env.POSTGRES_URL)) {
+    const dbUrl = getDbUrl();
+    if (dbUrl) {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { neon } = require('@neondatabase/serverless');
-      const sql = neon((process.env.DATABASE_URL || process.env.POSTGRES_URL));
+      const sql = neon(dbUrl as string);
       await sql`UPDATE leads SET status = ${newStatus} WHERE id = ${leadId}`;
       console.log(`✅ [CRM BACKEND] Lead ${leadId} atualizado no Neon Postgres para '${newStatus}'`);
+    } else {
+      console.error('❌ [CRM BACKEND] Nenhuma URL de banco de dados válida encontrada.');
     }
   } catch (err) {
     console.error('❌ [CRM BACKEND] Erro ao atualizar status no Neon:', err);
@@ -134,6 +147,7 @@ export async function updateLeadStatus(leadId: string, newStatus: string, leadDa
     }
   }
 
+  revalidatePath('/admin');
   return { success: true };
 }
 
@@ -175,11 +189,13 @@ Responda apenas a ação, sem aspas.`;
     const suggestion = data.candidates?.[0]?.content?.parts?.[0]?.text?.replace(/["\n]/g, '').trim();
     
     if (suggestion) {
-      if (process.env.DATABASE_URL || process.env.POSTGRES_URL) {
+      const dbUrl = getDbUrl();
+      if (dbUrl) {
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         const { neon } = require('@neondatabase/serverless');
-        const sql = neon((process.env.DATABASE_URL || process.env.POSTGRES_URL));
+        const sql = neon(dbUrl as string);
         await sql`UPDATE leads SET ai_suggestion = ${suggestion} WHERE id = ${leadId}`;
+        revalidatePath('/admin');
       }
       return { success: true, suggestion };
     }
@@ -192,16 +208,18 @@ Responda apenas a ação, sem aspas.`;
 
 export async function updateLeadFollowup(leadId: string, followupDate: string | null, followupNote: string | null) {
   try {
-    if (process.env.DATABASE_URL || process.env.POSTGRES_URL) {
+    const dbUrl = getDbUrl();
+    if (dbUrl) {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { neon } = require('@neondatabase/serverless');
-      const sql = neon((process.env.DATABASE_URL || process.env.POSTGRES_URL));
+      const sql = neon(dbUrl as string);
       
       if (followupDate) {
         await sql`UPDATE leads SET followup_date = ${followupDate}, followup_note = ${followupNote} WHERE id = ${leadId}`;
       } else {
         await sql`UPDATE leads SET followup_date = NULL, followup_note = NULL WHERE id = ${leadId}`;
       }
+      revalidatePath('/admin');
       return { success: true };
     }
     return { success: false, error: 'Database URL not found' };
