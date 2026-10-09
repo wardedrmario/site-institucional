@@ -114,6 +114,7 @@ O resultado final entregue é uma silhueta contínua, elegante e que flui com na
     excerpt: 'A união de procedimentos permite otimizar a transformação estética, sempre com planejamento individualizado e uma avaliação criteriosa.',
     readTime: '4 min',
     date: '09 Out 2026',
+    hideComments: true,
     content: `O desejo de realizar mais de uma alteração estética de uma só vez é incrivelmente comum. A ideia de passar por apenas um período de anestesia, um único afastamento do trabalho e um processo unificado de recuperação — o chamado *downtime* — torna as cirurgias combinadas (como o famoso "Mommy Makeover") uma das opções mais procuradas no consultório.
 
 No entanto, a verdadeira arte de combinar cirurgias não está em fazer o máximo possível, mas sim em realizar o que é **seguro e fisiologicamente suportável** para o seu corpo. 
@@ -134,5 +135,69 @@ O PÓS-OPERATÓRIO UNIFICADO
 Recuperar-se de múltiplas cirurgias simultâneas exige uma infraestrutura de apoio de altíssimo nível. É aqui que nosso protocolo de recuperação acelerada entra em ação. A aplicação transoperatória do *taping* reduz drasticamente os hematomas e o inchaço. Paralelamente, nossa equipe de fisioterapia dermatofuncional atua de forma precoce, garantindo que o seu conforto e a sua mobilidade retornem muito antes do que era padrão na cirurgia plástica do passado.
 
 Combinar cirurgias é, em essência, um projeto arquitetônico ambicioso do seu corpo. Ele exige planejamento minucioso, técnica refinada e, acima de tudo, um profundo respeito aos seus limites biológicos para entregar o resultado mais elegante possível.`
+  },
+  {
+    slug: 'como-e-o-caminho-ate-a-primeira-consulta-com-o-dr-mario-warde',
+    category: 'Planejamento',
+    title: 'Como é o caminho até a primeira consulta com o Dr. Mário Warde',
+    excerpt: 'Conheça cada etapa da experiência exclusiva na Clínica Dr. Mário Warde: do acolhimento com nosso serviço de concierge até o planejamento cirúrgico minucioso e individualizado.',
+    readTime: '5 min',
+    date: '09 Out 2026',
+    hideComments: true,
+    content: `Decidir realizar uma cirurgia plástica é um dos momentos mais íntimos e importantes na vida de uma pessoa. Envolve expectativas, sonhos, planejamento e, acima de tudo, a escolha de quem cuidará da sua integridade física e da sua autoestima.
+
+Por entender a magnitude dessa decisão, construímos uma jornada pensada nos mínimos detalhes. Na Clínica Dr. Mário Warde, o caminho até a sua cirurgia não começa na sala de operações, mas sim no primeiro instante em que você entra em contato conosco.
+
+Abaixo, detalho como funciona cada etapa dessa experiência desenhada para oferecer segurança, privacidade e atenção integral.
+
+
+1. O PRIMEIRO CONTATO: O ACOLHIMENTO DO NOSSO CONCIERGE DEDICADO
+O atendimento começa de forma humana e personalizada. Ao enviar sua mensagem pelo nosso canal oficial de WhatsApp ou formulário, você é recebida pela nossa Concierge exclusiva.
+
+Diferente de sistemas impessoais, nosso objetivo inicial é ouvir: entender o que motivou a sua busca, quais são as suas principais queixas e em que momento da sua vida você se encontra. Nossa concierge esclarece todas as dúvidas preliminares (como localização em São Paulo, dinâmica de horários e funcionamento da clínica), garantindo que você se sinta acolhida antes mesmo de pisar no consultório.
+
+
+2. O AGENDAMENTO COM TEMPO DEDICADO E SEM PRESSA
+Acreditamos que a medicina de excelência é incompatível com a pressa. Por isso, organizamos a agenda cirúrgica e de consultas com intervalos amplos entre as pacientes.
+
+Não trabalhamos com sobreposição de horários. Quando você reserva o seu horário, aquele período é dedicado exclusivamente a você. Isso assegura pontualidade, discrição e a garantia de que teremos todo o tempo necessário para conversar com calma, sem a sensação de uma consulta cronometrada.
+
+
+3. A CHEGADA À CLÍNICA: PRIVACIDADE E CONFORTO EM SÃO PAULO
+Localizada em uma das regiões mais nobres e acessíveis de São Paulo, a clínica foi desenhada sob o conceito de uma clínica boutique.
+
+Ao chegar, você é recebida em um ambiente sereno, elegante e privativo. Cada detalhe, da iluminação suave ao atendimento da equipe, foi pensado para que você sinta tranquilidade e segurança desde o primeiro passo.
+
+
+4. A CONSULTA MÉDICA: ESCUTA ATIVA E EXAME FÍSICO MINUCIOSO
+A consulta com o Dr. Mário Warde é dividida em dois momentos essenciais:
+
+• A Escuta Aberta: Sentamos para conversar profundamente sobre o que você deseja melhorar. Falamos sobre sua rotina, suas gestações anteriores (quando aplicável), flutuações de peso, histórico de saúde e o resultado estético que você almeja. A cirurgia plástica precisa harmonizar com o seu estilo de vida, não o contrário.
+
+• O Exame Físico e Estudo Anatômico: Realizamos uma avaliação técnica e detalhada. Analisamos a qualidade da pele, o tônus muscular, as proporções osteocartilaginosas, a distribuição de gordura e as assimetrias naturais do corpo. Cada anatomia é única, e é a partir dessas medições precisas que nasce a arquitetura do seu procedimento.
+
+
+5. ALINHAMENTO DE EXPECTATIVAS E ÉTICA MÉDICA
+Nem todo procedimento em alta nas redes sociais é o ideal para você. Um dos pilares mais fortes da nossa filosofia de trabalho é a verdade clínica e a busca pela elegância e naturalidade.
+
+Durante a consulta, sou absolutamente transparente sobre o que a cirurgia é capaz de entregar e quais são os limites biológicos dos seus tecidos. Se uma técnica não for a mais indicada ou se houver um caminho cirúrgico mais seguro e refinado para atingir o seu objetivo, apresentarei essa visão com clareza. Cirurgia plástica de alto nível não segue padrões artificiais; ela valoriza e refina as suas características individuais.
+
+
+6. PLANEJAMENTO CIRÚRGICO, AMBIENTE HOSPITALAR E SEGURANÇA
+Com a indicação cirúrgica definida, desenhamos o planejamento completo:
+
+• Estrutura Hospitalar: Todas as nossas cirurgias são realizadas exclusivamente em hospitais de ponta em São Paulo equipados com Unidade de Terapia Intensiva (UTI), como Albert Einstein e Sírio-Libanês. A segurança do paciente é a nossa diretriz inegociável.
+
+• Equipe Dedicada: Contamos com equipe anestésica fixa e treinada, além de suporte de instrumentação e enfermagem de alta precisão.
+
+• Protocolos Modernos de Pós-Operatório: Detalhamos como será o período pós-cirúrgico, incluindo o uso de tecnologias como o taping transoperatório e a assistência precoce com fisioterapeutas dermatofuncionais especializadas para acelerar a sua recuperação com o máximo de conforto.
+
+
+7. O PÓS-CONSULTA: TEMPO PARA DECIDIR COM TRANQUILIDADE
+Ao final da consulta, você não sairá com pressão para agendar sua cirurgia. Você receberá o plano cirúrgico detalhado, a relação completa de exames pré-operatórios laboratoriais e cardiológicos necessários e o orçamento com total transparência.
+
+Nossa Concierge permanece à sua disposição para esclarecer qualquer dúvida subsequente, auxiliar no agendamento dos exames ou alinhar a melhor data em sua agenda profissional e familiar.
+
+O caminho até a cirurgia plástica deve ser leve, seguro e esclarecedor. Estamos aqui para caminhar ao seu lado em cada etapa dessa transformação.`
   }
 ];

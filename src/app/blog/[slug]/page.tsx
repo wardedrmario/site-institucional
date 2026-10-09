@@ -49,7 +49,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <div className="prose prose-lg prose-p:text-chumbo-light prose-p:leading-relaxed prose-headings:text-chumbo prose-a:text-wine hover:prose-a:text-burgundy mx-auto whitespace-pre-wrap font-normal text-lg">
             {article.content}
           </div>
-          {article.slug !== 'cirurgias-combinadas-potencializando-resultados' && (
+          {!('hideComments' in article && article.hideComments) && (
             <ArticleComments />
           )}
           <div className="mt-16 text-center">
