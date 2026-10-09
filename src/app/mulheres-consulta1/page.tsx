@@ -445,7 +445,7 @@ export default function PrimeiraConsulta() {
 
             <div className="flex items-center gap-3">
               <span>Desenvolvido por</span>
-              <a href="https://unioo.com.br" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 group">
+              <a href="https://www.unioo.online" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 group">
                 <img src="/images/logo-unioo.svg" alt="Unio" className="h-4 opacity-70 group-hover:opacity-100 transition-opacity" />
                 <span className="font-medium tracking-[0.15em] opacity-70 group-hover:opacity-100 transition-opacity mt-0.5">COMUNICAÇÃO E MARKETING</span>
               </a>

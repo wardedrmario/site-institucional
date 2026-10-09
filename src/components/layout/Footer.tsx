@@ -106,7 +106,7 @@ export function Footer() {
               <div className="hidden sm:block w-px h-3 bg-white/10 mx-2"></div>
               <div className="flex items-center gap-2 text-white/40">
                 <span>Desenvolvido por</span>
-                <a href="https://unioo.com.br" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/70 hover:text-white transition-all group">
+                <a href="https://www.unioo.online" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white/70 hover:text-white transition-all group">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src="/brand/logo-unioo.svg" alt="unioo" className="h-4 w-auto opacity-70 group-hover:opacity-100 transition-opacity" />
                   <span className="text-[10px] tracking-widest uppercase font-medium">Comunicação e Marketing</span>
