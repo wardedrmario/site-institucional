@@ -182,29 +182,29 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
             
-            <div className="bg-white/[0.05] backdrop-blur-md p-8 rounded-[28px] border border-white/10 hover:bg-white/10 transition-colors cursor-pointer group">
+            <Link href="/blog/a-verdade-sobre-a-lipo-hd-e-quem-e-o-paciente-ideal" className="bg-white/[0.05] backdrop-blur-md p-8 rounded-[28px] border border-white/10 hover:bg-white/10 transition-colors cursor-pointer group block">
               <span className="text-xs font-medium text-[#ccb9b6] uppercase tracking-wider mb-3 block">Contorno Corporal</span>
               <h4 className="text-lg font-bold text-white mb-3 tracking-tight group-hover:text-[#ccb9b6] transition-colors">A verdade sobre a Lipo HD e quem é o paciente ideal</h4>
               <p className="text-sm text-white/60 leading-relaxed font-normal">
                 Entenda os limites anatômicos da lipoaspiração de alta definição e por que o resultado perfeito nasce da proporção natural.
               </p>
-            </div>
+            </Link>
 
-            <div className="bg-white/[0.05] backdrop-blur-md p-8 rounded-[28px] border border-white/10 hover:bg-white/10 transition-colors cursor-pointer group">
+            <Link href="/blog/deep-plane-facelift-a-evolucao-do-rejuvenescimento" className="bg-white/[0.05] backdrop-blur-md p-8 rounded-[28px] border border-white/10 hover:bg-white/10 transition-colors cursor-pointer group block">
               <span className="text-xs font-medium text-[#ccb9b6] uppercase tracking-wider mb-3 block">Face</span>
               <h4 className="text-lg font-bold text-white mb-3 tracking-tight group-hover:text-[#ccb9b6] transition-colors">Deep Plane Facelift: A evolução do rejuvenescimento</h4>
               <p className="text-sm text-white/60 leading-relaxed font-normal">
                 Como as técnicas modernas de ritidoplastia evitam o aspecto &quot;esticado&quot; reposicionando os tecidos profundos da face.
               </p>
-            </div>
+            </Link>
 
-            <div className="bg-white/[0.05] backdrop-blur-md p-8 rounded-[28px] border border-white/10 hover:bg-white/10 transition-colors cursor-pointer group">
+            <Link href="/blog/mastopexia-com-alca-muscular-maior-sustentacao" className="bg-white/[0.05] backdrop-blur-md p-8 rounded-[28px] border border-white/10 hover:bg-white/10 transition-colors cursor-pointer group block">
               <span className="text-xs font-medium text-[#ccb9b6] uppercase tracking-wider mb-3 block">Mamas</span>
               <h4 className="text-lg font-bold text-white mb-3 tracking-tight group-hover:text-[#ccb9b6] transition-colors">Mastopexia com alça muscular: Maior sustentação e estabilidade</h4>
               <p className="text-sm text-white/60 leading-relaxed font-normal">
                 Descubra como o uso do próprio músculo como &quot;sutiã interno&quot; tem prolongado a longevidade dos resultados nas cirurgias mamárias.
               </p>
-            </div>
+            </Link>
 
           </div>
 
