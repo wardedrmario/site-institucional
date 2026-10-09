@@ -12,6 +12,7 @@ const COLUMNS = [
   { id: 'deposito', title: 'Depósito / Confirmação' },
   { id: 'pre_op', title: 'Pré-operatório' },
   { id: 'pos_op', title: 'Pós-operatório / Recorrência' },
+  { id: 'arquivado', title: '🥶 Arquivado / Perdido' },
 ];
 
 export interface DbLead {
@@ -35,7 +36,7 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
   // Converte a lista plana de leads do BD para o formato de colunas do Kanban
   const groupedLeads = React.useMemo(() => {
     const columns: Record<string, Lead[]> = {
-      'triagem': [], 'qualificacao': [], 'consulta': [], 'pos_consulta': [], 'deposito': [], 'pre_op': [], 'pos_op': []
+      'triagem': [], 'qualificacao': [], 'consulta': [], 'pos_consulta': [], 'deposito': [], 'pre_op': [], 'pos_op': [], 'arquivado': []
     };
     
     initialLeads.forEach(lead => {
