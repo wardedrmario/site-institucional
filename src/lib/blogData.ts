@@ -19,7 +19,7 @@ Em minha prática, sempre priorizo a naturalidade. A harmonia entre o abdome, os
     category: 'Face',
     title: 'Deep Plane Facelift: A evolução do rejuvenescimento',
     excerpt: 'Como as técnicas modernas de ritidoplastia evitam o aspecto "esticado" reposicionando os tecidos profundos da face.',
-    readTime: '6 min',
+    readTime: '3 min',
     date: '02 Set 2026',
     content: `O rejuvenescimento facial passou por uma verdadeira revolução nas últimas décadas. Antigamente, a ritidoplastia (lifting facial tradicional) focava quase exclusivamente em "puxar" a pele, o que muitas vezes resultava em um aspecto artificial, esticado ou repuxado. 
 
@@ -85,7 +85,7 @@ Minha equipe anestésica é fixa e dedicada, acompanhando o paciente desde o pr�
     category: 'Contorno Corporal',
     title: 'Enxertia de glúteos: Como esculpir sem exageros',
     excerpt: 'A técnica de purificação e re-injeção de gordura para criar um contorno elegante que respeita a arquitetura do seu corpo.',
-    readTime: '5 min',
+    readTime: '4 min',
     date: '05 Jul 2026',
     content: `A lipoenxertia glútea, muitas vezes associada ao termo internacional "Brazilian Butt Lift" (BBL), foi por muito tempo estigmatizada por resultados exagerados, desproporcionais e que frequentemente beiravam o artificial. 
 
