@@ -163,6 +163,7 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
   }, [groupedLeads]);
 
   const [draggedLead, setDraggedLead] = useState<{ lead: Lead, fromColumnId: string } | null>(null);
+  const [isArchiveOpen, setIsArchiveOpen] = useState(false);
 
   const handleDragStart = (e: React.DragEvent, lead: Lead, fromColumnId: string) => {
     setDraggedLead({ lead, fromColumnId });
@@ -217,41 +218,72 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
     <div className="flex gap-4 overflow-x-auto pb-8 pt-4 h-[calc(100vh-140px)] items-stretch snap-x select-none">
       {COLUMNS.map((col) => {
         const leads = columnsData[col.id] || [];
+        const isArchivedCol = col.id === 'arquivado';
+        const isCollapsed = isArchivedCol && !isArchiveOpen;
         
         return (
           <div 
             key={col.id} 
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, col.id)}
-            className="flex-shrink-0 w-[300px] flex flex-col overflow-hidden bg-white/60 backdrop-blur-md rounded-2xl border border-white/40 shadow-sm snap-center transition-colors hover:bg-white/80"
+            className={`flex-shrink-0 flex flex-col overflow-hidden bg-white/60 backdrop-blur-md rounded-2xl border border-white/40 shadow-sm snap-center transition-all duration-300 hover:bg-white/80 ${isCollapsed ? 'w-16 cursor-pointer hover:bg-black/5' : 'w-[300px]'}`}
+            onClick={() => { if (isCollapsed) setIsArchiveOpen(true); }}
+            title={isCollapsed ? "Clique para expandir os Arquivados" : ""}
           >
-            {/* Header da Coluna */}
-            <div className="p-4 flex items-center justify-between border-b border-black/5">
-              <h2 className="font-semibold text-sm text-[#1d1d1f]">{col.title}</h2>
-              <span className="bg-black/10 text-[#1d1d1f] text-xs font-semibold w-6 h-6 flex items-center justify-center rounded-full">
-                {leads.length}
-              </span>
-            </div>
-            
-            {/* Corpo da Coluna (Lista de Cards) */}
-            <div className="flex-1 overflow-y-auto min-h-0 overscroll-contain p-3 space-y-3">
-              {leads.map(lead => (
-                <div
-                  key={lead.id}
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, lead, col.id)}
-                  onDragEnd={handleDragEnd}
-                >
-                  <LeadCard lead={lead} />
+            {isCollapsed ? (
+              <div className="flex flex-col items-center justify-start h-full w-full py-4 relative">
+                <span className="text-lg">🥶</span>
+                <span className="bg-black/10 text-black/60 text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full mt-3">
+                  {leads.length}
+                </span>
+                <div className="flex-1 flex items-center justify-center w-full relative mt-10">
+                  <div className="-rotate-90 whitespace-nowrap text-xs font-bold tracking-widest uppercase text-black/30">
+                    Arquivados
+                  </div>
                 </div>
-              ))}
-              
-              {leads.length === 0 && (
-                <div className="h-24 flex items-center justify-center border-2 border-dashed border-black/10 rounded-xl">
-                  <span className="text-xs text-black/40 font-medium">Solte aqui</span>
+              </div>
+            ) : (
+              <>
+                {/* Header da Coluna */}
+                <div className="p-4 flex items-center justify-between border-b border-black/5">
+                  <h2 className="font-semibold text-sm text-[#1d1d1f]">{col.title}</h2>
+                  <div className="flex items-center gap-2">
+                    <span className="bg-black/10 text-[#1d1d1f] text-xs font-semibold w-6 h-6 flex items-center justify-center rounded-full">
+                      {leads.length}
+                    </span>
+                    {isArchivedCol && (
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); setIsArchiveOpen(false); }}
+                        className="text-black/40 hover:text-black/80 ml-1 p-1 rounded hover:bg-black/5 transition-colors"
+                        title="Ocultar coluna"
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                      </button>
+                    )}
+                  </div>
                 </div>
-              )}
-            </div>
+                
+                {/* Corpo da Coluna (Lista de Cards) */}
+                <div className="flex-1 overflow-y-auto min-h-0 overscroll-contain p-3 space-y-3">
+                  {leads.map(lead => (
+                    <div
+                      key={lead.id}
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, lead, col.id)}
+                      onDragEnd={handleDragEnd}
+                    >
+                      <LeadCard lead={lead} />
+                    </div>
+                  ))}
+                  
+                  {leads.length === 0 && (
+                    <div className="h-24 flex items-center justify-center border-2 border-dashed border-black/10 rounded-xl">
+                      <span className="text-xs text-black/40 font-medium">Solte aqui</span>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         );
       })}
