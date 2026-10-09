@@ -106,5 +106,33 @@ COMO É O PÓS-OPERATÓRIO?
 A recuperação exige comprometimento. Para garantir a sobrevivência máxima das células de gordura transferidas, a paciente precisa evitar pressão direta e prolongada na região glútea durante as primeiras semanas, utilizando almofadas especiais ao sentar. O uso de cintas compressivas de alta tecnologia nas áreas lipoaspiradas, aliado à nossa fisioterapia dermatofuncional especializada e aplicação de taping no centro cirúrgico, garante o controle do inchaço e uma retração de pele perfeita sobre o novo contorno.
 
 O resultado final entregue é uma silhueta contínua, elegante e que flui com naturalidade. A verdadeira beleza do contorno corporal se revela quando as pessoas notam que você está deslumbrante, mas não conseguem apontar exatamente qual foi a intervenção realizada.`
+  },
+  {
+    slug: 'cirurgias-combinadas-potencializando-resultados',
+    category: 'Procedimentos',
+    title: 'Cirurgias Combinadas: Como potencializar resultados com máxima segurança',
+    excerpt: 'A união de procedimentos permite otimizar a transformação estética, sempre com planejamento individualizado e uma avaliação criteriosa.',
+    readTime: '4 min',
+    date: '09 Out 2026',
+    content: `O desejo de realizar mais de uma alteração estética de uma só vez é incrivelmente comum. A ideia de passar por apenas um período de anestesia, um único afastamento do trabalho e um processo unificado de recuperação — o chamado *downtime* — torna as cirurgias combinadas (como o famoso "Mommy Makeover") uma das opções mais procuradas no consultório.
+
+No entanto, a verdadeira arte de combinar cirurgias não está em fazer o máximo possível, mas sim em realizar o que é **seguro e fisiologicamente suportável** para o seu corpo. 
+
+QUANDO É SEGURO COMBINAR CIRURGIAS?
+A segurança do paciente dita absolutamente todas as regras na nossa prática cirúrgica. Para que possamos unir dois ou mais procedimentos (como uma Lipoaspiração HD + Mastopexia, ou uma Abdominoplastia + Prótese de Mama), aplicamos critérios de triagem extremamente rigorosos:
+
+1. **Tempo de Cirurgia:** O planejamento deve garantir que o tempo total de centro cirúrgico não ultrapasse a margem de segurança clínica estipulada para evitar desgaste metabólico excessivo.
+2. **Saúde Global (IMC e Exames):** Pacientes candidatas a cirurgias combinadas precisam estar com a saúde impecável, com exames laboratoriais, cardiológicos e um Índice de Massa Corporal (IMC) estritamente dentro da zona de segurança.
+3. **Infraestrutura Hospitalar:** Cirurgias combinadas exigem, inegociavelmente, um hospital de ponta, com Unidade de Terapia Intensiva (UTI), banco de sangue e uma equipe anestésica dedicada integralmente à sua estabilidade hemodinâmica.
+
+AS COMBINAÇÕES MAIS EFICIENTES E HARMÔNICAS
+Quando aprovadas nestes critérios, as cirurgias combinadas oferecem transformações belíssimas. A sinergia entre os procedimentos cria uma harmonia global que dificilmente seria alcançada operando partes isoladas em anos diferentes.
+
+O clássico **Mommy Makeover**, por exemplo, restaura a firmeza do abdome e reposiciona as mamas (Mastopexia), devolvendo a confiança da mulher após as gestações. Outras combinações de alto impacto incluem associar o refinamento corporal de uma Lipo HD com o enxerto de gordura nos glúteos, esculpindo a silhueta de forma contínua em 360 graus.
+
+O PÓS-OPERATÓRIO UNIFICADO
+Recuperar-se de múltiplas cirurgias simultâneas exige uma infraestrutura de apoio de altíssimo nível. É aqui que nosso protocolo de recuperação acelerada entra em ação. A aplicação transoperatória do *taping* reduz drasticamente os hematomas e o inchaço. Paralelamente, nossa equipe de fisioterapia dermatofuncional atua de forma precoce, garantindo que o seu conforto e a sua mobilidade retornem muito antes do que era padrão na cirurgia plástica do passado.
+
+Combinar cirurgias é, em essência, um projeto arquitetônico ambicioso do seu corpo. Ele exige planejamento minucioso, técnica refinada e, acima de tudo, um profundo respeito aos seus limites biológicos para entregar o resultado mais elegante possível.`
   }
 ];
