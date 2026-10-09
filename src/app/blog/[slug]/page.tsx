@@ -49,9 +49,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <div className="prose prose-lg prose-p:text-chumbo-light prose-p:leading-relaxed prose-headings:text-chumbo prose-a:text-wine hover:prose-a:text-burgundy mx-auto whitespace-pre-wrap font-normal text-lg">
             {article.content}
           </div>
-          
-          <ArticleComments />
-          
+          {article.slug !== 'cirurgias-combinadas-potencializando-resultados' && (
+            <ArticleComments />
+          )}
           <div className="mt-16 text-center">
             <Link href="/blog" className="inline-flex items-center justify-center gap-2 bg-[#f0edea] text-chumbo hover:bg-[#e4ded9] text-xs font-semibold uppercase tracking-widest px-8 py-4 rounded-full transition-all">
               <svg className="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/></svg>
