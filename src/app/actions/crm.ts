@@ -151,28 +151,26 @@ export async function updateLeadStatus(leadId: string, newStatus: string, leadDa
   return { success: true };
 }
 
-export async function generateAiForLead(leadId: string, leadData: { procedure?: string, timeframe?: string, city?: string }) {
+export async function generateAiForLead(leadId: string, leadData: { procedure?: string, timeframe?: string, city?: string, name?: string }) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return { success: false, error: 'Sem API Key do Gemini' };
 
-  const prompt = `Atue como o Dr. Mário Warde, cirurgião plástico de alto padrão.
-Analise este lead recém-cadastrado e sugira para a sua equipe uma ÚNICA PRÓXIMA AÇÃO comercial em no máximo 10 a 12 palavras, baseada no Playbook "White Glove".
+  const prompt = `Atue como Ana Paula, a Concierge exclusiva do Dr. Mário Warde, uma clínica de cirurgia plástica de alto padrão (Boutique de Luxo).
+Escreva a MENSAGEM EXATA DE WHATSAPP que deve ser enviada para este paciente, seguindo estritamente os scripts do nosso Playbook "White Glove".
 
-Regras do Playbook:
-1. NUNCA use a palavra "Avaliação", use SEMPRE "Primeira Consulta".
-2. Se o lead abandonou sem mandar mensagem, a ação é o "Script de Resgate".
-3. Mantenha um tom sofisticado, acolhedor e focado na dor/sonho da paciente.
+Regras:
+1. NUNCA use a palavra "Avaliação". Use SEMPRE "Primeira Consulta".
+2. Mantenha um tom sofisticado, empático e focado na dor/sonho da paciente.
+3. Não use gírias ou excesso de emojis. Apenas o texto pronto para ser copiado e enviado.
+4. Se apresente como Ana Paula, Concierge do Dr. Mário Warde.
+5. Inicie saudando a pessoa pelo nome fornecido.
+6. Apenas retorne a mensagem de whatsapp, não inclua aspas no início/fim nem explicações da IA.
 
 Dados do Lead:
-- Procedimento: ${leadData.procedure || 'Não informado'}
+- Nome: ${leadData.name || 'Paciente'}
+- Procedimento de interesse: ${leadData.procedure || 'Não informado'}
 - Urgência: ${leadData.timeframe || 'Não informada'}
-- Cidade: ${leadData.city || 'Não informada'}
-
-Exemplos de resposta esperada: 
-"Enviar script de resgate para Primeira Consulta de Mama."
-"Perguntar sobre a dor atual antes de agendar Primeira Consulta."
-
-Responda apenas a ação, sem aspas.`;
+- Cidade: ${leadData.city || 'Não informada'}`;
 
   try {
     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
@@ -180,7 +178,7 @@ Responda apenas a ação, sem aspas.`;
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.7, maxOutputTokens: 25 }
+        generationConfig: { temperature: 0.7, maxOutputTokens: 300 }
       })
     });
     

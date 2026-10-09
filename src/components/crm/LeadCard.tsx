@@ -39,6 +39,7 @@ export default function LeadCard({ lead }: LeadCardProps) {
       const res = await generateAiForLead(lead.id, {
         procedure: lead.procedure,
         timeframe: lead.timeframe,
+        name: lead.name,
       });
       if (res?.success && res.suggestion) {
         setLocalNextAction(res.suggestion);
