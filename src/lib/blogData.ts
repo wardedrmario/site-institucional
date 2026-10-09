@@ -1,18 +1,67 @@
 export const articles = [
   {
-    slug: 'a-verdade-sobre-a-lipo-hd-e-quem-e-o-paciente-ideal',
-    category: 'Contorno Corporal',
-    title: 'A verdade sobre a Lipo HD e quem é o paciente ideal',
-    excerpt: 'Entenda os limites anatômicos da lipoaspiração de alta definição e por que o resultado perfeito nasce da proporção natural.',
-    readTime: '4 min',
-    date: '10 Set 2026',
-    content: `A lipoaspiração de alta definição (Lipo HD) popularizou-se enormemente, mas é crucial entender que ela não é indicada para todos os pacientes.
+    slug: 'como-e-o-caminho-ate-a-primeira-consulta-com-o-dr-mario-warde',
+    category: 'Primeira Consulta',
+    title: 'Como é o caminho até a primeira consulta com o Dr. Mário Warde',
+    excerpt: 'Conheça cada etapa da experiência exclusiva na Clínica Dr. Mário Warde: do acolhimento com nosso serviço de concierge até o planejamento cirúrgico minucioso e individualizado.',
+    readTime: '5 min',
+    date: '09 Out 2026',
+    hideComments: true,
+    content: `Decidir realizar uma cirurgia plástica é um dos momentos mais íntimos e importantes na vida de uma pessoa. Envolve expectativas, sonhos, planejamento e, acima de tudo, a escolha de quem cuidará da sua integridade física e da sua autoestima.
 
-Diferente da lipoaspiração tradicional, que foca apenas na remoção de volume, a técnica HD exige um paciente que já possua uma boa estrutura muscular subjacente e um percentual de gordura relativamente baixo. O objetivo não é emagrecer, mas sim esculpir e realçar os contornos naturais do corpo, "desenhando" as sombras e luzes da musculatura.
+Por entender a magnitude dessa decisão, construímos uma jornada pensada nos mínimos detalhes. Na Clínica Dr. Mário Warde, o caminho até a sua cirurgia não começa na sala de operações, mas sim no primeiro instante em que você entra em contato conosco.
 
-Pacientes ideais são aqueles que mantêm uma rotina ativa e alimentação balanceada, mas que possuem aquela gordura localizada teimosa que não responde ao exercício. A excelência do resultado não vem de criar marcações artificiais, mas de refinar a transição entre os músculos de forma elegante e sutil.
+Abaixo, detalho como funciona cada etapa dessa experiência desenhada para oferecer segurança, privacidade e atenção integral.
 
-Em minha prática, sempre priorizo a naturalidade. A harmonia entre o abdome, os flancos e o dorso é o que traz a verdadeira beleza do contorno corporal.`
+
+1. O PRIMEIRO CONTATO: O ACOLHIMENTO DO NOSSO CONCIERGE DEDICADO
+O atendimento começa de forma humana e personalizada. Ao enviar sua mensagem pelo nosso canal oficial de WhatsApp ou formulário, você é recebida pela nossa Concierge exclusiva.
+
+Diferente de sistemas impessoais, nosso objetivo inicial é ouvir: entender o que motivou a sua busca, quais são as suas principais queixas e em que momento da sua vida você se encontra. Nossa concierge esclarece todas as dúvidas preliminares (como localização em São Paulo, dinâmica de horários e funcionamento da clínica), garantindo que você se sinta acolhida antes mesmo de pisar no consultório.
+
+
+2. O AGENDAMENTO COM TEMPO DEDICADO E SEM PRESSA
+Acreditamos que a medicina de excelência é incompatível com a pressa. Por isso, organizamos a agenda cirúrgica e de consultas com intervalos amplos entre as pacientes.
+
+Não trabalhamos com sobreposição de horários. Quando você reserva o seu horário, aquele período é dedicado exclusivamente a você. Isso assegura pontualidade, discrição e a garantia de que teremos todo o tempo necessário para conversar com calma, sem a sensação de uma consulta cronometrada.
+
+
+3. A CHEGADA À CLÍNICA: PRIVACIDADE E CONFORTO EM SÃO PAULO
+Localizada em uma das regiões mais nobres e acessíveis de São Paulo, a clínica foi desenhada sob o conceito de uma clínica boutique.
+
+Ao chegar, você é recebida em um ambiente sereno, elegante e privativo. Cada detalhe, da iluminação suave ao atendimento da equipe, foi pensado para que você sinta tranquilidade e segurança desde o primeiro passo.
+
+
+4. A CONSULTA MÉDICA: ESCUTA ATIVA E EXAME FÍSICO MINUCIOSO
+A consulta com o Dr. Mário Warde é dividida em dois momentos essenciais:
+
+• A Escuta Aberta: Sentamos para conversar profundamente sobre o que você deseja melhorar. Falamos sobre sua rotina, suas gestações anteriores (quando aplicável), flutuações de peso, histórico de saúde e o resultado estético que você almeja. A cirurgia plástica precisa harmonizar com o seu estilo de vida, não o contrário.
+
+• O Exame Físico e Estudo Anatômico: Realizamos uma avaliação técnica e detalhada. Analisamos a qualidade da pele, o tônus muscular, as proporções osteocartilaginosas, a distribuição de gordura e as assimetrias naturais do corpo. Cada anatomia é única, e é a partir dessas medições precisas que nasce a arquitetura do seu procedimento.
+
+
+5. ALINHAMENTO DE EXPECTATIVAS E ÉTICA MÉDICA
+Nem todo procedimento em alta nas redes sociais é o ideal para você. Um dos pilares mais fortes da nossa filosofia de trabalho é a verdade clínica e a busca pela elegância e naturalidade.
+
+Durante a consulta, sou absolutamente transparente sobre o que a cirurgia é capaz de entregar e quais são os limites biológicos dos seus tecidos. Se uma técnica não for a mais indicada ou se houver um caminho cirúrgico mais seguro e refinado para atingir o seu objetivo, apresentarei essa visão com clareza. Cirurgia plástica de alto nível não segue padrões artificiais; ela valoriza e refina as suas características individuais.
+
+
+6. PLANEJAMENTO CIRÚRGICO, AMBIENTE HOSPITALAR E SEGURANÇA
+Com a indicação cirúrgica definida, desenhamos o planejamento completo:
+
+• Estrutura Hospitalar: Todas as nossas cirurgias são realizadas exclusivamente em hospitais de ponta em São Paulo equipados com Unidade de Terapia Intensiva (UTI), como Albert Einstein e Sírio-Libanês. A segurança do paciente é a nossa diretriz inegociável.
+
+• Equipe Dedicada: Contamos com equipe anestésica fixa e treinada, além de suporte de instrumentação e enfermagem de alta precisão.
+
+• Protocolos Modernos de Pós-Operatório: Detalhamos como será o período pós-cirúrgico, incluindo o uso de tecnologias como o taping transoperatório e a assistência precoce com fisioterapeutas dermatofuncionais especializadas para acelerar a sua recuperação com o máximo de conforto.
+
+
+7. O PÓS-CONSULTA: TEMPO PARA DECIDIR COM TRANQUILIDADE
+Ao final da consulta, você não sairá com pressão para agendar sua cirurgia. Você receberá o plano cirúrgico detalhado, a relação completa de exames pré-operatórios laboratoriais e cardiológicos necessários e o orçamento com total transparência.
+
+Nossa Concierge permanece à sua disposição para esclarecer qualquer dúvida subsequente, auxiliar no agendamento dos exames ou alinhar a melhor data em sua agenda profissional e familiar.
+
+O caminho até a cirurgia plástica deve ser leve, seguro e esclarecedor. Estamos aqui para caminhar ao seu lado em cada etapa dessa transformação.`
   },
   {
     slug: 'deep-plane-facelift-a-evolucao-do-rejuvenescimento',
@@ -137,67 +186,18 @@ Recuperar-se de múltiplas cirurgias simultâneas exige uma infraestrutura de ap
 Combinar cirurgias é, em essência, um projeto arquitetônico ambicioso do seu corpo. Ele exige planejamento minucioso, técnica refinada e, acima de tudo, um profundo respeito aos seus limites biológicos para entregar o resultado mais elegante possível.`
   },
   {
-    slug: 'como-e-o-caminho-ate-a-primeira-consulta-com-o-dr-mario-warde',
-    category: 'Planejamento',
-    title: 'Como é o caminho até a primeira consulta com o Dr. Mário Warde',
-    excerpt: 'Conheça cada etapa da experiência exclusiva na Clínica Dr. Mário Warde: do acolhimento com nosso serviço de concierge até o planejamento cirúrgico minucioso e individualizado.',
-    readTime: '5 min',
-    date: '09 Out 2026',
-    hideComments: true,
-    content: `Decidir realizar uma cirurgia plástica é um dos momentos mais íntimos e importantes na vida de uma pessoa. Envolve expectativas, sonhos, planejamento e, acima de tudo, a escolha de quem cuidará da sua integridade física e da sua autoestima.
+    slug: 'a-verdade-sobre-a-lipo-hd-e-quem-e-o-paciente-ideal',
+    category: 'Contorno Corporal',
+    title: 'A verdade sobre a Lipo HD e quem é o paciente ideal',
+    excerpt: 'Entenda os limites anatômicos da lipoaspiração de alta definição e por que o resultado perfeito nasce da proporção natural.',
+    readTime: '4 min',
+    date: '10 Set 2026',
+    content: `A lipoaspiração de alta definição (Lipo HD) popularizou-se enormemente, mas é crucial entender que ela não é indicada para todos os pacientes.
 
-Por entender a magnitude dessa decisão, construímos uma jornada pensada nos mínimos detalhes. Na Clínica Dr. Mário Warde, o caminho até a sua cirurgia não começa na sala de operações, mas sim no primeiro instante em que você entra em contato conosco.
+Diferente da lipoaspiração tradicional, que foca apenas na remoção de volume, a técnica HD exige um paciente que já possua uma boa estrutura muscular subjacente e um percentual de gordura relativamente baixo. O objetivo não é emagrecer, mas sim esculpir e realçar os contornos naturais do corpo, "desenhando" as sombras e luzes da musculatura.
 
-Abaixo, detalho como funciona cada etapa dessa experiência desenhada para oferecer segurança, privacidade e atenção integral.
+Pacientes ideais são aqueles que mantêm uma rotina ativa e alimentação balanceada, mas que possuem aquela gordura localizada teimosa que não responde ao exercício. A excelência do resultado não vem de criar marcações artificiais, mas de refinar a transição entre os músculos de forma elegante e sutil.
 
-
-1. O PRIMEIRO CONTATO: O ACOLHIMENTO DO NOSSO CONCIERGE DEDICADO
-O atendimento começa de forma humana e personalizada. Ao enviar sua mensagem pelo nosso canal oficial de WhatsApp ou formulário, você é recebida pela nossa Concierge exclusiva.
-
-Diferente de sistemas impessoais, nosso objetivo inicial é ouvir: entender o que motivou a sua busca, quais são as suas principais queixas e em que momento da sua vida você se encontra. Nossa concierge esclarece todas as dúvidas preliminares (como localização em São Paulo, dinâmica de horários e funcionamento da clínica), garantindo que você se sinta acolhida antes mesmo de pisar no consultório.
-
-
-2. O AGENDAMENTO COM TEMPO DEDICADO E SEM PRESSA
-Acreditamos que a medicina de excelência é incompatível com a pressa. Por isso, organizamos a agenda cirúrgica e de consultas com intervalos amplos entre as pacientes.
-
-Não trabalhamos com sobreposição de horários. Quando você reserva o seu horário, aquele período é dedicado exclusivamente a você. Isso assegura pontualidade, discrição e a garantia de que teremos todo o tempo necessário para conversar com calma, sem a sensação de uma consulta cronometrada.
-
-
-3. A CHEGADA À CLÍNICA: PRIVACIDADE E CONFORTO EM SÃO PAULO
-Localizada em uma das regiões mais nobres e acessíveis de São Paulo, a clínica foi desenhada sob o conceito de uma clínica boutique.
-
-Ao chegar, você é recebida em um ambiente sereno, elegante e privativo. Cada detalhe, da iluminação suave ao atendimento da equipe, foi pensado para que você sinta tranquilidade e segurança desde o primeiro passo.
-
-
-4. A CONSULTA MÉDICA: ESCUTA ATIVA E EXAME FÍSICO MINUCIOSO
-A consulta com o Dr. Mário Warde é dividida em dois momentos essenciais:
-
-• A Escuta Aberta: Sentamos para conversar profundamente sobre o que você deseja melhorar. Falamos sobre sua rotina, suas gestações anteriores (quando aplicável), flutuações de peso, histórico de saúde e o resultado estético que você almeja. A cirurgia plástica precisa harmonizar com o seu estilo de vida, não o contrário.
-
-• O Exame Físico e Estudo Anatômico: Realizamos uma avaliação técnica e detalhada. Analisamos a qualidade da pele, o tônus muscular, as proporções osteocartilaginosas, a distribuição de gordura e as assimetrias naturais do corpo. Cada anatomia é única, e é a partir dessas medições precisas que nasce a arquitetura do seu procedimento.
-
-
-5. ALINHAMENTO DE EXPECTATIVAS E ÉTICA MÉDICA
-Nem todo procedimento em alta nas redes sociais é o ideal para você. Um dos pilares mais fortes da nossa filosofia de trabalho é a verdade clínica e a busca pela elegância e naturalidade.
-
-Durante a consulta, sou absolutamente transparente sobre o que a cirurgia é capaz de entregar e quais são os limites biológicos dos seus tecidos. Se uma técnica não for a mais indicada ou se houver um caminho cirúrgico mais seguro e refinado para atingir o seu objetivo, apresentarei essa visão com clareza. Cirurgia plástica de alto nível não segue padrões artificiais; ela valoriza e refina as suas características individuais.
-
-
-6. PLANEJAMENTO CIRÚRGICO, AMBIENTE HOSPITALAR E SEGURANÇA
-Com a indicação cirúrgica definida, desenhamos o planejamento completo:
-
-• Estrutura Hospitalar: Todas as nossas cirurgias são realizadas exclusivamente em hospitais de ponta em São Paulo equipados com Unidade de Terapia Intensiva (UTI), como Albert Einstein e Sírio-Libanês. A segurança do paciente é a nossa diretriz inegociável.
-
-• Equipe Dedicada: Contamos com equipe anestésica fixa e treinada, além de suporte de instrumentação e enfermagem de alta precisão.
-
-• Protocolos Modernos de Pós-Operatório: Detalhamos como será o período pós-cirúrgico, incluindo o uso de tecnologias como o taping transoperatório e a assistência precoce com fisioterapeutas dermatofuncionais especializadas para acelerar a sua recuperação com o máximo de conforto.
-
-
-7. O PÓS-CONSULTA: TEMPO PARA DECIDIR COM TRANQUILIDADE
-Ao final da consulta, você não sairá com pressão para agendar sua cirurgia. Você receberá o plano cirúrgico detalhado, a relação completa de exames pré-operatórios laboratoriais e cardiológicos necessários e o orçamento com total transparência.
-
-Nossa Concierge permanece à sua disposição para esclarecer qualquer dúvida subsequente, auxiliar no agendamento dos exames ou alinhar a melhor data em sua agenda profissional e familiar.
-
-O caminho até a cirurgia plástica deve ser leve, seguro e esclarecedor. Estamos aqui para caminhar ao seu lado em cada etapa dessa transformação.`
+Em minha prática, sempre priorizo a naturalidade. A harmonia entre o abdome, os flancos e o dorso é o que traz a verdadeira beleza do contorno corporal.`
   }
 ];

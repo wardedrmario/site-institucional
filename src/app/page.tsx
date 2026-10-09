@@ -182,11 +182,11 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
             
-            <Link href="/blog/a-verdade-sobre-a-lipo-hd-e-quem-e-o-paciente-ideal" className="bg-white/[0.05] backdrop-blur-md p-8 rounded-[28px] border border-white/10 hover:bg-white/10 transition-colors cursor-pointer group block">
-              <span className="text-xs font-medium text-[#ccb9b6] uppercase tracking-wider mb-3 block">Contorno Corporal</span>
-              <h4 className="text-lg font-bold text-white mb-3 tracking-tight group-hover:text-[#ccb9b6] transition-colors">A verdade sobre a Lipo HD e quem é o paciente ideal</h4>
+            <Link href="/blog/como-e-o-caminho-ate-a-primeira-consulta-com-o-dr-mario-warde" className="bg-white/[0.05] backdrop-blur-md p-8 rounded-[28px] border border-white/10 hover:bg-white/10 transition-colors cursor-pointer group block">
+              <span className="text-xs font-medium text-[#ccb9b6] uppercase tracking-wider mb-3 block">Primeira Consulta</span>
+              <h4 className="text-lg font-bold text-white mb-3 tracking-tight group-hover:text-[#ccb9b6] transition-colors">Como é o caminho até a primeira consulta com o Dr. Mário Warde</h4>
               <p className="text-sm text-white/60 leading-relaxed font-normal">
-                Entenda os limites anatômicos da lipoaspiração de alta definição e por que o resultado perfeito nasce da proporção natural.
+                Conheça cada etapa da experiência exclusiva: do acolhimento com concierge ao planejamento cirúrgico minucioso.
               </p>
             </Link>
 
