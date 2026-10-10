@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-type Step = 1 | 2 | 3;
+type Step = 1 | 2 | 3 | 4;
 
 export function LeadForm({ onClose }: { onClose?: () => void }) {
   const [step, setStep] = useState<Step>(1);
@@ -10,6 +10,7 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
     procedure: '',
     timeframe: '',
     timeframeDetails: '',
+    hospitalPreference: '',
     name: '',
     phone: '',
     email: '',
@@ -116,7 +117,7 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
       }
 
       const text = encodeURIComponent(
-        `Olá! Meu nome é ${formData.name}. Gostaria de iniciar meu planejamento cirúrgico com o Dr. Mário Warde para ${formData.procedure} (Previsão: ${timeframeText}).${utmData}`
+        `Olá! Meu nome é ${formData.name}. Gostaria de iniciar meu planejamento cirúrgico com o Dr. Mário Warde para ${formData.procedure} (Previsão: ${timeframeText}, Preferência: ${formData.hospitalPreference}).${utmData}`
       );
       
       // Pequeno atraso (2500ms) para garantir que o GTM e o Pixel processem o evento de Lead perfeitamente
@@ -153,6 +154,7 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
           <span className={`h-1.5 rounded-full transition-all duration-300 ${step === 1 ? 'w-8 bg-wine' : 'w-2 bg-black/15'}`} />
           <span className={`h-1.5 rounded-full transition-all duration-300 ${step === 2 ? 'w-8 bg-wine' : 'w-2 bg-black/15'}`} />
           <span className={`h-1.5 rounded-full transition-all duration-300 ${step === 3 ? 'w-8 bg-wine' : 'w-2 bg-black/15'}`} />
+          <span className={`h-1.5 rounded-full transition-all duration-300 ${step === 4 ? 'w-8 bg-wine' : 'w-2 bg-black/15'}`} />
         </div>
 
         {/* Right: Arrows */}
@@ -171,8 +173,8 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
           <button 
             type="button" 
             onClick={handleNext}
-            disabled={step === 3}
-            className={`p-2 transition-colors ${step === 3 ? 'text-black/10 cursor-not-allowed' : 'text-chumbo-light hover:text-chumbo cursor-pointer'}`}
+            disabled={step === 4}
+            className={`p-2 transition-colors ${step === 4 ? 'text-black/10 cursor-not-allowed' : 'text-chumbo-light hover:text-chumbo cursor-pointer'}`}
             aria-label="Avançar"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -185,12 +187,14 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
       <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-center text-chumbo mb-2">
         {step === 1 && 'Qual procedimento você deseja planejar?'}
         {step === 2 && 'Qual o seu momento ideal?'}
-        {step === 3 && 'Acesso Exclusivo ao Concierge'}
+        {step === 3 && 'Qual a sua preferência hospitalar?'}
+        {step === 4 && 'Acesso Exclusivo ao Concierge'}
       </h3>
       <p className="text-xs md:text-base md:text-sm text-chumbo-light text-center mb-8 font-normal">
         {step === 1 && 'Selecione a área de foco para atendimento personalizado'}
         {step === 2 && 'Isso me ajuda a calibrar a disponibilidade de agenda cirúrgica'}
-        {step === 3 && 'Converse diretamente com minha equipe de atendimento VIP'}
+        {step === 3 && 'Nossas cirurgias são realizadas nos melhores hospitais para sua segurança'}
+        {step === 4 && 'Converse diretamente com minha equipe de atendimento VIP'}
       </p>
       
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -276,8 +280,36 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
           </div>
         )}
 
-        {/* STEP 3: CONTACT VIP */}
+        {/* STEP 3: HOSPITAL PREFERENCE */}
         {step === 3 && (
+          <div className="animate-blur-in-up space-y-3">
+            {[
+              'Hospital Israelita Albert Einstein',
+              'Hospital Sírio-Libanês',
+              'Hospital Vila Nova Star',
+              'Sem preferência (equipe pode sugerir)'
+            ].map((hospital) => (
+              <button
+                key={hospital}
+                type="button"
+                onClick={(e) => {
+                  setFormData({ ...formData, hospitalPreference: hospital });
+                  handleNext(e);
+                }}
+                className={`w-full text-left px-6 py-4 rounded-2xl transition-all duration-200 text-sm font-medium border ${
+                  formData.hospitalPreference === hospital 
+                    ? 'bg-wine text-white border-wine shadow-md' 
+                    : 'bg-[#f5f5f7] hover:bg-[#ebebed] text-chumbo border-transparent'
+                }`}
+              >
+                {hospital}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* STEP 4: CONTACT VIP */}
+        {step === 4 && (
           <div className="animate-blur-in-up space-y-3">
             <div>
               <input 
