@@ -114,6 +114,8 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
         isClinical: isClinical,
         followupDate: lead.followup_date || null,
         followupNote: lead.followup_note || null,
+        email: lead.email,
+        city: lead.city,
       };
 
       const status = lead.status || 'triagem';

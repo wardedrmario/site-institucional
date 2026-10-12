@@ -33,21 +33,96 @@ interface LeadData {
   email?: string;
   city?: string;
   procedure?: string;
-  // [key: string]: unknown;
+}
+
+// Dispara eventos Server-Side para a Graph API da Meta (CAPI)
+async function sendMetaCapi(
+  eventName: string,
+  eventValue: number,
+  leadData: LeadData,
+  leadId: string,
+  extraCustomData: Record<string, unknown> = {}
+) {
+  try {
+    const pixelId = process.env.META_PIXEL_ID || "4376073622648258";
+    const token = process.env.META_ACCESS_TOKEN || process.env.META_CAPI_TOKEN;
+
+    if (!token) {
+      console.warn('⚠️ [META CAPI] Token de acesso ausente (META_CAPI_TOKEN / META_ACCESS_TOKEN). Evento não disparado.');
+      return { success: false, error: 'Token ausente' };
+    }
+
+    const eventTime = Math.floor(Date.now() / 1000);
+    const eventId = `crm_${eventName.toLowerCase()}_${leadId}_${eventTime}`;
+
+    const payload = {
+      data: [
+        {
+          event_name: eventName,
+          event_time: eventTime,
+          event_id: eventId,
+          action_source: "system_generated",
+          user_data: {
+            em: [hashData(leadData.email || 'paciente@email.com')],
+            ph: [hashData(cleanPhone(leadData.phone))],
+            fn: [hashData(leadData.name ? leadData.name.split(' ')[0] : '')],
+            ct: [hashData(leadData.city || 'São Paulo')]
+          },
+          custom_data: {
+            currency: "BRL",
+            value: eventValue,
+            lead_id: leadId,
+            procedimento_interesse: leadData.procedure || 'Não informado',
+            ...extraCustomData
+          }
+        }
+      ]
+    };
+
+    console.log(`🚀 [META CAPI] Disparando evento "${eventName}" (R$ ${eventValue.toFixed(2)}) para o lead ${leadData.name} no Pixel ${pixelId}...`);
+
+    const metaUrl = `https://graph.facebook.com/v19.0/${pixelId}/events?access_token=${token}`;
+    const metaRes = await fetch(metaUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const metaJson = await metaRes.json();
+    if (metaJson.events_received) {
+      console.log(`✅ [META CAPI SUCESSO] Evento "${eventName}" recebido pela Meta Ads!`, metaJson);
+      return { success: true, metaJson };
+    } else {
+      console.error(`❌ [META CAPI ERRO] Resposta da Meta para "${eventName}":`, metaJson);
+      return { success: false, metaJson };
+    }
+  } catch (err) {
+    console.error(`❌ [META CAPI EXCEPTION] Erro no envio de "${eventName}":`, err);
+    return { success: false, error: err };
+  }
 }
 
 export async function updateLeadStatus(leadId: string, newStatus: string, leadData: LeadData) {
   console.log(`[CRM BACKEND] Movendo lead ${leadId} (${leadData.name}) para a coluna: ${newStatus}`);
   
-  // Atualiza no Banco Neon
+  // 1. Atualiza no Banco Neon e recupera dados completos do lead
   try {
     const dbUrl = getDbUrl();
     if (dbUrl) {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { neon } = require('@neondatabase/serverless');
       const sql = neon(dbUrl as string);
-      await sql`UPDATE leads SET status = ${newStatus} WHERE id = ${leadId}`;
+      const rows = await sql`UPDATE leads SET status = ${newStatus} WHERE id = ${leadId} RETURNING email, city, phone, name, procedure`;
       console.log(`✅ [CRM BACKEND] Lead ${leadId} atualizado no Neon Postgres para '${newStatus}'`);
+      
+      if (rows && rows.length > 0) {
+        const row = rows[0];
+        if (!leadData.email && row.email) leadData.email = row.email;
+        if (!leadData.city && row.city) leadData.city = row.city;
+        if (!leadData.phone && row.phone) leadData.phone = row.phone;
+        if (!leadData.name && row.name) leadData.name = row.name;
+        if (!leadData.procedure && row.procedure) leadData.procedure = row.procedure;
+      }
     } else {
       console.error('❌ [CRM BACKEND] Nenhuma URL de banco de dados válida encontrada.');
     }
@@ -55,96 +130,52 @@ export async function updateLeadStatus(leadId: string, newStatus: string, leadDa
     console.error('❌ [CRM BACKEND] Erro ao atualizar status no Neon:', err);
   }
   
-  // SE O PACIENTE CHEGOU NA COLUNA DE DEPÓSITO -> DISPARA A API DO META!
+  // 2. SE O PACIENTE CHEGOU NA COLUNA DE CONSULTA PRESENCIAL -> DISPARA "Schedule" (Meta Conversion Leads)
+  if (newStatus === 'consulta') {
+    await sendMetaCapi('Schedule', 350.00, leadData, leadId, {
+      content_name: leadData.procedure ? `Primeira Consulta - ${leadData.procedure}` : 'Primeira Consulta Presencial',
+      status_etapa: 'Consulta Agendada',
+      tipo_evento: 'Primeira Consulta Presencial'
+    });
+  }
+
+  // 3. SE O PACIENTE CHEGOU NA COLUNA DE DEPÓSITO -> DISPARA EVENTO DE CIRURGIA DE ALTO VALOR!
   if (newStatus === 'deposito') {
-    try {
-      const pixelId = process.env.META_PIXEL_ID;
-      const token = process.env.META_CAPI_TOKEN;
-
-      if (!pixelId || !token) {
-        console.error('❌ [META CAPI] Credenciais ausentes no servidor (Verifique o arquivo .env.local).');
-        return { success: false, error: 'Credenciais ausentes' };
+    let eventName = 'CRM_Paciente_Cirurgia';
+    let eventValue = 45000.00; // Ticket médio base alto (Cirurgia Genérica)
+    
+    if (leadData.procedure) {
+      const procLower = leadData.procedure.toLowerCase();
+      
+      // Triagem de Baixo Ticket (Clínico / Não-cirúrgico)
+      if (
+        procLower.includes('botox') || procLower.includes('toxina') || procLower.includes('preenchimento') || 
+        procLower.includes('fios') || procLower.includes('bioestimulador') || procLower.includes('dermatologia') || 
+        procLower.includes('peeling') || procLower.includes('laser') || procLower.includes('estética') || procLower.includes('consulta')
+      ) {
+        eventName = 'CRM_Paciente_Clinico';
+        eventValue = 400.00; 
+      } 
+      // Triagem de Altíssimo Ticket (Cirurgias Complexas/Premium)
+      else if (procLower.includes('face') || procLower.includes('lifting') || procLower.includes('ritidoplastia') || procLower.includes('pescoço')) {
+        eventValue = 75000.00;
       }
-
-      // IMPORTANTE: Como o pixel está sob Shadowban de Políticas de Saúde, 
-      // enviar eventos padrões médicos ou Purchase pode ser bloqueado.
-      // Solução da Inteligência: Usar um EVENTO PERSONALIZADO de altíssimo valor.
-      
-      let eventName = 'CRM_Paciente_Cirurgia';
-      let eventValue = 45000.00; // Ticket médio base alto (Cirurgia Genérica)
-      
-      if (leadData.procedure) {
-        const procLower = leadData.procedure.toLowerCase();
-        
-        // 1. Triagem de Baixo Ticket (Clínico)
-        if (
-          procLower.includes('botox') || procLower.includes('toxina') || procLower.includes('preenchimento') || 
-          procLower.includes('fios') || procLower.includes('bioestimulador') || procLower.includes('dermatologia') || 
-          procLower.includes('peeling') || procLower.includes('laser') || procLower.includes('estética') || procLower.includes('consulta')
-        ) {
-          eventName = 'CRM_Paciente_Clinico';
-          eventValue = 400.00; 
-        } 
-        // 2. Triagem de Altíssimo Ticket (Cirurgias Complexas/Premium)
-        else if (procLower.includes('face') || procLower.includes('lifting') || procLower.includes('ritidoplastia') || procLower.includes('pescoço')) {
-          eventValue = 75000.00;
-        }
-        else if (procLower.includes('lipo') || procLower.includes('abd') || procLower.includes('contorno')) {
-          eventValue = 55000.00;
-        }
-        else if (procLower.includes('rino') || procLower.includes('nariz')) {
-          eventValue = 45000.00;
-        }
-        else if (procLower.includes('mama') || procLower.includes('mastopexia') || procLower.includes('silicone') || procLower.includes('prótese')) {
-          eventValue = 35000.00;
-        }
+      else if (procLower.includes('lipo') || procLower.includes('abd') || procLower.includes('contorno')) {
+        eventValue = 55000.00;
       }
-
-      const eventTime = Math.floor(Date.now() / 1000);
-      
-      const payload = {
-        data: [
-          {
-            event_name: eventName,
-            event_time: eventTime,
-            action_source: "system_generated",
-            user_data: {
-              // Os dados críticos criptografados (O "DNA" do comprador)
-              em: [hashData(leadData.email || 'paciente@email.com')],
-              ph: [hashData(cleanPhone(leadData.phone))],
-              fn: [hashData(leadData.name.split(' ')[0])],
-              ct: [hashData(leadData.city || 'São Paulo')] 
-            },
-            custom_data: {
-              currency: "BRL",
-              value: eventValue,
-              procedimento_interesse: leadData.procedure
-            }
-          }
-        ]
-      };
-
-      console.log(`🚀 [META CAPI] Preparando disparo do evento "${eventName}" para o Pixel ${pixelId}...`);
-
-      const metaUrl = `https://graph.facebook.com/v19.0/${pixelId}/events?access_token=${token}`;
-      
-      const metaRes = await fetch(metaUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      const metaJson = await metaRes.json();
-      
-      if (metaJson.events_received) {
-        console.log('✅ [META CAPI SUCESSO] Evento recebido pela Meta Ads!', metaJson);
-      } else {
-        console.error('❌ [META CAPI ERRO] Falha no retorno da Meta:', metaJson);
+      else if (procLower.includes('rino') || procLower.includes('nariz')) {
+        eventValue = 45000.00;
       }
-
-    } catch (err) {
-      console.error('❌ [META CAPI EXCEPTION]', err);
+      else if (procLower.includes('mama') || procLower.includes('mastopexia') || procLower.includes('silicone') || procLower.includes('prótese')) {
+        eventValue = 35000.00;
+      }
     }
+
+    await sendMetaCapi(eventName, eventValue, leadData, leadId, {
+      content_name: leadData.procedure || 'Cirurgia Plástica',
+      status_etapa: 'Depósito / Confirmação Cirúrgica',
+      tipo_evento: 'Fechamento de Procedimento'
+    });
   }
 
   revalidatePath('/admin');

@@ -18,6 +18,8 @@ export interface Lead {
   isClinical?: boolean;
   followupDate?: string | null;
   followupNote?: string | null;
+  email?: string;
+  city?: string;
 }
 
 interface LeadCardProps {
