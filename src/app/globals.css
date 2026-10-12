@@ -19,8 +19,10 @@
   --color-text-accent: var(--text-accent);
   --color-border-subtle: var(--border-subtle);
 
-  --font-sans: var(--font-montserrat), -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-poppins), 'poppins', var(--font-montserrat), -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
   --font-serif: var(--font-libre-baskerville), 'Baskerville', Georgia, serif;
+  --font-title: 'Amolina Boutique Sans', 'Amolina', var(--font-serif), serif;
+  --font-poppins: var(--font-poppins), 'poppins', sans-serif;
 }
 
 :root {

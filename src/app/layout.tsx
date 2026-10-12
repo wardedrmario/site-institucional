@@ -52,6 +52,8 @@ export default function RootLayout({
         `}} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Adobe Typekit Oficial (Poppins & Brand Fonts) */}
+        <link rel="stylesheet" href="https://use.typekit.net/fev8vde.css" />
 
         <meta name="facebook-domain-verification" content="3m53d5ki4hjsrbmw9iq5v5gb6lf9o8" />
       </head>
