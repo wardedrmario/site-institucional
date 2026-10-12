@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Amolina Boutique Sans';
+  src: url('/fonts/Amolina-Boutique-Sans.otf') format('opentype'),
+       url('/fonts/Amolina Boutique Sans.otf') format('opentype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Amolina Boutique Script';
+  src: url('/fonts/Amolina-Boutique-Script.otf') format('opentype'),
+       url('/fonts/Amolina Boutique Script.otf') format('opentype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --color-gelo: #fbfbfd;
   --color-chumbo: #1d1d1f;
@@ -19,19 +37,39 @@
   --color-text-accent: var(--text-accent);
   --color-border-subtle: var(--border-subtle);
 
-  --font-sans: 'poppins', var(--font-montserrat), -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: 'Poppins', 'poppins', var(--font-montserrat), -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
   --font-serif: var(--font-libre-baskerville), 'Baskerville', Georgia, serif;
-  --font-title: var(--font-amolina), 'Amolina Boutique Sans', 'Amolina', var(--font-serif), serif;
-  --font-script: var(--font-amolina-script), 'Amolina Boutique Script', cursive;
-  --font-poppins: 'poppins', sans-serif;
+  --font-title: 'Amolina Boutique Sans', var(--font-amolina), 'Amolina', var(--font-serif), serif;
+  --font-script: 'Amolina Boutique Script', var(--font-amolina-script), cursive;
+  --font-poppins: 'Poppins', 'poppins', sans-serif;
 }
 
 h1, .font-title {
-  font-family: var(--font-title);
+  font-family: 'Amolina Boutique Sans', var(--font-amolina), var(--font-serif), serif !important;
+}
+
+h2, h3, h4 {
+  font-family: 'Amolina Boutique Sans', var(--font-amolina), var(--font-serif), serif;
+}
+
+.font-sans {
+  font-family: 'Poppins', 'poppins', sans-serif !important;
+}
+
+.prose, .prose p, .prose li, .prose span, .prose a {
+  font-family: 'Poppins', 'poppins', sans-serif !important;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  font-family: 'Amolina Boutique Sans', var(--font-amolina), var(--font-serif), serif !important;
+}
+
+body, p, button, input, textarea, select {
+  font-family: 'Poppins', 'poppins', var(--font-sans), sans-serif;
 }
 
 .font-script {
-  font-family: var(--font-script);
+  font-family: 'Amolina Boutique Script', var(--font-amolina-script), cursive !important;
 }
 
 :root {

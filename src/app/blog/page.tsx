@@ -17,7 +17,7 @@ export default function BlogPage() {
           <div className="inline-block text-[10px] font-bold uppercase tracking-widest text-[#ccb9b6] bg-white/[0.08] px-3.5 py-1.5 rounded-full border border-white/10 mb-6">
             Blog & Artigos
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 leading-tight">
+          <h1 className="font-title text-4xl md:text-5xl lg:text-6xl font-normal tracking-tight mb-6 leading-tight">
             Conhecimento que<br className="hidden sm:block" /> eleva a sua escolha.
           </h1>
           <p className="text-base sm:text-lg text-white/70 max-w-2xl mx-auto font-normal">
@@ -41,7 +41,7 @@ export default function BlogPage() {
                   </span>
                 </div>
                 
-                <h3 className="text-xl font-bold text-chumbo mb-3 leading-[1.3] tracking-tight group-hover:text-wine transition-colors">
+                <h3 className="font-title text-xl font-normal text-chumbo mb-3 leading-[1.3] tracking-tight group-hover:text-wine transition-colors">
                   {article.title}
                 </h3>
                 

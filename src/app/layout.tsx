@@ -7,12 +7,14 @@ import { Header } from "@/components/layout/Header";
 
 const amolina = localFont({
   src: "../fonts/Amolina-Boutique-Sans.otf",
+  weight: "100 900",
   variable: "--font-amolina",
   display: "swap",
 });
 
 const amolinaScript = localFont({
   src: "../fonts/Amolina-Boutique-Script.otf",
+  weight: "100 900",
   variable: "--font-amolina-script",
   display: "swap",
 });
@@ -65,6 +67,8 @@ export default function RootLayout({
         `}} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Google Fonts Poppins oficial (Fallback universal com todos os pesos) */}
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" />
         {/* Adobe Typekit Oficial (Poppins & Brand Fonts) */}
         <link rel="stylesheet" href="https://use.typekit.net/fev8vde.css" />
 

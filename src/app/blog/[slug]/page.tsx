@@ -32,7 +32,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               {article.readTime} de leitura
             </span>
           </div>
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-8 leading-tight">
+          <h1 className="font-title text-3xl md:text-5xl lg:text-6xl font-normal tracking-tight mb-8 leading-tight">
             {article.title}
           </h1>
           <div className="flex items-center justify-center gap-2 text-sm text-white/60">
@@ -46,8 +46,54 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       {/* Article Content */}
       <section className="w-full py-20 px-4">
         <div className="max-w-3xl mx-auto">
-          <div className="prose prose-lg prose-p:text-chumbo-light prose-p:leading-relaxed prose-headings:text-chumbo prose-a:text-wine hover:prose-a:text-burgundy mx-auto whitespace-pre-wrap font-normal text-lg">
-            {article.content}
+          <div className="max-w-none text-chumbo mx-auto font-normal text-lg">
+            {article.content.split(/\n\s*\n/).map((block, idx) => {
+              const trimmed = block.trim();
+              if (!trimmed) return null;
+
+              // Check if block is a section subtitle (numbered or all caps)
+              const isNumberedHeading = /^\d+\.\s+[A-ZÀ-Ú\s:]+/.test(trimmed);
+              const isAllCapsHeading = /^[A-ZÀ-Ú\s\(\)\?:-]{4,90}$/.test(trimmed) && trimmed === trimmed.toUpperCase() && !trimmed.includes('. ');
+
+              if (isNumberedHeading || isAllCapsHeading) {
+                return (
+                  <h2 key={idx} className="font-sans text-xl md:text-2xl font-semibold text-chumbo mt-12 mb-4 tracking-tight uppercase">
+                    {trimmed}
+                  </h2>
+                );
+              }
+
+              // Check if block has bullet points
+              if (trimmed.includes('• ')) {
+                const lines = trimmed.split('\n');
+                return (
+                  <div key={idx} className="my-6 space-y-3">
+                    {lines.map((line, lIdx) => {
+                      const cleanLine = line.trim();
+                      if (cleanLine.startsWith('• ')) {
+                        return (
+                          <div key={lIdx} className="flex items-start gap-3 text-chumbo-light text-base md:text-lg leading-relaxed font-normal">
+                            <span className="text-wine font-bold mt-0.5">•</span>
+                            <span>{cleanLine.replace(/^•\s*/, '')}</span>
+                          </div>
+                        );
+                      }
+                      return (
+                        <p key={lIdx} className="text-chumbo-light text-base md:text-lg leading-relaxed font-normal">
+                          {cleanLine}
+                        </p>
+                      );
+                    })}
+                  </div>
+                );
+              }
+
+              return (
+                <p key={idx} className="text-chumbo-light text-base md:text-lg leading-relaxed font-normal mb-6">
+                  {trimmed}
+                </p>
+              );
+            })}
           </div>
           {!('hideComments' in article && article.hideComments) && (
             <ArticleComments />
