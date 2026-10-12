@@ -287,7 +287,7 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
               'Hospital Israelita Albert Einstein',
               'Hospital Sírio-Libanês',
               'Hospital Vila Nova Star',
-              'Sem preferência (equipe pode sugerir)'
+              'Recomendação técnica do Dr. Mário Warde'
             ].map((hospital) => (
               <button
                 key={hospital}
