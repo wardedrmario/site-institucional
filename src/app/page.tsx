@@ -65,11 +65,11 @@ export default function Home() {
               <span className="text-white/90 font-semibold text-lg md:text-xl tracking-tight mb-1 md:mb-2 drop-shadow-md">
                 Dr. Mário Warde
               </span>
-              <h1 className="text-[44px] sm:text-[56px] md:text-[64px] lg:text-[72px] font-bold tracking-[-0.035em] text-white leading-[1.04] drop-shadow-lg">
-                Cirurgião Plástico.
+              <h1 className="font-title text-[40px] sm:text-[52px] md:text-[62px] lg:text-[70px] font-normal tracking-[-0.02em] text-white leading-[1.08] drop-shadow-lg max-w-3xl">
+                A excelência cirúrgica que sussurra elegância.
               </h1>
-              <p className="mt-2 md:mt-3 text-base md:text-lg text-white/80 font-medium tracking-tight drop-shadow max-w-2xl">
-                A arte da cirurgia plástica elevada à sua forma mais pura. Redesenho contornos com maestria técnica e um olhar clínico refinado, revelando a sua melhor versão sem perder a própria essência.
+              <p className="mt-3 md:mt-4 text-base md:text-lg text-white/80 font-normal leading-relaxed tracking-normal drop-shadow max-w-2xl font-sans">
+                A fusão entre o rigor cirúrgico e proporções anatômicas naturais. Cirurgias faciais e corporais sob medida, desenhadas para restaurar a juventude sem deixar sinais óbvios de intervenção.
               </p>
             </div>
 
