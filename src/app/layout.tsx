@@ -1,8 +1,21 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Libre_Baskerville, Montserrat } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
+
+const amolina = localFont({
+  src: "../fonts/Amolina-Boutique-Sans.otf",
+  variable: "--font-amolina",
+  display: "swap",
+});
+
+const amolinaScript = localFont({
+  src: "../fonts/Amolina-Boutique-Script.otf",
+  variable: "--font-amolina-script",
+  display: "swap",
+});
 
 const libreBaskerville = Libre_Baskerville({
   weight: ['400', '700'],
@@ -57,7 +70,7 @@ export default function RootLayout({
 
         <meta name="facebook-domain-verification" content="3m53d5ki4hjsrbmw9iq5v5gb6lf9o8" />
       </head>
-      <body className={`font-sans antialiased text-text-primary bg-bg-primary min-h-screen flex flex-col selection:bg-burgundy/15 selection:text-text-primary ${libreBaskerville.variable} ${montserrat.variable}`}>
+      <body className={`font-sans antialiased text-text-primary bg-bg-primary min-h-screen flex flex-col selection:bg-burgundy/15 selection:text-text-primary ${amolina.variable} ${amolinaScript.variable} ${libreBaskerville.variable} ${montserrat.variable}`}>
         <noscript>
           <iframe
             src="https://clinica.drmariowarde.com/ns.html?id=GTM-FVTTJTR7"
