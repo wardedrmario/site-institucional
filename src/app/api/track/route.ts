@@ -16,11 +16,12 @@ function normalizePhone(phone: string): string {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { phone, email, testCode, sourceUrl, eventId, eventName, customData } = body;
+    const { phone, email, name, testCode, sourceUrl, eventId, eventName, customData, actionSource } = body;
 
     const normalizedPhone = phone ? normalizePhone(phone) : '';
     const hashedEmail = email ? hashData(email) : '';
     const hashedPhone = normalizedPhone ? hashData(normalizedPhone) : '';
+    const hashedFn = name ? hashData(name.trim().split(' ')[0]) : '';
     const finalEventId = eventId || crypto.randomUUID();
     const eventTime = Math.floor(Date.now() / 1000);
     const finalEventName = eventName || 'Lead';
@@ -38,11 +39,12 @@ export async function POST(request: Request) {
       };
       if (hashedEmail) userData.em = [hashedEmail];
       if (hashedPhone) userData.ph = [hashedPhone];
+      if (hashedFn) userData.fn = [hashedFn];
 
       const eventData: Record<string, unknown> = {
         event_name: finalEventName,
         event_time: eventTime,
-        action_source: 'website',
+        action_source: actionSource || (sourceUrl ? 'website' : 'system_generated'),
         event_source_url: sourceUrl || 'https://drmariowarde.com/',
         event_id: finalEventId,
         user_data: userData,
