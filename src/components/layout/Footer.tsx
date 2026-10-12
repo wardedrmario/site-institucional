@@ -10,6 +10,55 @@ export function Footer() {
     return null;
   }
 
+  const handleWhatsAppClick = () => {
+    try {
+      const eventId = typeof crypto !== 'undefined' && crypto.randomUUID 
+        ? crypto.randomUUID() 
+        : 'wa_footer_' + Date.now();
+
+      // 1. DataLayer (GTM & GA4)
+      if (typeof window !== 'undefined') {
+        const win = window as Window & typeof globalThis & { 
+          dataLayer?: Record<string, unknown>[];
+          fbq?: (...args: unknown[]) => void;
+        };
+        win.dataLayer = win.dataLayer || [];
+        win.dataLayer.push({
+          event: 'Contact',
+          event_id: eventId,
+          click_source: 'footer_whatsapp',
+          contact_channel: 'whatsapp'
+        });
+
+        // 2. Meta Pixel Client-Side (com eventID para deduplicação)
+        if (typeof win.fbq === 'function') {
+          win.fbq('track', 'Contact', {
+            content_name: 'WhatsApp Footer Direct',
+            event_source: 'footer'
+          }, { eventID: eventId });
+        }
+      }
+
+      // 3. Meta CAPI Server-Side via /api/track
+      fetch('/api/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          eventName: 'Contact',
+          eventId: eventId,
+          sourceUrl: typeof window !== 'undefined' ? window.location.href : 'https://drmariowarde.com/',
+          customData: {
+            content_name: 'WhatsApp Footer Direct',
+            click_source: 'footer'
+          }
+        }),
+        keepalive: true
+      }).catch(() => null);
+    } catch (err) {
+      console.error('Erro no tracking de WhatsApp no footer:', err);
+    }
+  };
+
   return (
     <footer className="bg-[#1d1d1f] text-white/80 pt-20 pb-16 border-t border-black/10">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -66,7 +115,15 @@ export function Footer() {
             <span className="font-semibold text-white tracking-tight text-xs uppercase text-white/90">Contato & Local</span>
             <p className="text-white/60 leading-relaxed">
               <strong className="text-white/80 font-medium">WhatsApp:</strong><br/>
-              <a href="https://wa.me/5511966496116" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">+55 11 96649-6116</a>
+              <a 
+                href="https://wa.me/5511966496116" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                onClick={handleWhatsAppClick}
+                className="hover:text-white transition-colors"
+              >
+                +55 11 96649-6116
+              </a>
             </p>
             <p className="text-white/60 leading-relaxed">
               <strong className="text-white/80 font-medium">Instagram:</strong><br/>

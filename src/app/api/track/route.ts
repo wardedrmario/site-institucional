@@ -16,13 +16,14 @@ function normalizePhone(phone: string): string {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { phone, email, testCode, sourceUrl, eventId } = body;
+    const { phone, email, testCode, sourceUrl, eventId, eventName, customData } = body;
 
-    const normalizedPhone = normalizePhone(phone);
-    const hashedEmail = hashData(email);
-    const hashedPhone = hashData(normalizedPhone);
+    const normalizedPhone = phone ? normalizePhone(phone) : '';
+    const hashedEmail = email ? hashData(email) : '';
+    const hashedPhone = normalizedPhone ? hashData(normalizedPhone) : '';
     const finalEventId = eventId || crypto.randomUUID();
     const eventTime = Math.floor(Date.now() / 1000);
+    const finalEventName = eventName || 'Lead';
     
     const clientIp = request.headers.get('x-forwarded-for') || '0.0.0.0';
     const userAgent = request.headers.get('user-agent') || '';
@@ -31,18 +32,21 @@ export async function POST(request: Request) {
     const metaAccessToken = process.env.META_ACCESS_TOKEN || process.env.META_CAPI_TOKEN;
 
     if (metaPixelId && metaAccessToken) {
+      const userData: Record<string, unknown> = {
+        client_ip_address: clientIp,
+        client_user_agent: userAgent,
+      };
+      if (hashedEmail) userData.em = [hashedEmail];
+      if (hashedPhone) userData.ph = [hashedPhone];
+
       const eventData: Record<string, unknown> = {
-        event_name: 'Lead',
+        event_name: finalEventName,
         event_time: eventTime,
         action_source: 'website',
         event_source_url: sourceUrl || 'https://drmariowarde.com/',
         event_id: finalEventId,
-        user_data: {
-          em: [hashedEmail],
-          ph: [hashedPhone],
-          client_ip_address: clientIp,
-          client_user_agent: userAgent,
-        }
+        user_data: userData,
+        ...(customData ? { custom_data: customData } : {})
       };
 
       // Injeção do código de teste para depuração no painel do Meta
@@ -60,10 +64,10 @@ export async function POST(request: Request) {
       });
       
       const metaResult = await metaResponse.json();
-      console.log("Meta API Response:", metaResult);
+      console.log(`Meta API Response for ${finalEventName}:`, metaResult);
     }
 
-    return NextResponse.json({ success: true, eventId, message: 'Lead recebido.' });
+    return NextResponse.json({ success: true, eventId: finalEventId, eventName: finalEventName, message: 'Evento recebido.' });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ success: false, error: 'Internal Server Error' }, { status: 500 });
