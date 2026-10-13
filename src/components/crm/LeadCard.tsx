@@ -1,8 +1,9 @@
 'use client';
 import React, { useState, useTransition } from 'react';
-import { generateAiForLead, updateLeadFollowup } from '@/app/actions/crm';
+import { generateAiForLead, updateLeadFollowup, updateLeadConsultationCategory } from '@/app/actions/crm';
 
 type LeadScore = 'HOT' | 'WARM' | 'COLD';
+export type ConsultationCategory = 'internet' | 'indicacao' | 'indicacao_medica';
 
 export interface Lead {
   id: string;
@@ -20,6 +21,8 @@ export interface Lead {
   followupNote?: string | null;
   email?: string;
   city?: string;
+  status?: string;
+  consultationCategory?: ConsultationCategory;
 }
 
 interface LeadCardProps {
@@ -30,11 +33,36 @@ export default function LeadCard({ lead }: LeadCardProps) {
   const [isPending, startTransition] = useTransition();
   const [localNextAction, setLocalNextAction] = useState(lead.nextAction);
 
+  // Category and Financial states
+  const [category, setCategory] = useState<ConsultationCategory>(
+    lead.consultationCategory || 'internet'
+  );
+  const [isPendingCategory, startCategoryTransition] = useTransition();
+  const [copiedScript, setCopiedScript] = useState(false);
+
   // Follow-Up states
   const [isEditingFup, setIsEditingFup] = useState(false);
   const [fupDate, setFupDate] = useState(lead.followupDate ? new Date(lead.followupDate).toISOString().split('T')[0] : '');
   const [fupNote, setFupNote] = useState(lead.followupNote || '');
   const [isPendingFup, startFupTransition] = useTransition();
+
+  const handleCategoryChange = (newCat: ConsultationCategory) => {
+    setCategory(newCat);
+    startCategoryTransition(async () => {
+      await updateLeadConsultationCategory(lead.id, newCat);
+      lead.consultationCategory = newCat;
+    });
+  };
+
+  const handleCopyDrMarioScript = () => {
+    const firstName = lead.name.split(' ')[0] || 'Tudo bem?';
+    const script = `Olá, ${firstName}! O Dr. Mário organiza a agenda com intervalos amplos entre os atendimentos, sem sobreposição de pacientes, para garantir total privacidade e uma consulta médica detalhada e sem pressa.\n\nPor essa razão, a confirmação do horário é formalizada mediante a reserva de 50% do valor da consulta via Pix, e o saldo restante é acertado na recepção no dia do atendimento.\n\nUm diferencial da clínica: caso você decida realizar o procedimento cirúrgico com o Dr. Mário, o valor integral da consulta é revertido em crédito no seu plano cirúrgico.\n\nPosso enviar o pix da clínica para travarmos a sua data com o doutor?`;
+    
+    navigator.clipboard.writeText(script).then(() => {
+      setCopiedScript(true);
+      setTimeout(() => setCopiedScript(false), 2200);
+    });
+  };
 
   const handleGenerateAi = () => {
     startTransition(async () => {
@@ -130,6 +158,82 @@ export default function LeadCard({ lead }: LeadCardProps) {
           </svg>
           <span>{lead.timeframe}</span>
         </div>
+      </div>
+
+      {/* Consultation Category & Financial Badges */}
+      <div className="bg-[#f8fafc] rounded-xl p-2.5 border border-slate-100 flex flex-col gap-2">
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+            <span>🏷️</span> Origem & Valor
+          </span>
+          {isPendingCategory && <span className="text-[9px] text-slate-400">Salvando...</span>}
+        </div>
+
+        {/* Category selector pills */}
+        <div className="grid grid-cols-3 gap-1">
+          <button
+            type="button"
+            onClick={() => handleCategoryChange('internet')}
+            className={`text-[10px] py-1 px-1.5 rounded-lg font-semibold transition-all text-center truncate ${
+              category === 'internet'
+                ? 'bg-slate-900 text-white shadow-xs'
+                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+            }`}
+            title="Internet (Meta Ads / Orgânico) - R$ 350 total (50% Pix: R$ 175)"
+          >
+            🌐 Internet
+          </button>
+          <button
+            type="button"
+            onClick={() => handleCategoryChange('indicacao')}
+            className={`text-[10px] py-1 px-1.5 rounded-lg font-semibold transition-all text-center truncate ${
+              category === 'indicacao'
+                ? 'bg-slate-900 text-white shadow-xs'
+                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+            }`}
+            title="Indicação de Pacientes - R$ 350 total (50% Pix: R$ 175)"
+          >
+            👥 Indicação
+          </button>
+          <button
+            type="button"
+            onClick={() => handleCategoryChange('indicacao_medica')}
+            className={`text-[10px] py-1 px-1.5 rounded-lg font-semibold transition-all text-center truncate ${
+              category === 'indicacao_medica'
+                ? 'bg-amber-600 text-white shadow-xs'
+                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+            }`}
+            title="Indicação Médica ou Linhagem VIP (R$ 850 total | 50% Pix: R$ 425)"
+          >
+            🩺 Médica/VIP
+          </button>
+        </div>
+
+        {/* Financial Badge depending on Status */}
+        {lead.status === 'consulta' && (
+          <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-1.5 text-[10px] flex items-center justify-between text-emerald-800 font-medium">
+            <span>🟢 Sinal 50% Pix: <strong>R$ {category === 'indicacao_medica' ? '425' : '175'}</strong></span>
+            <span className="text-emerald-700">Saldo: R$ {category === 'indicacao_medica' ? '425' : '175'}</span>
+          </div>
+        )}
+
+        {lead.status === 'consulta_realizada' && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-1.5 text-[10px] flex items-center justify-between text-blue-800 font-medium">
+            <span>✅ Consulta: <strong>R$ {category === 'indicacao_medica' ? '850' : '350'}</strong></span>
+            <span className="text-blue-700">Crédito: 100%</span>
+          </div>
+        )}
+
+        {/* Script Dr. Mário Copy Button */}
+        <button
+          type="button"
+          onClick={handleCopyDrMarioScript}
+          className="flex items-center justify-center gap-1.5 w-full py-1.5 px-2 bg-white hover:bg-slate-50 text-slate-800 rounded-lg border border-slate-200 text-[10px] font-semibold transition-all hover:border-slate-300"
+          title="Copiar texto formal com dedicação de tempo, privacidade e crédito cirúrgico"
+        >
+          <span>{copiedScript ? '✓' : '📋'}</span>
+          <span>{copiedScript ? 'Script Dr. Mário Copiado!' : 'Copiar Texto Dr. Mário (50% Pix)'}</span>
+        </button>
       </div>
 
       {/* Follow Up Section */}

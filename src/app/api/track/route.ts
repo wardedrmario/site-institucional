@@ -26,11 +26,30 @@ export async function POST(request: Request) {
     const eventTime = Math.floor(Date.now() / 1000);
     const finalEventName = eventName || 'Lead';
     
-    const clientIp = request.headers.get('x-forwarded-for') || '0.0.0.0';
+    // Extração e higienização rigorosa do IP (apenas o primeiro IP público, sem portas ou proxies)
+    const rawIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || '0.0.0.0';
+    const clientIp = rawIp.split(',')[0].trim();
     const userAgent = request.headers.get('user-agent') || '';
+
+    // Extração automática dos cookies primários da Meta (_fbp e _fbc)
+    const cookiesHeader = request.headers.get('cookie') || '';
+    const fbpMatch = cookiesHeader.match(/_fbp=([^;]+)/);
+    const fbcMatch = cookiesHeader.match(/_fbc=([^;]+)/);
+    const fbp = body.fbp || (fbpMatch ? fbpMatch[1] : undefined);
+    const fbc = body.fbc || (fbcMatch ? fbcMatch[1] : undefined);
 
     const metaPixelId = process.env.META_PIXEL_ID || "4376073622648258";
     const metaAccessToken = process.env.META_ACCESS_TOKEN || process.env.META_CAPI_TOKEN;
+
+    // Se for apenas ping de teste de infraestrutura/conexão, não envia para o Pixel em produção para não poluir o Gerenciador
+    if (finalEventName.toLowerCase().includes('ping') || finalEventName.toLowerCase().includes('teste')) {
+      return NextResponse.json({ 
+        success: true, 
+        eventId: finalEventId, 
+        eventName: finalEventName, 
+        message: 'Teste de conexão validado com sucesso pelo servidor (ignorado envio à Meta para manter o Pixel limpo).' 
+      });
+    }
 
     if (metaPixelId && metaAccessToken) {
       const userData: Record<string, unknown> = {
@@ -40,6 +59,8 @@ export async function POST(request: Request) {
       if (hashedEmail) userData.em = [hashedEmail];
       if (hashedPhone) userData.ph = [hashedPhone];
       if (hashedFn) userData.fn = [hashedFn];
+      if (fbp) userData.fbp = fbp;
+      if (fbc) userData.fbc = fbc;
 
       const eventData: Record<string, unknown> = {
         event_name: finalEventName,

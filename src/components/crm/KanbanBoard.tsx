@@ -6,13 +6,14 @@ import { updateLeadStatus } from '@/app/actions/crm';
 
 const COLUMNS = [
   { id: 'triagem', title: 'Triagem / Descoberta' },
-  { id: 'qualificacao', title: 'Qualificação' },
-  { id: 'consulta', title: 'Consulta Presencial' },
+  { id: 'qualificacao', title: 'Qualificação Concierge' },
+  { id: 'consulta', title: '📅 Agendado (Sinal 50% Pago)' },
+  { id: 'consulta_realizada', title: '✅ Consulta Realizada (Presencial)' },
   { id: 'pos_consulta', title: 'Pós-Consulta (Decisão)' },
-  { id: 'deposito', title: 'Depósito / Confirmação' },
+  { id: 'deposito', title: '💎 Cirurgia Fechada (Depósito)' },
   { id: 'pre_op', title: 'Pré-operatório' },
   { id: 'pos_op', title: 'Pós-operatório / Recorrência' },
-  { id: 'arquivado', title: '🥶 Arquivado / Perdido' },
+  { id: 'arquivado', title: '🥶 Arquivado / Não Converteu' },
 ];
 
 export interface DbLead {
@@ -30,13 +31,14 @@ export interface DbLead {
   created_at: string;
   followup_date?: string;
   followup_note?: string;
+  consultation_category?: string;
 }
 
 export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLead[] }) {
   // Converte a lista plana de leads do BD para o formato de colunas do Kanban
   const groupedLeads = React.useMemo(() => {
     const columns: Record<string, Lead[]> = {
-      'triagem': [], 'qualificacao': [], 'consulta': [], 'pos_consulta': [], 'deposito': [], 'pre_op': [], 'pos_op': [], 'arquivado': []
+      'triagem': [], 'qualificacao': [], 'consulta': [], 'consulta_realizada': [], 'pos_consulta': [], 'deposito': [], 'pre_op': [], 'pos_op': [], 'arquivado': []
     };
     
     initialLeads.forEach(lead => {
@@ -95,11 +97,12 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
       }
       
       // 4. Orçamento Alinhado & Status Avançado:
-      if (lead.status && ['consulta', 'pos_consulta', 'deposito', 'pre_op', 'pos_op'].includes(lead.status)) {
+      if (lead.status && ['consulta', 'consulta_realizada', 'pos_consulta', 'deposito', 'pre_op', 'pos_op'].includes(lead.status)) {
         calculatedScore += 40; // Ganha pontos pesados por já estar avançado no funil
       }
       // ------------------------------------------------
 
+      const status = lead.status || 'triagem';
       const mappedLead: Lead = {
         id: lead.id,
         name: lead.name,
@@ -116,9 +119,10 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
         followupNote: lead.followup_note || null,
         email: lead.email,
         city: lead.city,
+        status: status,
+        consultationCategory: (lead.consultation_category as any) || 'internet',
       };
 
-      const status = lead.status || 'triagem';
       if (columns[status]) {
         columns[status].push(mappedLead);
       } else {

@@ -33,6 +33,7 @@ interface LeadData {
   email?: string;
   city?: string;
   procedure?: string;
+  consultationCategory?: string;
 }
 
 // Dispara eventos Server-Side para a Graph API da Meta (CAPI)
@@ -63,10 +64,10 @@ async function sendMetaCapi(
           event_id: eventId,
           action_source: "system_generated",
           user_data: {
-            em: [hashData(leadData.email || 'paciente@email.com')],
             ph: [hashData(cleanPhone(leadData.phone))],
-            fn: [hashData(leadData.name ? leadData.name.split(' ')[0] : '')],
-            ct: [hashData(leadData.city || 'São Paulo')]
+            ...(leadData.email && leadData.email.trim() ? { em: [hashData(leadData.email)] } : {}),
+            ...(leadData.name && leadData.name.trim() ? { fn: [hashData(leadData.name.trim().split(' ')[0])] } : {}),
+            ...(leadData.city && leadData.city.trim() ? { ct: [hashData(leadData.city)] } : {})
           },
           custom_data: {
             currency: "BRL",
@@ -112,7 +113,8 @@ export async function updateLeadStatus(leadId: string, newStatus: string, leadDa
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { neon } = require('@neondatabase/serverless');
       const sql = neon(dbUrl as string);
-      const rows = await sql`UPDATE leads SET status = ${newStatus} WHERE id = ${leadId} RETURNING email, city, phone, name, procedure`;
+      await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS consultation_category VARCHAR(50);`;
+      const rows = await sql`UPDATE leads SET status = ${newStatus} WHERE id = ${leadId} RETURNING email, city, phone, name, procedure, consultation_category`;
       console.log(`✅ [CRM BACKEND] Lead ${leadId} atualizado no Neon Postgres para '${newStatus}'`);
       
       if (rows && rows.length > 0) {
@@ -122,6 +124,7 @@ export async function updateLeadStatus(leadId: string, newStatus: string, leadDa
         if (!leadData.phone && row.phone) leadData.phone = row.phone;
         if (!leadData.name && row.name) leadData.name = row.name;
         if (!leadData.procedure && row.procedure) leadData.procedure = row.procedure;
+        if (!leadData.consultationCategory && row.consultation_category) leadData.consultationCategory = row.consultation_category;
       }
     } else {
       console.error('❌ [CRM BACKEND] Nenhuma URL de banco de dados válida encontrada.');
@@ -130,12 +133,32 @@ export async function updateLeadStatus(leadId: string, newStatus: string, leadDa
     console.error('❌ [CRM BACKEND] Erro ao atualizar status no Neon:', err);
   }
   
-  // 2. SE O PACIENTE CHEGOU NA COLUNA DE CONSULTA PRESENCIAL -> DISPARA "Schedule" (Meta Conversion Leads)
+  // 2. SE O PACIENTE CHEGOU NA COLUNA DE AGENDADO COM SINAL PAGO (50%) -> DISPARA "Schedule"
   if (newStatus === 'consulta') {
-    await sendMetaCapi('Schedule', 350.00, leadData, leadId, {
-      content_name: leadData.procedure ? `Primeira Consulta - ${leadData.procedure}` : 'Primeira Consulta Presencial',
-      status_etapa: 'Consulta Agendada',
-      tipo_evento: 'Primeira Consulta Presencial'
+    const isMedicalRef = leadData.consultationCategory === 'indicacao_medica' ||
+                         (leadData.procedure && leadData.procedure.toLowerCase().includes('médic')) || 
+                         (leadData.city && leadData.city.toLowerCase().includes('médic'));
+    const depositValue = isMedicalRef ? 425.00 : 175.00; // 50% de R$ 850 ou R$ 350
+
+    await sendMetaCapi('Schedule', depositValue, leadData, leadId, {
+      content_name: leadData.procedure ? `Reserva Consulta (50%) - ${leadData.procedure}` : `Reserva Consulta (50% - R$ ${depositValue})`,
+      status_etapa: 'Agendamento Confirmado (Sinal 50% Pago)',
+      tipo_evento: isMedicalRef ? 'Reserva de Agenda (Indicação Médica - R$ 425)' : 'Reserva de Agenda (Internet/Indicação - R$ 175)',
+      categoria_consulta: isMedicalRef ? 'Indicação Médica (R$ 850)' : 'Internet / Indicação Paciente (R$ 350)'
+    });
+  }
+
+  // 2.1 SE O PACIENTE CHEGOU NA COLUNA DE CONSULTA REALIZADA (QUITAÇÃO) -> DISPARA "Purchase" (Saldo restante de 50%)
+  if (newStatus === 'consulta_realizada') {
+    const isMedicalRef = (leadData.procedure && leadData.procedure.toLowerCase().includes('médic')) || 
+                         (leadData.city && leadData.city.toLowerCase().includes('médic'));
+    const balanceValue = isMedicalRef ? 425.00 : 175.00; // Saldo de 50% na recepção
+
+    await sendMetaCapi('Purchase', balanceValue, leadData, leadId, {
+      content_name: leadData.procedure ? `Quitação Consulta - ${leadData.procedure}` : `Quitação Consulta Presencial (R$ ${balanceValue})`,
+      status_etapa: 'Consulta Realizada Presencial',
+      tipo_evento: isMedicalRef ? 'Quitação Consulta (Indicação Médica - R$ 425)' : 'Quitação Consulta (Internet/Indicação - R$ 175)',
+      categoria_consulta: isMedicalRef ? 'Indicação Médica (R$ 850)' : 'Internet / Indicação Paciente (R$ 350)'
     });
   }
 
@@ -204,7 +227,7 @@ Dados do Lead:
 - Cidade: ${leadData.city || 'Não informada'}`;
 
   try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -254,6 +277,26 @@ export async function updateLeadFollowup(leadId: string, followupDate: string | 
     return { success: false, error: 'Database URL not found' };
   } catch (err: any) {
     console.error('Erro ao atualizar follow-up:', err);
+    return { success: false, error: err.message };
+  }
+}
+
+export async function updateLeadConsultationCategory(leadId: string, consultationCategory: string) {
+  try {
+    const dbUrl = getDbUrl();
+    if (dbUrl) {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { neon } = require('@neondatabase/serverless');
+      const sql = neon(dbUrl as string);
+      
+      await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS consultation_category VARCHAR(50);`;
+      await sql`UPDATE leads SET consultation_category = ${consultationCategory} WHERE id = ${leadId}`;
+      revalidatePath('/admin');
+      return { success: true };
+    }
+    return { success: false, error: 'Database URL not found' };
+  } catch (err: any) {
+    console.error('Erro ao atualizar categoria de consulta:', err);
     return { success: false, error: err.message };
   }
 }
