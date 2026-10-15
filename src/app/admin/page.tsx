@@ -24,6 +24,32 @@ export default async function AdminPage({
     }
     if (dbUrl) {
       const sql = neon(dbUrl as string);
+
+      // Injeção do Script de Resgate White Glove no card do Sr. Cláudio
+      const claudioRescueMessage = `Olá, Sr. Cláudio, bom dia! Tudo bem com o senhor? Aqui é a Ana Paula, Concierge do Dr. Mário Warde.
+
+Passando para saber como o senhor está. Sei como a rotina na semana é corrida e os compromissos acabam atropelando o tempo.
+
+O Dr. Mário estava revisando o planejamento dos atendimentos e me pediu para fazer um contato especial com o senhor. Ele achou o seu caso de contorno corporal e alinhamento do tórax muito interessante pelas proporções anatômicas e pelos resultados harmônicos que conseguimos alcançar hoje com as técnicas atuais.
+
+Como estamos abrindo a grade exclusiva da próxima semana, reservei duas opções de horários privativos e sem sobreposição com o Dr. Mário para conversarem com calma:
+
+🗓️ Quarta-feira (21/10) às 15h30
+🗓️ Quinta-feira (22/10) às 16h00
+
+Algum desses momentos fica mais confortável para o senhor passar aqui na clínica na Vila Madalena?`;
+
+      try {
+        await sql`
+          UPDATE leads 
+          SET ai_suggestion = ${claudioRescueMessage}
+          WHERE (phone LIKE '%996768256%' OR name ILIKE '%Cláudio%')
+            AND (ai_suggestion IS NULL OR ai_suggestion NOT LIKE '%tórax%');
+        `;
+      } catch (e) {
+        console.warn('Auto-resgate Cláudio:', e);
+      }
+
       leads = (await sql`SELECT * FROM leads ORDER BY created_at DESC LIMIT 200`) as DbLead[];
     }
   } catch (error) {

@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useTransition } from 'react';
-import { generateAiForLead, updateLeadFollowup, updateLeadConsultationCategory } from '@/app/actions/crm';
+import { generateAiForLead, updateLeadFollowup, updateLeadConsultationCategory, updateLeadAction } from '@/app/actions/crm';
 
 type LeadScore = 'HOT' | 'WARM' | 'COLD';
 export type ConsultationCategory = 'internet' | 'indicacao' | 'indicacao_medica';
@@ -33,6 +33,13 @@ export default function LeadCard({ lead }: LeadCardProps) {
   const [isPending, startTransition] = useTransition();
   const [localNextAction, setLocalNextAction] = useState(lead.nextAction);
 
+  // Script / Next Action states
+  const [isEditingAction, setIsEditingAction] = useState(false);
+  const [actionDraft, setActionDraft] = useState(lead.nextAction || '');
+  const [isPendingAction, startActionTransition] = useTransition();
+  const [copiedAction, setCopiedAction] = useState(false);
+  const [isExpandedAction, setIsExpandedAction] = useState(false);
+
   // Category and Financial states
   const [category, setCategory] = useState<ConsultationCategory>(
     lead.consultationCategory || 'internet'
@@ -45,6 +52,23 @@ export default function LeadCard({ lead }: LeadCardProps) {
   const [fupDate, setFupDate] = useState(lead.followupDate ? new Date(lead.followupDate).toISOString().split('T')[0] : '');
   const [fupNote, setFupNote] = useState(lead.followupNote || '');
   const [isPendingFup, startFupTransition] = useTransition();
+
+  const handleSaveAction = () => {
+    startActionTransition(async () => {
+      await updateLeadAction(lead.id, actionDraft);
+      setLocalNextAction(actionDraft);
+      lead.nextAction = actionDraft;
+      setIsEditingAction(false);
+    });
+  };
+
+  const handleCopyAction = () => {
+    if (!localNextAction) return;
+    navigator.clipboard.writeText(localNextAction).then(() => {
+      setCopiedAction(true);
+      setTimeout(() => setCopiedAction(false), 2000);
+    });
+  };
 
   const handleCategoryChange = (newCat: ConsultationCategory) => {
     setCategory(newCat);
@@ -280,32 +304,108 @@ export default function LeadCard({ lead }: LeadCardProps) {
       </div>
 
       {/* Next Action & WhatsApp */}
-      <div className="mt-1 pt-2 border-t border-black/5 flex items-center justify-between">
-        <div className="text-[11px] text-[#86868b]">
-          <span className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-black/40 font-semibold mb-0.5">
-            Sugestão (IA)
+      <div className="mt-1 pt-2 border-t border-black/5 flex flex-col gap-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <span className="text-[9px] uppercase tracking-wider text-black/50 font-bold flex items-center gap-1">
+              💬 Script Whats / Ação
+            </span>
             <button 
               onClick={handleGenerateAi} 
               disabled={isPending}
-              className="hover:bg-black/5 p-0.5 rounded transition-colors disabled:opacity-50 cursor-pointer"
+              className="hover:bg-black/5 p-1 rounded transition-colors disabled:opacity-50 cursor-pointer text-xs"
               title="Gerar/Atualizar sugestão com IA"
             >
               ✨
             </button>
-          </span>
-          <span className="font-medium text-[#1d1d1f]">{isPending ? 'Analisando...' : localNextAction}</span>
+            <button 
+              onClick={() => {
+                setActionDraft(localNextAction);
+                setIsEditingAction(!isEditingAction);
+              }}
+              className="hover:bg-black/5 p-1 rounded transition-colors text-xs text-slate-500 hover:text-black cursor-pointer"
+              title="Editar mensagem do WhatsApp"
+            >
+              ✏️
+            </button>
+          </div>
+          
+          <div className="flex items-center gap-1.5">
+            {localNextAction && localNextAction !== '-' && (
+              <button
+                type="button"
+                onClick={handleCopyAction}
+                className="text-[10px] text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-1.5 py-0.5 rounded transition-all font-medium"
+                title="Copiar texto da mensagem"
+              >
+                {copiedAction ? '✓ Copiado' : '📋 Copiar'}
+              </button>
+            )}
+            <a 
+              href={whatsLink} 
+              target="_blank" 
+              rel="noreferrer"
+              className="w-7 h-7 rounded-full bg-green-50 flex items-center justify-center hover:bg-green-100 transition-colors shadow-xs"
+              title="Abrir no WhatsApp com a mensagem pronta"
+            >
+              <svg className="w-3.5 h-3.5 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+              </svg>
+            </a>
+          </div>
         </div>
-        <a 
-          href={whatsLink} 
-          target="_blank" 
-          rel="noreferrer"
-          className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center hover:bg-green-100 transition-colors"
-          title="Falar no WhatsApp"
-        >
-          <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-          </svg>
-        </a>
+
+        {isEditingAction ? (
+          <div className="flex flex-col gap-1.5 bg-slate-50 p-2 rounded-xl border border-slate-200">
+            <textarea
+              rows={4}
+              value={actionDraft}
+              onChange={(e) => setActionDraft(e.target.value)}
+              className="text-xs p-2 border border-slate-200 rounded-lg w-full bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-black"
+              placeholder="Digite ou cole o script de WhatsApp para este paciente..."
+            />
+            <div className="flex gap-2 justify-end">
+              <button 
+                type="button" 
+                onClick={() => setIsEditingAction(false)} 
+                className="text-[11px] text-slate-500 hover:text-slate-800"
+              >
+                Cancelar
+              </button>
+              <button 
+                type="button" 
+                onClick={handleSaveAction} 
+                disabled={isPendingAction} 
+                className="text-[11px] bg-slate-900 text-white px-2.5 py-1 rounded-md font-medium disabled:opacity-50"
+              >
+                {isPendingAction ? 'Salvando...' : 'Salvar Script'}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-slate-50/80 rounded-xl p-2 border border-slate-100 text-xs">
+            {isPending ? (
+              <span className="text-slate-400 italic">Analisando com IA...</span>
+            ) : localNextAction ? (
+              <div>
+                <p className={`text-slate-700 font-normal leading-relaxed whitespace-pre-line ${!isExpandedAction && localNextAction.length > 120 ? 'line-clamp-2' : ''}`}>
+                  {localNextAction}
+                </p>
+                {localNextAction.length > 120 && (
+                  <button 
+                    type="button" 
+                    onClick={() => setIsExpandedAction(!isExpandedAction)}
+                    className="text-[10px] text-blue-600 hover:underline mt-1 font-medium block"
+                  >
+                    {isExpandedAction ? '▲ Ver menos' : '▼ Ver mensagem completa...'}
+                  </button>
+                )}
+              </div>
+            ) : (
+              <span className="text-slate-400 italic">Sem script definido. Clique em ✏️ para adicionar.</span>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -300,3 +300,23 @@ export async function updateLeadConsultationCategory(leadId: string, consultatio
     return { success: false, error: err.message };
   }
 }
+
+export async function updateLeadAction(leadId: string, actionText: string) {
+  try {
+    const dbUrl = getDbUrl();
+    if (dbUrl) {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { neon } = require('@neondatabase/serverless');
+      const sql = neon(dbUrl as string);
+      
+      await sql`UPDATE leads SET ai_suggestion = ${actionText} WHERE id = ${leadId}`;
+      revalidatePath('/admin');
+      return { success: true };
+    }
+    return { success: false, error: 'Database URL not found' };
+  } catch (err: any) {
+    console.error('Erro ao atualizar script de ação do lead:', err);
+    return { success: false, error: err.message };
+  }
+}
+
