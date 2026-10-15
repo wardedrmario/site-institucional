@@ -3,36 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manual de Boas Práticas do CRM | Dr. Mário Warde</title>
+    <title>Manual do CRM | Clínica Dr. Mário Warde</title>
+    
+    <!-- Tipografia Oficial Quiet Luxury -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
     <style>
+        /* ==========================================================================
+           DESIGN TOKENS • QUIET LUXURY & APPLE HEALTH (100% SEM EMOJIS)
+           Clínica Dr. Mário Warde | Cirurgia Plástica de Alto Padrão
+           ========================================================================== */
+        @font-face {
+            font-family: 'Amolina Boutique Sans';
+            src: url('/fonts/Amolina-Boutique-Sans.otf') format('opentype'),
+                 url('../Site institucional/public/fonts/Amolina-Boutique-Sans.otf') format('opentype'),
+                 url('fonts/Amolina-Boutique-Sans.otf') format('opentype'),
+                 local('Amolina Boutique Sans'), local('Amolina');
+            font-weight: 100 900;
+            font-style: normal;
+            font-display: swap;
+        }
+
         :root {
-            --bg-body: #f8fafc;
-            --bg-surface: #ffffff;
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --text-muted: #94a3b8;
-            --border-color: #e2e8f0;
-            --border-subtle: #f1f5f9;
-            --brand-primary: #0f172a;
-            --brand-gold: #c5a880;
-            --brand-gold-dark: #937341;
-            --brand-green: #10b981;
-            --brand-green-light: #ecfdf5;
-            --brand-amber: #f59e0b;
-            --brand-amber-light: #fffbeb;
-            --brand-indigo: #6366f1;
-            --brand-wine: #722f37;
+            /* Paleta Nobre Homologada */
+            --wine-900: #310f0e;       /* Vinho Nobre */
+            --wine-800: #4a1715;
+            --wine-700: #6f0f00;       /* Borgonha */
+            --wine-50: #fcf9f8;
+            --wine-tint: rgba(49, 15, 14, 0.04);
+            --wine-tint-hover: rgba(49, 15, 14, 0.08);
+
+            --chumbo-900: #1d1d1f;     /* Apple Dark Text */
+            --chumbo-800: #2c2c2e;
+            --chumbo-700: #3a3a3c;     /* Apple Body Text */
+            --chumbo-500: #86868b;     /* Apple Muted Gray */
+            --chumbo-300: #d2d2d7;
+            --chumbo-100: #f5f5f7;     /* Apple Card Gray */
+            
+            --apple-bg: #fbfbfd;       /* Apple Page Off-White */
+            --surface-pure: #ffffff;
+            
+            --champagne-500: #ccb9b6;  /* Nude Champanhe */
+            --champagne-200: #f2ebe9;
+            --champagne-100: #f9f5f4;
+
+            --gold-500: #c5a880;       /* Dourado Nobre */
+            --gold-600: #937341;
+            
+            --emerald-600: #059669;    /* Verde Clínico */
+            --emerald-50: #ecfdf5;
+            --emerald-border: #a7f3d0;
+
+            --amber-600: #d97706;
+            --amber-50: #fffbeb;
+            --amber-border: #fde68a;
+
+            --border-hairline: rgba(0, 0, 0, 0.06);
+            --border-champagne: rgba(204, 185, 182, 0.45);
+
+            --font-title: 'Amolina Boutique Sans', 'Amolina', 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+
+            --radius-pill: 9999px;
             --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 18px;
-            --radius-xl: 24px;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
-            --shadow-lg: 0 12px 28px rgba(0,0,0,0.08);
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+
+            --shadow-subtle: 0 2px 10px rgba(0, 0, 0, 0.025);
+            --shadow-card: 0 4px 20px -2px rgba(49, 15, 14, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+            --shadow-elevated: 0 12px 32px -4px rgba(49, 15, 14, 0.08), 0 2px 8px rgba(0, 0, 0, 0.03);
+
             --sidebar-width: 320px;
         }
 
@@ -42,25 +86,46 @@
             padding: 0;
         }
 
-        body {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-primary);
-            line-height: 1.65;
-            font-size: 15px;
-            -webkit-font-smoothing: antialiased;
+        html {
+            scroll-behavior: smooth;
         }
 
-        .layout {
+        body {
+            font-family: var(--font-body);
+            background-color: var(--apple-bg);
+            color: var(--chumbo-700);
+            line-height: 1.75;
+            font-size: 15px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Barra de Leitura Superior */
+        .reading-progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--wine-900), var(--wine-700), var(--gold-500));
+            width: 0%;
+            z-index: 9999;
+            transition: width 0.1s linear;
+        }
+
+        .app-layout {
             display: flex;
             min-height: 100vh;
         }
 
-        /* Sidebar Styling */
+        /* ==========================================================================
+           SIDEBAR • macOS FINDER STYLE (SILENCIOSA E NOBRE)
+           ========================================================================== */
         .sidebar {
             width: var(--sidebar-width);
-            background: var(--bg-surface);
-            border-right: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border-right: 1px solid var(--border-hairline);
             position: fixed;
             top: 0;
             bottom: 0;
@@ -70,113 +135,161 @@
             z-index: 100;
         }
 
-        .sidebar-header {
-            padding: 24px 20px 16px 20px;
-            border-bottom: 1px solid var(--border-color);
+        .sidebar-brand-box {
+            padding: 28px 22px 20px 22px;
+            border-bottom: 1px solid var(--border-hairline);
         }
 
-        .clinic-brand {
+        .brand-seal-row {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
+            gap: 12px;
+            margin-bottom: 14px;
         }
 
-        .clinic-logo-badge {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: var(--brand-gold);
+        .clinic-medallion {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--wine-900) 0%, var(--wine-700) 100%);
+            color: var(--gold-500);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Playfair Display', serif;
+            font-family: var(--font-title);
+            font-size: 20px;
             font-weight: 700;
-            font-size: 16px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            border: 1px solid rgba(197, 168, 128, 0.35);
+            box-shadow: 0 4px 10px rgba(49, 15, 14, 0.12);
         }
 
-        .clinic-name {
+        .brand-titles {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-author {
             font-size: 13px;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.05em;
+            color: var(--wine-900);
             text-transform: uppercase;
-            color: var(--text-secondary);
         }
 
-        .sidebar-title {
-            font-size: 17px;
-            font-weight: 800;
-            color: var(--text-primary);
-            letter-spacing: -0.3px;
-            margin-bottom: 6px;
+        .brand-tagline {
+            font-size: 11px;
+            color: var(--chumbo-500);
+            letter-spacing: 0.02em;
         }
 
-        .version-pill {
+        .sidebar-doc-title {
+            font-family: var(--font-title);
+            font-size: 21px;
+            color: var(--chumbo-900);
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-live-pill {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 3px 8px;
-            background: #ecfdf5;
-            color: #065f46;
-            border-radius: 999px;
-            font-size: 11px;
+            gap: 8px;
+            background: var(--wine-50);
+            border: 1px solid var(--border-champagne);
+            color: var(--wine-900);
+            padding: 3px 10px;
+            border-radius: var(--radius-pill);
+            font-size: 10.5px;
             font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
         }
 
-        .sidebar-search {
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--border-color);
+        .sidebar-live-pill .dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--emerald-600);
         }
 
-        .search-wrapper {
+        /* Search input */
+        .sidebar-search-box {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border-hairline);
+        }
+
+        .search-shell {
             position: relative;
             display: flex;
             align-items: center;
         }
 
-        .search-icon {
+        .search-icon-text {
             position: absolute;
             left: 12px;
-            font-size: 13px;
+            font-size: 11px;
+            color: var(--chumbo-500);
             pointer-events: none;
-            opacity: 0.5;
+            font-weight: 600;
         }
 
         .search-input {
             width: 100%;
-            padding: 8px 12px 8px 34px;
-            background: var(--bg-body);
-            border: 1px solid var(--border-color);
+            padding: 8px 36px 8px 34px;
+            background: var(--apple-bg);
+            border: 1px solid var(--border-hairline);
             border-radius: var(--radius-sm);
-            font-size: 13px;
-            color: var(--text-primary);
+            font-size: 12.5px;
+            color: var(--chumbo-900);
             outline: none;
             transition: all 0.2s ease;
+            font-family: var(--font-body);
         }
 
         .search-input:focus {
-            border-color: var(--text-primary);
+            border-color: var(--wine-900);
             background: #ffffff;
-            box-shadow: 0 0 0 2px rgba(15,23,42,0.06);
+            box-shadow: 0 0 0 2px rgba(49, 15, 14, 0.08);
         }
 
-        .sidebar-nav {
-            padding: 14px 10px;
+        .search-key-badge {
+            position: absolute;
+            right: 10px;
+            font-size: 10px;
+            background: rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border-hairline);
+            padding: 1px 5px;
+            border-radius: 4px;
+            color: var(--chumbo-500);
+            font-family: monospace;
+            pointer-events: none;
+        }
+
+        /* Navigation List */
+        .sidebar-nav-scroll {
+            padding: 16px 12px 28px 12px;
             overflow-y: auto;
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 3px;
+        }
+
+        .nav-category-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--chumbo-500);
+            padding: 16px 12px 6px 12px;
         }
 
         .nav-link {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 8px 12px;
-            color: var(--text-secondary);
+            gap: 10px;
+            padding: 9px 12px;
+            color: var(--chumbo-700);
             text-decoration: none;
             font-size: 12.5px;
             font-weight: 500;
@@ -186,31 +299,67 @@
         }
 
         .nav-link:hover {
-            color: var(--text-primary);
-            background: var(--border-subtle);
+            background: var(--wine-tint);
+            color: var(--wine-900);
+        }
+
+        .nav-link .nav-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--chumbo-300);
+            transition: all 0.2s ease;
+            flex-shrink: 0;
         }
 
         .nav-link.active {
-            color: var(--text-primary);
-            background: #ffffff;
-            font-weight: 700;
-            box-shadow: var(--shadow-sm);
-            border-left: 3px solid var(--brand-gold-dark);
+            background: var(--wine-50);
+            color: var(--wine-900);
+            font-weight: 600;
+            border: 1px solid var(--border-champagne);
+            box-shadow: var(--shadow-subtle);
         }
 
-        .nav-level-2 {
-            margin-top: 6px;
-            font-weight: 600;
-            color: var(--text-primary);
+        .nav-link.active .nav-dot {
+            background: var(--wine-700);
+            transform: scale(1.4);
         }
 
         .nav-level-3 {
-            padding-left: 24px;
+            padding-left: 28px;
             font-size: 12px;
-            color: var(--text-secondary);
+            color: var(--chumbo-500);
         }
 
-        /* Main Content Wrapper */
+        /* Sidebar Footer */
+        .sidebar-footer-box {
+            padding: 14px 20px;
+            border-top: 1px solid var(--border-hairline);
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .concierge-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11.5px;
+            color: var(--chumbo-700);
+            font-weight: 500;
+        }
+
+        .pulse-green {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--emerald-600);
+        }
+
+        /* ==========================================================================
+           MAIN CONTENT & TOP NAVIGATION
+           ========================================================================== */
         .main-wrapper {
             margin-left: var(--sidebar-width);
             flex: 1;
@@ -220,298 +369,1408 @@
         }
 
         .top-navbar {
-            height: 60px;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
+            height: 64px;
+            background: rgba(251, 251, 253, 0.9);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--border-hairline);
             position: sticky;
             top: 0;
             z-index: 90;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 40px;
+            padding: 0 44px;
         }
 
         .top-breadcrumb {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        .top-breadcrumb span {
-            color: var(--text-secondary);
+            font-size: 12.5px;
+            color: var(--chumbo-500);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .top-breadcrumb strong {
-            color: var(--text-primary);
+            color: var(--wine-900);
             font-weight: 600;
         }
 
         .top-actions {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .btn-action {
+        .btn-pill {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
+            padding: 7px 16px;
             font-size: 12px;
             font-weight: 600;
-            border-radius: var(--radius-sm);
+            border-radius: var(--radius-pill);
             background: #ffffff;
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
+            border: 1px solid var(--border-hairline);
+            color: var(--chumbo-700);
             cursor: pointer;
             transition: all 0.2s ease;
             text-decoration: none;
+            box-shadow: var(--shadow-subtle);
         }
 
-        .btn-action:hover {
-            background: var(--bg-body);
-            color: var(--text-primary);
+        .btn-pill:hover {
+            background: var(--wine-50);
+            color: var(--wine-900);
+            border-color: var(--border-champagne);
         }
 
-        .btn-action-primary {
-            background: var(--brand-primary);
+        .btn-pill-primary {
+            background: linear-gradient(135deg, var(--wine-900) 0%, var(--wine-800) 100%);
             color: #ffffff;
-            border-color: var(--brand-primary);
+            border-color: var(--wine-900);
+            box-shadow: 0 2px 8px rgba(49, 15, 14, 0.18);
         }
 
-        .btn-action-primary:hover {
-            background: #1e293b;
+        .btn-pill-primary:hover {
+            background: linear-gradient(135deg, var(--wine-800) 0%, var(--wine-700) 100%);
             color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .btn-pill-brand {
+            background: rgba(49, 15, 14, 0.05);
+            border: 1px solid var(--border-champagne);
+            color: var(--wine-900);
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-pill-brand:hover {
+            background: var(--wine-900);
+            color: #ffffff;
+            border-color: var(--wine-900);
+            box-shadow: 0 4px 12px rgba(49, 15, 14, 0.18);
+            transform: translateY(-1px);
+        }
+
+        .sidebar-manual-switcher {
+            padding: 9px 12px;
+            margin: 0 12px 10px 12px;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid var(--border-hairline);
+            border-radius: var(--radius-sm);
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-manual-switcher:hover {
+            background: var(--wine-50);
+            border-color: var(--border-champagne);
+        }
+
+        .manual-switcher-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            color: var(--wine-900);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .switcher-arrow {
+            color: var(--gold-500);
+            font-size: 13px;
+            font-weight: 700;
         }
 
         /* Document Canvas */
         .document-canvas {
-            max-width: 900px;
+            max-width: 860px;
             margin: 0 auto;
-            padding: 40px 30px 80px 30px;
+            padding: 54px 36px 120px 36px;
             width: 100%;
         }
 
-        .doc-header-card {
+        /* ==========================================================================
+           HERO CARD • EDITORIAL MASTER
+           ========================================================================== */
+        .doc-hero-card {
             background: #ffffff;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border-champagne);
             border-radius: var(--radius-xl);
-            padding: 40px;
-            margin-bottom: 36px;
-            box-shadow: var(--shadow-sm);
+            padding: 48px 48px 40px 48px;
+            margin-bottom: 54px;
+            box-shadow: var(--shadow-card);
             position: relative;
             overflow: hidden;
         }
 
-        .doc-header-card::before {
+        .doc-hero-card::before {
             content: "";
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #0f172a 0%, var(--brand-gold) 50%, #0f172a 100%);
+            height: 3px;
+            background: linear-gradient(90deg, var(--wine-900) 0%, var(--gold-500) 50%, var(--wine-700) 100%);
         }
 
-        .doc-subtitle-pre {
-            font-size: 12px;
+        .doc-hero-pretitle {
+            font-size: 11px;
             font-weight: 700;
-            letter-spacing: 1px;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: var(--brand-gold-dark);
-            margin-bottom: 8px;
+            color: var(--wine-700);
+            margin-bottom: 14px;
         }
 
-        .doc-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 32px;
+        .doc-hero-title {
+            font-family: var(--font-title);
+            font-size: 40px;
             font-weight: 700;
-            color: var(--text-primary);
-            line-height: 1.25;
-            margin-bottom: 12px;
-            letter-spacing: -0.5px;
+            color: var(--chumbo-900);
+            line-height: 1.15;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
         }
 
-        .doc-meta-tags {
+        .doc-hero-desc {
+            font-size: 16px;
+            color: var(--chumbo-700);
+            line-height: 1.7;
+            margin-bottom: 28px;
+            max-width: 92%;
+        }
+
+        .personas-dock {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            background: var(--apple-bg);
+            border: 1px solid var(--border-hairline);
+            border-radius: var(--radius-md);
+            padding: 18px 22px;
+            margin-bottom: 28px;
+        }
+
+        .persona-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .persona-initials-badge {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 1px solid var(--border-champagne);
+            color: var(--wine-900);
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 0.05em;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .persona-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .persona-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--chumbo-900);
+        }
+
+        .persona-role {
+            font-size: 11.5px;
+            color: var(--chumbo-500);
+        }
+
+        .hero-meta-strip {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-subtle);
+            align-items: center;
+            gap: 10px;
+            padding-top: 22px;
+            border-top: 1px solid var(--border-hairline);
         }
 
-        .doc-tag {
-            font-size: 12px;
-            padding: 4px 10px;
-            background: var(--bg-body);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            color: var(--text-secondary);
+        .hero-pill-meta {
+            font-size: 11px;
             font-weight: 500;
+            padding: 4px 12px;
+            background: var(--apple-bg);
+            border: 1px solid var(--border-hairline);
+            border-radius: var(--radius-pill);
+            color: var(--chumbo-700);
+            letter-spacing: 0.02em;
         }
 
-        .doc-tag-highlight {
-            background: #ecfdf5;
-            color: #065f46;
-            border-color: #a7f3d0;
+        .hero-pill-highlight {
+            background: var(--wine-50);
+            color: var(--wine-900);
+            border-color: var(--border-champagne);
             font-weight: 600;
         }
 
-        /* Typography */
+        /* ==========================================================================
+           CARTA DE ACOLHIMENTO
+           ========================================================================== */
+        .welcome-letter-card {
+            background: #ffffff;
+            border: 1px solid var(--border-champagne);
+            border-left: 4px solid var(--wine-900);
+            border-radius: var(--radius-lg);
+            padding: 32px 36px;
+            margin: 36px 0 48px 0;
+            box-shadow: var(--shadow-card);
+        }
+
+        .welcome-letter-badge {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--wine-700);
+            margin-bottom: 14px;
+        }
+
+        .welcome-letter-body {
+            font-size: 15.5px;
+            line-height: 1.8;
+            color: var(--chumbo-800);
+        }
+
+        /* ==========================================================================
+           TYPOGRAPHY & CONTENT HEADINGS
+           ========================================================================== */
+        .section-anchor-wrap {
+            scroll-margin-top: 90px;
+            margin-top: 60px;
+        }
+
         .section-divider {
             height: 1px;
-            background: var(--border-color);
-            margin: 48px 0 32px 0;
+            background: var(--border-hairline);
+            margin-bottom: 36px;
+        }
+
+        .section-header-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 22px;
         }
 
         .section-title {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--text-primary);
-            letter-spacing: -0.4px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            scroll-margin-top: 80px;
+            font-family: var(--font-title);
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--chumbo-900);
+            letter-spacing: -0.01em;
+            line-height: 1.25;
         }
 
-        .anchor-tag {
-            color: var(--brand-gold);
-            font-size: 18px;
+        .anchor-link-pill {
+            color: var(--champagne-500);
+            text-decoration: none;
+            font-family: var(--font-body);
+            font-size: 15px;
             font-weight: 400;
-            opacity: 0.7;
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+        }
+
+        .anchor-link-pill:hover {
+            background: var(--wine-50);
+            color: var(--wine-900);
         }
 
         .subsection-title {
-            font-size: 18px;
+            font-family: var(--font-body);
+            font-size: 19px;
             font-weight: 700;
-            color: #1e293b;
-            margin: 28px 0 14px 0;
-            letter-spacing: -0.2px;
-            scroll-margin-top: 80px;
+            color: var(--chumbo-900);
+            margin: 40px 0 16px 0;
+            letter-spacing: -0.01em;
+            scroll-margin-top: 90px;
         }
 
         .subsubsection-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin: 18px 0 8px 0;
+            font-size: 15.5px;
+            font-weight: 600;
+            color: var(--wine-900);
+            margin: 26px 0 10px 0;
         }
 
         .luxury-p {
-            margin-bottom: 16px;
-            color: #334155;
-            font-size: 15px;
-            line-height: 1.7;
+            margin-bottom: 20px;
+            color: var(--chumbo-700);
+            font-size: 15.5px;
+            line-height: 1.8;
         }
 
-        /* Callouts / Alerts */
-        .callout {
-            display: flex;
-            gap: 14px;
-            padding: 18px 20px;
-            border-radius: var(--radius-md);
-            margin: 24px 0;
-            border: 1px solid transparent;
-            font-size: 14.5px;
-            line-height: 1.6;
-        }
-
-        .callout-icon {
-            font-size: 20px;
-            line-height: 1;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .callout-note {
-            background: #fdf8f6;
-            border-color: #f3d5ca;
-            color: #4a2820;
-        }
-
-        .callout-important {
-            background: #eff6ff;
-            border-color: #bfdbfe;
-            color: #1e3a8a;
-        }
-
-        .callout-tip {
-            background: #f0fdf4;
-            border-color: #bbf7d0;
-            color: #14532d;
-        }
-
-        .callout-warning {
-            background: #fffbeb;
-            border-color: #fde68a;
-            color: #78350f;
-        }
-
-        .luxury-quote {
-            padding: 16px 20px;
-            margin: 20px 0;
-            border-left: 3px solid var(--brand-gold-dark);
-            background: #ffffff;
-            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-            font-style: italic;
-            color: #334155;
-            box-shadow: var(--shadow-sm);
+        .luxury-hairline {
+            height: 1px;
+            background: var(--border-hairline);
+            margin: 44px 0;
         }
 
         /* Lists */
         .luxury-list, .luxury-numbered-list {
-            margin: 14px 0 20px 24px;
-            color: #334155;
+            margin: 18px 0 28px 28px;
+            color: var(--chumbo-700);
         }
 
         .luxury-list li, .luxury-numbered-list li {
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            line-height: 1.7;
+            padding-left: 6px;
+        }
+
+        /* Quotes */
+        .luxury-quote-box {
+            display: flex;
+            gap: 18px;
+            background: #ffffff;
+            border: 1px solid var(--border-hairline);
+            border-radius: var(--radius-md);
+            padding: 22px 26px;
+            margin: 28px 0;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .quote-accent-bar {
+            width: 3px;
+            border-radius: 4px;
+            background: var(--wine-900);
+            flex-shrink: 0;
+        }
+
+        .quote-text {
+            font-size: 15px;
+            font-style: italic;
+            color: var(--chumbo-800);
+            line-height: 1.75;
+        }
+
+        /* Callouts */
+        .callout {
+            padding: 20px 24px;
+            border-radius: var(--radius-md);
+            margin: 28px 0;
+            border: 1px solid transparent;
+            font-size: 14.5px;
+            line-height: 1.7;
+        }
+
+        .callout-important {
+            background: var(--wine-50);
+            border-color: var(--border-champagne);
+            color: var(--wine-900);
+        }
+
+        .callout-tip {
+            background: var(--emerald-50);
+            border-color: var(--emerald-border);
+            color: #064e3b;
+        }
+
+        .callout-warning {
+            background: var(--amber-50);
+            border-color: var(--amber-border);
+            color: #78350f;
+        }
+
+        /* ==========================================================================
+           AS 9 SALAS DA CLÍNICA • PIPELINE EDITORIAL LIMPO
+           ========================================================================== */
+        .rooms-pipeline-container {
+            background: #ffffff;
+            border: 1px solid var(--border-champagne);
+            border-radius: var(--radius-xl);
+            padding: 40px 36px;
+            margin: 40px 0 48px 0;
+            box-shadow: var(--shadow-card);
+        }
+
+        .rooms-pipeline-header {
+            margin-bottom: 32px;
+        }
+
+        .pipeline-tag {
+            font-size: 10.5px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--wine-700);
+            text-transform: uppercase;
+        }
+
+        .pipeline-title {
+            font-family: var(--font-title);
+            font-size: 25px;
+            color: var(--chumbo-900);
+            margin: 8px 0;
+        }
+
+        .pipeline-subtitle {
+            font-size: 14px;
+            color: var(--chumbo-500);
             line-height: 1.6;
         }
 
-        .luxury-checklist {
-            list-style: none;
-            margin: 16px 0 24px 0;
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            padding: 12px 16px;
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 18px;
         }
 
-        .check-item {
+        .room-card {
+            background: var(--apple-bg);
+            border: 1px solid var(--border-hairline);
+            border-radius: var(--radius-md);
+            padding: 22px 20px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s ease;
+        }
+
+        .room-card:hover {
+            background: #ffffff;
+            border-color: var(--border-champagne);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-card);
+        }
+
+        .room-card-highlight {
+            border-color: var(--border-champagne);
+            background: #ffffff;
+            box-shadow: 0 2px 10px rgba(49, 15, 14, 0.04);
+        }
+
+        .room-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .room-badge-num {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--wine-900);
+            background: var(--wine-50);
+            padding: 2px 8px;
+            border-radius: var(--radius-pill);
+            border: 1px solid var(--border-champagne);
+            letter-spacing: 0.05em;
+        }
+
+        .room-badge-clean {
+            font-size: 10.5px;
+            color: var(--chumbo-500);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .room-name {
+            font-size: 15.5px;
+            font-weight: 700;
+            color: var(--chumbo-900);
+            margin-bottom: 8px;
+            line-height: 1.35;
+        }
+
+        .room-desc {
+            font-size: 13px;
+            color: var(--chumbo-700);
+            line-height: 1.55;
+            margin-bottom: 16px;
+            flex: 1;
+        }
+
+        .room-footer {
+            border-top: 1px solid var(--border-hairline);
+            padding-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .room-meta-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+        }
+
+        .meta-label {
+            color: var(--chumbo-500);
+        }
+
+        .meta-value {
+            color: var(--chumbo-900);
+            font-weight: 600;
+        }
+
+        .meta-tag-capi {
+            background: rgba(16, 185, 129, 0.08);
+            color: #065f46;
+            padding: 1px 7px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 10px;
+        }
+
+        .meta-role {
+            color: var(--wine-900);
+            font-weight: 600;
+        }
+
+        /* ==========================================================================
+           MOCKUP INTERATIVO DO CARTÃO (CAPÍTULO 3 - SEM EMOJIS)
+           ========================================================================== */
+        .crm-mockup-wrapper {
+            background: #ffffff;
+            border: 1px solid var(--border-champagne);
+            border-radius: var(--radius-xl);
+            padding: 40px 36px;
+            margin: 40px 0 48px 0;
+            box-shadow: var(--shadow-card);
+        }
+
+        .crm-mockup-header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 26px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid var(--border-hairline);
+        }
+
+        .mockup-header-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--chumbo-900);
+        }
+
+        .mockup-indicator-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--wine-700);
+        }
+
+        .mockup-badge-live {
+            background: var(--emerald-50);
+            color: var(--emerald-600);
+            border: 1px solid var(--emerald-border);
+            padding: 1px 8px;
+            border-radius: var(--radius-pill);
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .mockup-tip {
+            font-size: 12px;
+            color: var(--chumbo-500);
+        }
+
+        .crm-card-preview {
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: var(--radius-lg);
+            padding: 26px;
+            box-shadow: var(--shadow-elevated);
+            max-width: 580px;
+            margin: 0 auto;
+        }
+
+        .crm-card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .crm-card-tags {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .crm-score-pill {
+            padding: 3px 10px;
+            border-radius: var(--radius-pill);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+
+        .crm-score-hot {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .crm-source-tag {
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--chumbo-700);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .crm-clinical-tag {
+            background: #eef2ff;
+            color: #3730a3;
+            border: 1px solid #c7d2fe;
+            padding: 2px 8px;
+            border-radius: var(--radius-pill);
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .crm-date-tag {
+            font-size: 11.5px;
+            color: var(--chumbo-500);
+        }
+
+        .crm-patient-profile {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .crm-patient-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--wine-50);
+            color: var(--wine-900);
+            border: 1px solid var(--border-champagne);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .crm-patient-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--chumbo-900);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .crm-verified-badge {
+            color: var(--wine-700);
+            font-size: 10px;
+            background: var(--wine-50);
+            padding: 1px 7px;
+            border-radius: 4px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+
+        .crm-patient-phone {
+            font-size: 12.5px;
+            color: var(--chumbo-500);
+        }
+
+        .crm-patient-meta-grid {
+            background: var(--apple-bg);
+            border: 1px solid var(--border-hairline);
+            border-radius: var(--radius-md);
+            padding: 14px 18px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .crm-meta-cell .cell-label {
+            display: block;
+            font-size: 10px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--chumbo-500);
+            letter-spacing: 0.04em;
+            margin-bottom: 3px;
+        }
+
+        .crm-meta-cell .cell-data {
+            font-size: 12.5px;
+            color: var(--chumbo-900);
+            font-weight: 600;
+        }
+
+        /* Pricing pills */
+        .crm-pricing-box {
+            border-top: 1px solid var(--border-hairline);
+            padding-top: 16px;
+            margin-bottom: 18px;
+        }
+
+        .pricing-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .pricing-label {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: var(--chumbo-700);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .pricing-rule-hint {
+            font-size: 10.5px;
+            color: var(--chumbo-500);
+        }
+
+        .pricing-pills-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .pricing-pill {
+            background: var(--apple-bg);
+            border: 1px solid var(--border-hairline);
+            border-radius: var(--radius-sm);
+            padding: 9px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            font-family: var(--font-body);
+        }
+
+        .pricing-pill:hover {
+            background: #ffffff;
+            border-color: var(--border-champagne);
+        }
+
+        .pricing-pill.active {
+            background: var(--wine-50);
+            border-color: var(--wine-900);
+            box-shadow: 0 0 0 1px var(--wine-900);
+        }
+
+        .pricing-pill .pill-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--chumbo-900);
+        }
+
+        .pricing-pill .pill-price {
+            font-size: 10px;
+            color: var(--chumbo-500);
+        }
+
+        .pricing-pill.active .pill-price {
+            color: var(--wine-900);
+            font-weight: 600;
+        }
+
+        .pricing-status-summary {
+            font-size: 12px;
+            padding: 9px 14px;
+            background: #fdfaf9;
+            border: 1px dashed var(--border-champagne);
+            border-radius: var(--radius-sm);
+            color: var(--chumbo-700);
+            line-height: 1.5;
+        }
+
+        .highlight-deposit {
+            color: var(--wine-900);
+            font-size: 13px;
+        }
+
+        /* Button Copy Dr Mario */
+        .crm-script-copy-cta {
+            margin-bottom: 18px;
+        }
+
+        .btn-copy-dr-mario-card {
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid var(--border-champagne);
+            padding: 11px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--wine-900);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-subtle);
+            font-family: var(--font-body);
+            letter-spacing: 0.02em;
+        }
+
+        .btn-copy-dr-mario-card:hover {
+            background: var(--wine-50);
+            border-color: var(--wine-900);
+            transform: translateY(-1px);
+        }
+
+        .copy-helper-text {
+            display: block;
+            text-align: center;
+            font-size: 10.5px;
+            color: var(--chumbo-500);
+            margin-top: 5px;
+        }
+
+        /* Follow-up reminder */
+        .crm-fup-box {
+            background: var(--amber-50);
+            border: 1px solid var(--amber-border);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .fup-title {
+            font-size: 12px;
+            color: #78350f;
+        }
+
+        .fup-note {
+            font-size: 11px;
+            color: #92400e;
+        }
+
+        .fup-badge-state {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Action box */
+        .crm-action-box {
+            background: var(--apple-bg);
+            border: 1px solid var(--border-hairline);
+            border-radius: var(--radius-md);
+            padding: 16px;
+        }
+
+        .action-box-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .action-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--chumbo-500);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .action-head-tools {
+            display: flex;
+            gap: 6px;
+        }
+
+        .tool-btn {
+            background: #ffffff;
+            border: 1px solid var(--border-hairline);
+            padding: 3px 9px;
+            border-radius: 4px;
+            font-size: 10.5px;
+            font-weight: 600;
+            color: var(--chumbo-700);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .tool-btn:hover {
+            background: var(--wine-50);
+            color: var(--wine-900);
+        }
+
+        .action-draft-text {
+            font-size: 12.5px;
+            color: var(--chumbo-800);
+            line-height: 1.55;
+            background: #ffffff;
+            border: 1px solid var(--border-hairline);
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+            margin-bottom: 14px;
+            font-style: italic;
+        }
+
+        .btn-whats-action {
+            width: 100%;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff;
+            border: none;
+            padding: 11px;
+            border-radius: var(--radius-sm);
+            font-size: 12.5px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2);
+            transition: all 0.2s ease;
+            letter-spacing: 0.02em;
+        }
+
+        .btn-whats-action:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Legenda */
+        .crm-hotspots-legend {
+            margin-top: 32px;
+            padding-top: 26px;
+            border-top: 1px solid var(--border-hairline);
+        }
+
+        .legend-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--chumbo-900);
+            margin-bottom: 16px;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .legend-item {
             display: flex;
             align-items: flex-start;
-            gap: 10px;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border-subtle);
+            gap: 12px;
+            font-size: 12.5px;
+            color: var(--chumbo-700);
+            line-height: 1.5;
         }
 
-        .check-item:last-child {
-            border-bottom: none;
+        .legend-badge {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            background: var(--wine-900);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 1px;
         }
 
-        .check-box {
-            font-size: 16px;
-            line-height: 1.2;
+        /* ==========================================================================
+           TELEMETRIA CAPI (CAPÍTULO 4)
+           ========================================================================== */
+        .telemetry-cycle-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 36px 0;
+            background: #ffffff;
+            border: 1px solid var(--border-champagne);
+            border-radius: var(--radius-xl);
+            padding: 36px;
+            box-shadow: var(--shadow-card);
         }
 
-        .check-text {
+        .telemetry-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            padding: 18px 22px;
+            border-radius: var(--radius-md);
+            background: var(--apple-bg);
+            border: 1px solid var(--border-hairline);
+        }
+
+        .step-highlight {
+            background: var(--wine-50);
+            border-color: var(--border-champagne);
+        }
+
+        .step-success {
+            background: var(--emerald-50);
+            border-color: var(--emerald-border);
+        }
+
+        .step-num-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: var(--wine-900);
+            color: var(--gold-500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 11px;
+            flex-shrink: 0;
+        }
+
+        .step-content h5 {
             font-size: 14.5px;
-            color: #334155;
+            font-weight: 700;
+            color: var(--chumbo-900);
+            margin-bottom: 4px;
         }
 
-        /* Tables */
+        .step-content p {
+            font-size: 13px;
+            color: var(--chumbo-700);
+            line-height: 1.55;
+            margin: 0;
+        }
+
+        .telemetry-connector {
+            width: 1px;
+            height: 12px;
+            background: var(--border-champagne);
+            margin-left: 31px;
+        }
+
+        /* ==========================================================================
+           CHECKLIST INTERATIVO DA ANA PAULA (CAPÍTULO 5)
+           ========================================================================== */
+        .luxury-checklist-board {
+            background: #ffffff;
+            border: 1px solid var(--border-champagne);
+            border-radius: var(--radius-xl);
+            padding: 36px;
+            margin: 36px 0 44px 0;
+            box-shadow: var(--shadow-card);
+        }
+
+        .checklist-board-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            gap: 16px;
+        }
+
+        .board-badge {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--wine-700);
+            text-transform: uppercase;
+        }
+
+        .board-title {
+            font-family: var(--font-title);
+            font-size: 23px;
+            color: var(--chumbo-900);
+            margin: 6px 0;
+        }
+
+        .board-subtitle {
+            font-size: 13.5px;
+            color: var(--chumbo-500);
+        }
+
+        .board-header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .progress-pill {
+            background: var(--apple-bg);
+            border: 1px solid var(--border-hairline);
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--chumbo-900);
+        }
+
+        .btn-reset-checklist {
+            background: #ffffff;
+            border: 1px solid var(--border-hairline);
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--chumbo-500);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: var(--font-body);
+        }
+
+        .btn-reset-checklist:hover {
+            background: var(--wine-50);
+            color: var(--wine-900);
+        }
+
+        .checklist-progress-bar {
+            height: 4px;
+            background: var(--apple-bg);
+            border-radius: var(--radius-pill);
+            overflow: hidden;
+            margin-bottom: 26px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--wine-900), var(--emerald-600));
+            transition: width 0.3s ease;
+        }
+
+        .interactive-checklist-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .interactive-check-row {
+            background: var(--apple-bg);
+            border: 1px solid var(--border-hairline);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .interactive-check-row:hover {
+            background: #ffffff;
+            border-color: var(--border-champagne);
+            transform: translateX(2px);
+        }
+
+        .apple-checkbox {
+            display: none;
+        }
+
+        .check-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .custom-checkbox-box {
+            width: 18px;
+            height: 18px;
+            border-radius: 5px;
+            border: 1.5px solid var(--chumbo-300);
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .apple-checkbox:checked + .check-label .custom-checkbox-box {
+            background: var(--emerald-600);
+            border-color: var(--emerald-600);
+        }
+
+        .apple-checkbox:checked + .check-label .custom-checkbox-box::after {
+            content: "";
+            width: 5px;
+            height: 9px;
+            border: solid #ffffff;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            margin-bottom: 2px;
+        }
+
+        .check-content-text {
+            font-size: 14px;
+            color: var(--chumbo-800);
+            line-height: 1.55;
+            transition: color 0.2s ease;
+        }
+
+        .apple-checkbox:checked + .check-label .check-content-text {
+            color: var(--chumbo-500);
+            text-decoration: line-through;
+        }
+
+        .checklist-congrats {
+            margin-top: 18px;
+            padding: 14px 20px;
+            background: var(--emerald-50);
+            border: 1px solid var(--emerald-border);
+            border-radius: var(--radius-md);
+            color: #065f46;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* ==========================================================================
+           TABULETA DOS 5 MANDAMENTOS (CAPÍTULO 7)
+           ========================================================================== */
+        .mandamentos-cards-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 36px 0 48px 0;
+        }
+
+        .mandamento-card {
+            background: #ffffff;
+            border: 1px solid var(--border-champagne);
+            border-radius: var(--radius-lg);
+            padding: 26px 30px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .mandamento-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .mandamento-numeral {
+            font-family: var(--font-title);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--wine-900);
+            background: var(--wine-50);
+            border: 1px solid var(--border-champagne);
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .mandamento-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--chumbo-900);
+        }
+
+        .mandamento-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .mandamento-col {
+            padding: 16px 18px;
+            border-radius: var(--radius-sm);
+        }
+
+        .mandamento-certo {
+            background: var(--emerald-50);
+            border: 1px solid var(--emerald-border);
+        }
+
+        .mandamento-errado {
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+        }
+
+        .col-tag {
+            display: block;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            margin-bottom: 6px;
+        }
+
+        .tag-certo {
+            color: #065f46;
+        }
+
+        .tag-errado {
+            color: #991b1b;
+        }
+
+        .col-text {
+            font-size: 13px;
+            color: var(--chumbo-800);
+            line-height: 1.55;
+            margin: 0;
+        }
+
+        .mandamento-footer {
+            border-top: 1px solid var(--border-hairline);
+            padding-top: 14px;
+            font-size: 12.5px;
+            line-height: 1.6;
+            color: var(--chumbo-700);
+        }
+
+        .mandamento-why-label {
+            font-weight: 700;
+            color: var(--wine-900);
+            margin-right: 4px;
+        }
+
+        /* ==========================================================================
+           TABELAS DE LUXO
+           ========================================================================== */
         .table-container {
             overflow-x: auto;
-            margin: 24px 0;
+            margin: 32px 0;
             background: #ffffff;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border-champagne);
             border-radius: var(--radius-md);
-            box-shadow: var(--shadow-sm);
+            box-shadow: var(--shadow-subtle);
         }
 
         .luxury-table {
@@ -522,21 +1781,22 @@
         }
 
         .luxury-table th {
-            background: #f8fafc;
-            padding: 12px 16px;
+            background: var(--apple-bg);
+            padding: 16px 20px;
             font-weight: 700;
-            color: #0f172a;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 12px;
+            color: var(--chumbo-900);
+            border-bottom: 1px solid var(--border-hairline);
+            font-size: 11.5px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.06em;
         }
 
         .luxury-table td {
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--border-subtle);
-            color: #334155;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-hairline);
+            color: var(--chumbo-700);
             vertical-align: top;
+            line-height: 1.65;
         }
 
         .luxury-table tr:last-child td {
@@ -544,40 +1804,40 @@
         }
 
         .luxury-table tr:hover td {
-            background: #fcfdfe;
+            background: var(--wine-50);
         }
 
-        /* Code Card */
+        /* Code block */
         .code-card {
-            background: #1e293b;
+            background: #1c1917;
             border-radius: var(--radius-md);
-            margin: 20px 0;
+            margin: 26px 0;
             overflow: hidden;
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--shadow-elevated);
         }
 
         .code-header {
-            background: #0f172a;
-            padding: 8px 14px;
+            background: #0c0a09;
+            padding: 8px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .code-lang {
-            font-size: 11px;
+            font-size: 10.5px;
             font-weight: 600;
             text-transform: uppercase;
-            color: var(--brand-gold);
-            letter-spacing: 0.5px;
+            color: var(--gold-500);
+            letter-spacing: 0.06em;
         }
 
         .btn-copy-mini {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             border: none;
             color: #ffffff;
-            padding: 3px 8px;
+            padding: 3px 10px;
             font-size: 11px;
             border-radius: 4px;
             cursor: pointer;
@@ -585,57 +1845,72 @@
         }
 
         .btn-copy-mini:hover {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
         }
 
         .code-body {
-            padding: 16px;
+            padding: 20px;
             overflow-x: auto;
-            color: #e2e8f0;
+            color: #e7e5e4;
             font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
             font-size: 12.5px;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         .inline-code {
-            background: #e2e8f0;
-            color: #0f172a;
-            padding: 2px 5px;
+            background: var(--champagne-200);
+            color: var(--wine-900);
+            padding: 2px 6px;
             border-radius: 4px;
-            font-size: 13px;
+            font-size: 12.5px;
             font-family: monospace;
+            font-weight: 600;
         }
 
-        .mermaid-diagram {
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            padding: 24px;
-            margin: 24px 0;
-            overflow-x: auto;
+        .doc-link {
+            color: var(--wine-900);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .doc-footer-signature {
+            margin-top: 70px;
+            padding-top: 36px;
+            border-top: 1px solid var(--border-hairline);
             text-align: center;
+            font-size: 12.5px;
+            color: var(--chumbo-500);
+            line-height: 1.75;
+        }
+
+        .doc-footer-signature strong {
+            color: var(--wine-900);
         }
 
         /* Toast notification */
         .toast {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: #0f172a;
+            bottom: 28px;
+            right: 28px;
+            background: rgba(49, 15, 14, 0.96);
+            backdrop-filter: blur(12px);
             color: #ffffff;
-            padding: 12px 20px;
+            padding: 14px 22px;
             border-radius: var(--radius-md);
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            gap: 10px;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-champagne);
             opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.25s ease;
+            transform: translateY(12px);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             pointer-events: none;
-            z-index: 999;
+            z-index: 10000;
         }
 
         .toast.show {
@@ -643,9 +1918,23 @@
             transform: translateY(0);
         }
 
-        @media (max-width: 900px) {
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: var(--chumbo-900);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        @media (max-width: 960px) {
             .sidebar {
-                display: none;
+                transform: translateX(-100%);
+                transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            .sidebar.mobile-open {
+                transform: translateX(0);
             }
             .main-wrapper {
                 margin-left: 0;
@@ -653,19 +1942,28 @@
             .top-navbar {
                 padding: 0 20px;
             }
+            .mobile-menu-btn {
+                display: block;
+            }
             .document-canvas {
-                padding: 20px 16px 60px 16px;
+                padding: 28px 18px 80px 18px;
             }
-            .doc-header-card {
-                padding: 24px 20px;
+            .doc-hero-card {
+                padding: 32px 24px;
             }
-            .doc-title {
-                font-size: 26px;
+            .doc-hero-title {
+                font-size: 30px;
+            }
+            .personas-dock {
+                grid-template-columns: 1fr;
+            }
+            .legend-grid, .mandamento-body {
+                grid-template-columns: 1fr;
             }
         }
 
         @media print {
-            .sidebar, .top-navbar, .btn-action, .btn-copy-mini {
+            .sidebar, .top-navbar, .btn-pill, .btn-reset-checklist, .btn-copy-mini, .reading-progress-bar {
                 display: none !important;
             }
             .main-wrapper {
@@ -675,129 +1973,169 @@
                 max-width: 100% !important;
                 padding: 0 !important;
             }
+            .crm-card-preview {
+                box-shadow: none !important;
+                border: 1px solid #ccc !important;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="layout">
+    <div class="reading-progress-bar" id="readingProgressBar"></div>
+
+    <div class="app-layout">
         <!-- Sidebar Navigation -->
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <div class="clinic-brand">
-                    <div class="clinic-logo-badge">W</div>
-                    <span class="clinic-name">Dr. Mário Warde</span>
+            <div class="sidebar-brand-box">
+                <div class="brand-seal-row">
+                    <div class="clinic-medallion">W</div>
+                    <div class="brand-titles">
+                        <span class="brand-author">Dr. Mário Warde</span>
+                        <span class="brand-tagline">Cirurgia Plástica de Alto Padrão</span>
+                    </div>
                 </div>
-                <h1 class="sidebar-title">Manual do CRM</h1>
-                <div class="version-pill">
-                    <span>🟢 Guia Oficial 2026</span>
-                </div>
-            </div>
-
-            <div class="sidebar-search">
-                <div class="search-wrapper">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" id="searchInput" class="search-input" placeholder="Buscar no Manual..." oninput="handleSearch(this.value)">
+                <h1 class="sidebar-doc-title">Manual do CRM</h1>
+                <div class="sidebar-live-pill">
+                    <span class="dot"></span>
+                    <span>Guia Oficial 2026</span>
                 </div>
             </div>
 
-            <nav class="sidebar-nav" id="sidebarNav">
-                <a href="#clínica-dr-mário-warde-|-cirurgia-plástica-de-alto-padrão" class="nav-link nav-level-3" data-target="clínica-dr-mário-warde-|-cirurgia-plástica-de-alto-padrão"><span class="nav-text">Clínica Dr. Mário Warde | Cirurgia Plástica de Alto Padrão</span></a>
-<a href="#🧭-índice-do-manual" class="nav-link nav-level-2" data-target="🧭-índice-do-manual"><span class="nav-text">🧭 Índice do Manual</span></a>
-<a href="#🏛️-capítulo-1-o-que-é-o-crm-a-linha-do-cuidado-do-paciente" class="nav-link nav-level-2" data-target="🏛️-capítulo-1-o-que-é-o-crm-a-linha-do-cuidado-do-paciente"><span class="nav-text">🏛️ Capítulo 1: O Que É o CRM? (A Linha do Cuidado do Paciente)</span></a>
-<a href="#🚪-capítulo-2-as-9-salas-da-nossa-clínica-entendendo-as-colunas-do-painel" class="nav-link nav-level-2" data-target="🚪-capítulo-2-as-9-salas-da-nossa-clínica-entendendo-as-colunas-do-painel"><span class="nav-text">🚪 Capítulo 2: As 9 "Salas" da Nossa Clínica (Entendendo as Colunas do Painel)</span></a>
-<a href="#1-triagem-/-descoberta-a-porta-de-entrada" class="nav-link nav-level-3" data-target="1-triagem-/-descoberta-a-porta-de-entrada"><span class="nav-text">1. Triagem / Descoberta (*"A Porta de Entrada"*)</span></a>
-<a href="#2-qualificação-concierge-a-sala-de-estar-e-acolhimento" class="nav-link nav-level-3" data-target="2-qualificação-concierge-a-sala-de-estar-e-acolhimento"><span class="nav-text">2. Qualificação Concierge (*"A Sala de Estar e Acolhimento"*)</span></a>
-<a href="#3-📅-agendado-sinal-50-pago-a-reserva-sagrada-da-agenda" class="nav-link nav-level-3" data-target="3-📅-agendado-sinal-50-pago-a-reserva-sagrada-da-agenda"><span class="nav-text">3. 📅 Agendado (Sinal 50% Pago) (*"A Reserva Sagrada da Agenda"*)</span></a>
-<a href="#4-✅-consulta-realizada-presencial-a-saída-da-sala-do-doutor" class="nav-link nav-level-3" data-target="4-✅-consulta-realizada-presencial-a-saída-da-sala-do-doutor"><span class="nav-text">4.  Consulta Realizada (Presencial) (*"A Saída da Sala do Doutor"*)</span></a>
-<a href="#5-pós-consulta-decisão-o-momento-de-reflexão-do-paciente" class="nav-link nav-level-3" data-target="5-pós-consulta-decisão-o-momento-de-reflexão-do-paciente"><span class="nav-text">5. Pós-Consulta (Decisão) (*"O Momento de Reflexão do Paciente"*)</span></a>
-<a href="#6-💎-cirurgia-fechada-depósito-o-sonho-confirmado" class="nav-link nav-level-3" data-target="6-💎-cirurgia-fechada-depósito-o-sonho-confirmado"><span class="nav-text">6. 💎 Cirurgia Fechada (Depósito) (*"O Sonho Confirmado"*)</span></a>
-<a href="#7-pré-operatório-o-cuidado-e-a-segurança-médica" class="nav-link nav-level-3" data-target="7-pré-operatório-o-cuidado-e-a-segurança-médica"><span class="nav-text">7. Pré-operatório (*"O Cuidado e a Segurança Médica"*)</span></a>
-<a href="#8-pós-operatório-/-recorrência-o-vínculo-para-toda-a-vida" class="nav-link nav-level-3" data-target="8-pós-operatório-/-recorrência-o-vínculo-para-toda-a-vida"><span class="nav-text">8. Pós-operatório / Recorrência (*"O Vínculo para Toda a Vida"*)</span></a>
-<a href="#9-🥶-arquivado-/-não-converteu-a-gaveta-de-arquivo" class="nav-link nav-level-3" data-target="9-🥶-arquivado-/-não-converteu-a-gaveta-de-arquivo"><span class="nav-text">9. 🥶 Arquivado / Não Converteu (*"A Gaveta de Arquivo"*)</span></a>
-<a href="#🪪-capítulo-3-anatomia-do-cartão-do-paciente-guia-visual-botão-por-botão" class="nav-link nav-level-2" data-target="🪪-capítulo-3-anatomia-do-cartão-do-paciente-guia-visual-botão-por-botão"><span class="nav-text">🪪 Capítulo 3: Anatomia do Cartão do Paciente (Guia Visual Botão por Botão)</span></a>
-<a href="#1-o-termômetro-de-interesse-pontuação-/-score" class="nav-link nav-level-3" data-target="1-o-termômetro-de-interesse-pontuação-/-score"><span class="nav-text">1. O Termômetro de Interesse (Pontuação / Score)</span></a>
-<a href="#2-a-tag-roxa-clínico" class="nav-link nav-level-3" data-target="2-a-tag-roxa-clínico"><span class="nav-text">2. A Tag Roxa `[CLÍNICO]`</span></a>
-<a href="#3-pílulas-de-origem-valor-da-consulta-a-matriz-dos-3-preços" class="nav-link nav-level-3" data-target="3-pílulas-de-origem-valor-da-consulta-a-matriz-dos-3-preços"><span class="nav-text">3. Pílulas de Origem & Valor da Consulta (A Matriz dos 3 Preços)</span></a>
-<a href="#4-botão-📋-copiar-texto-dr-mário-50-pix" class="nav-link nav-level-3" data-target="4-botão-📋-copiar-texto-dr-mário-50-pix"><span class="nav-text">4. Botão `[📋 Copiar Texto Dr. Mário (50% Pix)]`</span></a>
-<a href="#5-o-relógio-de-retorno-alarmes-de-follow-up" class="nav-link nav-level-3" data-target="5-o-relógio-de-retorno-alarmes-de-follow-up"><span class="nav-text">5. O Relógio de Retorno (Alarmes de Follow-up)</span></a>
-<a href="#6-script-whatsapp-edição-e-disparo-com-1-clique" class="nav-link nav-level-3" data-target="6-script-whatsapp-edição-e-disparo-com-1-clique"><span class="nav-text">6. Script WhatsApp, Edição e Disparo com 1 Clique</span></a>
-<a href="#🪄-capítulo-4-a-mágica-dos-bastidores-por-que-arrastar-o-cartão-importa-tanto" class="nav-link nav-level-2" data-target="🪄-capítulo-4-a-mágica-dos-bastidores-por-que-arrastar-o-cartão-importa-tanto"><span class="nav-text">🪄 Capítulo 4: A "Mágica" dos Bastidores: Por Que Arrastar o Cartão Importa Tanto?</span></a>
-<a href="#como-funciona-o-ciclo-da-inteligência" class="nav-link nav-level-3" data-target="como-funciona-o-ciclo-da-inteligência"><span class="nav-text">Como funciona o ciclo da inteligência:</span></a>
-<a href="#o-que-acontece-se-você-não-arrastar-o-cartão" class="nav-link nav-level-3" data-target="o-que-acontece-se-você-não-arrastar-o-cartão"><span class="nav-text">O que acontece se você NÃO arrastar o cartão:</span></a>
-<a href="#o-que-acontece-se-você-arrastar-na-hora-errada-sem-o-pix-pago" class="nav-link nav-level-3" data-target="o-que-acontece-se-você-arrastar-na-hora-errada-sem-o-pix-pago"><span class="nav-text">O que acontece se você arrastar na hora errada (sem o Pix pago):</span></a>
-<a href="#☕-capítulo-5-checklist-matinal-da-ana-paula-15-minutos-para-dominar-o-dia" class="nav-link nav-level-2" data-target="☕-capítulo-5-checklist-matinal-da-ana-paula-15-minutos-para-dominar-o-dia"><span class="nav-text">Capítulo 5: Checklist Matinal da Ana Paula (15 Minutos para Dominar o Dia)</span></a>
-<a href="#📋-o-roteiro-das-08h30" class="nav-link nav-level-3" data-target="📋-o-roteiro-das-08h30"><span class="nav-text">📋 O Roteiro das 08h30:</span></a>
-<a href="#📋-o-fechamento-das-17h30" class="nav-link nav-level-3" data-target="📋-o-fechamento-das-17h30"><span class="nav-text">📋 O Fechamento das 17h30:</span></a>
-<a href="#🩺-capítulo-6-rotina-de-consultório-do-dr-mário-warde-5-minutos-de-visão-estratégica" class="nav-link nav-level-2" data-target="🩺-capítulo-6-rotina-de-consultório-do-dr-mário-warde-5-minutos-de-visão-estratégica"><span class="nav-text">🩺 Capítulo 6: Rotina de Consultório do Dr. Mário Warde (5 Minutos de Visão Estratégica)</span></a>
-<a href="#1-antes-de-iniciar-o-atendimento-do-dia-3-minutos" class="nav-link nav-level-3" data-target="1-antes-de-iniciar-o-atendimento-do-dia-3-minutos"><span class="nav-text">1. Antes de Iniciar o Atendimento do Dia (3 Minutos):</span></a>
-<a href="#2-ao-término-do-dia-de-consultório-2-minutos" class="nav-link nav-level-3" data-target="2-ao-término-do-dia-de-consultório-2-minutos"><span class="nav-text">2. Ao Término do Dia de Consultório (2 Minutos):</span></a>
-<a href="#📜-capítulo-7-os-5-mandamentos-sagrados-do-crm-na-clínica" class="nav-link nav-level-2" data-target="📜-capítulo-7-os-5-mandamentos-sagrados-do-crm-na-clínica"><span class="nav-text">📜 Capítulo 7: Os 5 Mandamentos Sagrados do CRM na Clínica</span></a>
-<a href="#❓-capítulo-8-perguntas-frequentes-resolução-rápida-de-dúvidas" class="nav-link nav-level-2" data-target="❓-capítulo-8-perguntas-frequentes-resolução-rápida-de-dúvidas"><span class="nav-text">Capítulo 8: Perguntas Frequentes & Resolução Rápida de Dúvidas</span></a>
-<a href="#1-o-paciente-disse-que-achou-ruim-pagar-50-de-sinal-adiantado-o-que-eu-faço" class="nav-link nav-level-3" data-target="1-o-paciente-disse-que-achou-ruim-pagar-50-de-sinal-adiantado-o-que-eu-faço"><span class="nav-text">1. "O paciente disse que achou ruim pagar 50% de sinal adiantado. O que eu faço?"</span></a>
-<a href="#2-o-paciente-não-foi-à-consulta-como-aconteceu-com-o-sr-cláudio-o-que-fazer" class="nav-link nav-level-3" data-target="2-o-paciente-não-foi-à-consulta-como-aconteceu-com-o-sr-cláudio-o-que-fazer"><span class="nav-text">2. "O paciente não foi à consulta (como aconteceu com o Sr. Cláudio). O que fazer?"</span></a>
-<a href="#3-posso-alterar-o-texto-que-a-inteligência-artificial-sugeriu-no-cartão" class="nav-link nav-level-3" data-target="3-posso-alterar-o-texto-que-a-inteligência-artificial-sugeriu-no-cartão"><span class="nav-text">3. "Posso alterar o texto que a Inteligência Artificial sugeriu no cartão?"</span></a>
-<a href="#4-o-paciente-fechou-a-cirurgia-mas-só-vai-operar-daqui-a-4-meses-onde-deixo-o-cartão-dele" class="nav-link nav-level-3" data-target="4-o-paciente-fechou-a-cirurgia-mas-só-vai-operar-daqui-a-4-meses-onde-deixo-o-cartão-dele"><span class="nav-text">4. "O paciente fechou a cirurgia mas só vai operar daqui a 4 meses. Onde deixo o cartão dele?"</span></a>
+            <div class="sidebar-search-box">
+                <div class="search-shell">
+                    <span class="search-icon-text">Buscar</span>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Buscar no manual..." oninput="handleSearch(this.value)">
+                    <span class="search-key-badge">⌘K</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav-scroll" id="sidebarNav">
+                
             </nav>
+
+            <div class="sidebar-manual-switcher">
+                <a href="/playbook-comercial.html" class="manual-switcher-link">
+                    <span class="switcher-text">Playbook Comercial</span>
+                    <span class="switcher-arrow">›</span>
+                </a>
+            </div>
+
+            <div class="sidebar-footer-box">
+                <div class="concierge-status">
+                    <span class="pulse-green"></span>
+                    <span>Ana Paula • Concierge Ativa</span>
+                </div>
+                <small style="color: var(--chumbo-500); font-size: 10px;">Vila Madalena</small>
+            </div>
         </aside>
 
         <!-- Main Content Area -->
         <div class="main-wrapper">
             <header class="top-navbar">
-                <div class="top-breadcrumb">
-                    <span>Clínica Dr. Mário Warde</span> &nbsp;›&nbsp; <span>Gestão da Clínica</span> &nbsp;›&nbsp; <strong>Manual do CRM</strong>
+                <div style="display: flex; align-items: center; gap: 14px;">
+                    <button class="mobile-menu-btn" onclick="toggleMobileSidebar()" aria-label="Abrir Menu">Menu</button>
+                    <div class="top-breadcrumb">
+                        <span>Clínica Dr. Mário Warde</span> <span>›</span> <span>Gestão Médica</span> <span>›</span> <strong>Manual do CRM</strong>
+                    </div>
                 </div>
                 <div class="top-actions">
-                    <a href="/admin" class="btn-action">
-                        <span>⬅️</span> Voltar ao CRM
+                    <a href="/playbook-comercial.html" class="btn-pill btn-pill-brand" id="topBtnPlaybook" title="Acessar o Playbook Comercial Concierge">
+                        Playbook Comercial
                     </a>
-                    <button class="btn-action" onclick="window.print()">
-                        <span>🖨️</span> Imprimir / PDF
+                    <a href="/admin" class="btn-pill">
+                        Voltar ao CRM
+                    </a>
+                    <button class="btn-pill" onclick="window.print()">
+                        Imprimir / PDF
                     </button>
-                    <button class="btn-action btn-action-primary" onclick="copyDrMarioScript()">
-                        <span>📋</span> Copiar Script Dr. Mário
+                    <button class="btn-pill btn-pill-primary" onclick="copyDrMarioScriptCard(this)">
+                        Copiar Script Dr. Mário
                     </button>
                 </div>
             </header>
 
             <main class="document-canvas" id="docCanvas">
-                <div class="doc-header-card">
-                    <div class="doc-subtitle-pre">Hospitalidade Médica & Gestão da Jornada</div>
-                    <h1 class="doc-title">Manual de Boas Práticas do CRM</h1>
-                    <p style="color: var(--text-secondary); font-size: 16px;">
-                        Guia prático e humanizado para a <strong>Ana Paula (Concierge)</strong> e o <strong>Dr. Mário Warde (Cirurgião Plástico)</strong> dominarem a ferramenta com serenidade e alta eficiência.
+                <!-- Hero Card Editorial -->
+                <div class="doc-hero-card">
+                    <div class="doc-hero-pretitle">
+                        <span>HOSPITALIDADE MÉDICA E GOVERNANÇA DE CONSULTÓRIO</span>
+                    </div>
+                    <h1 class="doc-hero-title">Manual de Boas Práticas do CRM</h1>
+                    <p class="doc-hero-desc">
+                        O prontuário inteligente de hospitalidade e relacionamento da clínica, desenhado com exclusividade para a <strong>Concierge Ana Paula</strong> e o <strong>Dr. Mário Warde</strong>.
                     </p>
-                    <div class="doc-meta-tags">
-                        <span class="doc-tag doc-tag-highlight">🟢 Guia Oficial 2026</span>
-                        <span class="doc-tag">📅 Atualizado em 14/10/2026</span>
-                        <span class="doc-tag">👩‍💼 Concierge: Ana Paula</span>
-                        <span class="doc-tag">🩺 Cirurgião: Dr. Mário Warde</span>
+
+                    <!-- Personas Dock -->
+                    <div class="personas-dock">
+                        <div class="persona-item">
+                            <div class="persona-initials-badge">AP</div>
+                            <div class="persona-details">
+                                <span class="persona-name">Ana Paula • Concierge Médica</span>
+                                <span class="persona-role">Acolhimento, qualificação White Glove e checklist diário</span>
+                            </div>
+                        </div>
+                        <div class="persona-item">
+                            <div class="persona-initials-badge">MW</div>
+                            <div class="persona-details">
+                                <span class="persona-name">Dr. Mário Warde • Cirurgião Plástico</span>
+                                <span class="persona-role">Governança clínica, inteligência de pós-consulta e fechamento</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hero-meta-strip">
+                        <span class="hero-pill-meta hero-pill-highlight">Guia Homologado 2026</span>
+                        <span class="hero-pill-meta">Atualizado em 15/Out/2026</span>
+                        <span class="hero-pill-meta">Tempo de Leitura: ~10 minutos</span>
+                        <span class="hero-pill-meta">Rua Jericó, 255 - Vila Madalena</span>
                     </div>
                 </div>
 
-                <h1 class="main-title">Manual de Boas Práticas e Operação do CRM</h1>
-<h3 id="clínica-dr-mário-warde-|-cirurgia-plástica-de-alto-padrão" class="subsection-title">Clínica Dr. Mário Warde | Cirurgia Plástica de Alto Padrão</h3>
+                <!-- Conteúdo Parseado do Markdown -->
+                <h3 id="clínica-dr-mário-warde-|-cirurgia-plástica-de-alto-padrão" class="subsection-title">Clínica Dr. Mário Warde | Cirurgia Plástica de Alto Padrão</h3>
 <p class="luxury-p"><strong>Guia Prático de Hospitalidade Médica & Gestão da Jornada do Paciente</strong></p>
 <p class="luxury-p"><em>Dedicado à Ana Paula (Concierge) e ao Dr. Mário Warde</em></p>
-<hr class="luxury-divider" />
-<div class="callout callout-note"><div class="callout-icon">💌</div><div class="callout-content"><strong>Uma Carta de Boas-Vindas aos Guardiões da Clínica</strong>
+<div class="luxury-hairline"></div>
+
+            <div class="welcome-letter-card">
+                <div class="welcome-letter-badge">MENSAGEM DOS FUNDADORES</div>
+                <div class="welcome-letter-body"><strong>Uma Carta de Boas-Vindas aos Guardiões da Clínica</strong>
 Este manual foi escrito especialmente para vocês. Aqui não existem termos complicados de tecnologia, vendas ou marketing. O nosso CRM não é uma planilha fria nem um "funil de vendas"; ele é o <strong>Prontuário de Relacionamento e Hospitalidade</strong> da nossa clínica.
 Cada cartão que vocês veem na tela representa uma vida, um sonho de transformação física, uma dor profunda que o paciente muitas vezes esconde do mundo, e a confiança depositada nas mãos do Dr. Mário Warde.
-O objetivo desta ferramenta é simples: <strong>fazer com que nenhum paciente seja esquecido, que o tempo da Ana seja produtivo e sereno, e que a agenda do Dr. Mário seja blindada contra furos e atrasos.</strong></div></div>
-<hr class="luxury-divider" />
-<div class="section-divider"></div><h2 id="🧭-índice-do-manual" class="section-title"><span class="anchor-tag">#</span>🧭 Índice do Manual</h2>
+O objetivo desta ferramenta é simples: <strong>fazer com que nenhum paciente seja esquecido, que o tempo da Ana seja produtivo e sereno, e que a agenda do Dr. Mário seja blindada contra furos e atrasos.</strong></div>
+            </div>
+            
+<div class="luxury-hairline"></div>
+
+            <div class="section-anchor-wrap" id="índice-do-manual">
+                <div class="section-divider"></div>
+                <div class="section-header-row">
+                    <h2 class="section-title">Índice do Manual</h2>
+                    <a href="#índice-do-manual" class="anchor-link-pill" title="Link permanente para esta seção">#</a>
+                </div>
+            </div>
+            
 <ol class="luxury-numbered-list">
 <li><a href="#capitulo-1-o-que-e-o-crm" class="doc-link">O Que É o CRM? (A Linha do Cuidado do Paciente)</a></li>
-<li><a href="#capitulo-2-as-9-salas-da-clinica" class="doc-link">As 9 "Salas" da Nossa Clínica (Entendendo as Colunas do Painel)</a></li>
+<li><a href="#capitulo-2-as-9-salas-da-clinica" class="doc-link">As 9 Salas da Nossa Clínica (Entendendo as Colunas do Painel)</a></li>
 <li><a href="#capitulo-3-anatomia-do-cartao-do-paciente" class="doc-link">Anatomia do Cartão do Paciente (Guia Visual Botão por Botão)</a></li>
-<li><a href="#capitulo-4-a-magica-dos-bastidores" class="doc-link">A "Mágica" dos Bastidores: Por Que Arrastar o Cartão Importa Tanto?</a></li>
+<li><a href="#capitulo-4-a-magica-dos-bastidores" class="doc-link">A Mágica dos Bastidores: Por Que Arrastar o Cartão Importa Tanto?</a></li>
 <li><a href="#capitulo-5-checklist-matinal-da-ana" class="doc-link">Checklist Matinal da Ana Paula (15 Minutos para Dominar o Dia)</a></li>
 <li><a href="#capitulo-6-rotina-do-dr-mario" class="doc-link">Rotina de Consultório do Dr. Mário Warde (5 Minutos de Visão Estratégica)</a></li>
 <li><a href="#capitulo-7-os-5-mandamentos-sagrados" class="doc-link">Os 5 Mandamentos Sagrados do CRM na Clínica</a></li>
 <li><a href="#capitulo-8-perguntas-frequentes" class="doc-link">Perguntas Frequentes & Resolução Rápida de Dúvidas</a></li>
 </ol>
-<hr class="luxury-divider" />
+<div class="luxury-hairline"></div>
 <p class="luxury-p"><a id="capitulo-1-o-que-e-o-crm"></a></p>
-<div class="section-divider"></div><h2 id="🏛️-capítulo-1-o-que-é-o-crm-a-linha-do-cuidado-do-paciente" class="section-title"><span class="anchor-tag">#</span>🏛️ Capítulo 1: O Que É o CRM? (A Linha do Cuidado do Paciente)</h2>
+
+            <div class="section-anchor-wrap" id="capítulo-1-o-que-é-o-crm-a-linha-do-cuidado-do-paciente">
+                <div class="section-divider"></div>
+                <div class="section-header-row">
+                    <h2 class="section-title">Capítulo 1: O Que É o CRM? (A Linha do Cuidado do Paciente)</h2>
+                    <a href="#capítulo-1-o-que-é-o-crm-a-linha-do-cuidado-do-paciente" class="anchor-link-pill" title="Link permanente para esta seção">#</a>
+                </div>
+            </div>
+            
 <p class="luxury-p">No mundo corporativo, as pessoas costumam chamar isso de <em>"pipeline"</em> ou <em>"funil de vendas"</em>. Na nossa clínica boutique, chamamos de <strong>Linha do Cuidado e Hospitalidade Médica</strong>.</p>
 <p class="luxury-p">Imagine o CRM como o <strong>Grande Fichário Eletrônico da Recepção da Vila Madalena</strong>, mas com superpoderes:</p>
 <ul class="luxury-list">
@@ -806,20 +2144,249 @@ O objetivo desta ferramenta é simples: <strong>fazer com que nenhum paciente se
 <li><strong>Ele tem alarmes visuais:</strong> Avisa a Ana com cores vibrantes quando um retorno está atrasado (vermelho) ou deve ser feito hoje (laranja).</li>
 <li><strong>Ele protege o Dr. Mário:</strong> Garante que o doutor só se sente à mesa para atender pacientes que realmente têm perfil e já confirmaram a reserva com compromisso financeiro (o sinal de 50%).</li>
 </ul>
-<blockquote class="luxury-quote"><strong>Em resumo:</strong> O CRM é o assistente invisível que cuida da organização da clínica para que a Ana e o Dr. Mário possam focar no que fazem de melhor: acolher, ouvir e transformar a vida dos pacientes.</blockquote>
-<hr class="luxury-divider" />
+
+            <div class="luxury-quote-box">
+                <div class="quote-accent-bar"></div>
+                <div class="quote-text"><strong>Em resumo:</strong> O CRM é o assistente invisível que cuida da organização da clínica para que a Ana e o Dr. Mário possam focar no que fazem de melhor: acolher, ouvir e transformar a vida dos pacientes.</div>
+            </div>
+            
+<div class="luxury-hairline"></div>
 <p class="luxury-p"><a id="capitulo-2-as-9-salas-da-clinica"></a></p>
-<div class="section-divider"></div><h2 id="🚪-capítulo-2-as-9-salas-da-nossa-clínica-entendendo-as-colunas-do-painel" class="section-title"><span class="anchor-tag">#</span>🚪 Capítulo 2: As 9 "Salas" da Nossa Clínica (Entendendo as Colunas do Painel)</h2>
+
+            <div class="section-anchor-wrap" id="capítulo-2-as-9-salas-da-nossa-clínica-entendendo-as-colunas-do-painel">
+                <div class="section-divider"></div>
+                <div class="section-header-row">
+                    <h2 class="section-title">Capítulo 2: As 9 Salas da Nossa Clínica (Entendendo as Colunas do Painel)</h2>
+                    <a href="#capítulo-2-as-9-salas-da-nossa-clínica-entendendo-as-colunas-do-painel" class="anchor-link-pill" title="Link permanente para esta seção">#</a>
+                </div>
+            </div>
+            
 <p class="luxury-p">Quando você entra no painel <code class="inline-code">/admin</code>, vê nove colunas organizadas da esquerda para a direita. Pense nelas não como colunas de computador, mas como as <strong>salas pelas quais o paciente caminha dentro da nossa clínica</strong>:</p>
-<div class="mermaid-diagram"><pre class="mermaid">flowchart LR
-    A["1. Triagem<br/>(Novo Contato)"] --> B["2. Qualificação<br/>(Acolhimento)"]
-    B --> C["3. 📅 Agendado<br/>(Sinal 50% Pago)"]
-    C --> D["4. ✅ Consulta<br/>(Quitação Presencial)"]
-    D --> E["5. Pós-Consulta<br/>(Decisão do Sonho)"]
-    E --> F["6. 💎 Cirurgia Fechada<br/>(Depósito)"]
-    F --> G["7. Pré-op<br/>(Exames)"]
-    G --> H["8. Pós-op<br/>(Cuidado Vitalício)"]
-    B -.-> I["9. 🥶 Arquivado<br/>(Gaveta de Arquivo)"]</pre></div>
+<div class="rooms-pipeline-container">
+<div class="rooms-pipeline-header">
+<span class="pipeline-tag">ARQUITETURA DE HOSPITALIDADE</span>
+<h3 class="pipeline-title">A Jornada do Paciente nas 9 Salas da Vila Madalena</h3>
+<p class="pipeline-subtitle">As nove salas operacionais pelas quais cada paciente é conduzido com dedicação e controle financeiro rigoroso.</p>
+</div>
+<div class="rooms-grid">
+
+        <div class="room-card">
+            <div class="room-card-top">
+                <span class="room-badge-num">01</span>
+                <span class="room-badge-clean">Porta de Entrada</span>
+            </div>
+            <h4 class="room-name">Triagem / Descoberta</h4>
+            <p class="room-desc">Primeiro contato pelo site ou WhatsApp. Acolhimento cordial nos primeiros 10 a 15 minutos.</p>
+            <div class="room-footer">
+                <div class="room-meta-item">
+                    <span class="meta-label">Trava de Entrada:</span>
+                    <strong class="meta-value">SLA 10 a 15 minutos</strong>
+                </div>
+                <div class="room-meta-item">
+                    <span class="meta-label">Inteligência:</span>
+                    <span class="meta-tag-capi">Sem CAPI</span>
+                </div>
+                <div class="room-meta-item">
+                    <span class="meta-label">Responsável:</span>
+                    <span class="meta-role">Ana Paula</span>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="room-card">
+            <div class="room-card-top">
+                <span class="room-badge-num">02</span>
+                <span class="room-badge-clean">Sala de Acolhimento</span>
+            </div>
+            <h4 class="room-name">Qualificação Concierge</h4>
+            <p class="room-desc">Conversa ativa sobre histórico e desejos cirúrgicos. Abriga também os resgates VIP com data agendada.</p>
+            <div class="room-footer">
+                <div class="room-meta-item">
+                    <span class="meta-label">Trava de Entrada:</span>
+                    <strong class="meta-value">Pergunta de Ouro</strong>
+                </div>
+                <div class="room-meta-item">
+                    <span class="meta-label">Inteligência:</span>
+                    <span class="meta-tag-capi">Lead Qualificado</span>
+                </div>
+                <div class="room-meta-item">
+                    <span class="meta-label">Responsável:</span>
+                    <span class="meta-role">Ana Paula</span>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="room-card room-card-highlight">
+            <div class="room-card-top">
+                <span class="room-badge-num">03</span>
+                <span class="room-badge-clean">Reserva de Exclusividade</span>
+            </div>
+            <h4 class="room-name">Agendado</h4>
+            <p class="room-desc">Horário formalmente travado com intervalo amplo e sem sobreposição de pacientes na clínica.</p>
+            <div class="room-footer">
+                <div class="room-meta-item">
+                    <span class="meta-label">Trava de Entrada:</span>
+                    <strong class="meta-value">Sinal 50% Pix Pago (R$ 175 ou R$ 425)</strong>
+                </div>
+                <div class="room-meta-item">
+                    <span class="meta-label">Inteligência:</span>
+                    <span class="meta-tag-capi">Schedule (R$ 175 / R$ 425)</span>
+                </div>
+                <div class="room-meta-item">
+                    <span class="meta-label">Responsável:</span>
+                    <span class="meta-role">Ana Paula</span>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="room-card room-card-highlight">
+            <div class="room-card-top">
+                <span class="room-badge-num">04</span>
+                <span class="room-badge-clean">Conclusão de Consultório</span>
+            </div>
+            <h4 class="room-name">Consulta Realizada</h4>
+            <p class="room-desc">Atendimento presencial concluído na Vila Madalena com quitação dos 50% restantes na recepção.</p>
+            <div class="room-footer">
+                <div class="room-meta-item">
+                    <span class="meta-label">Trava de Entrada:</span>
+                    <strong class="meta-value">Saldo Quitado na Recepção</strong>
+                </div>
+                <div class="room-meta-item">
+                    <span class="meta-label">Inteligência:</span>
+                    <span class="meta-tag-capi">Purchase (R$ 175 / R$ 425)</span>
+                </div>
+                <div class="room-meta-item">
+                    <span class="meta-label">Responsável:</span>
+                    <span class="meta-role">Recepção / Ana</span>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="room-card">
+            <div class="room-card-top">
+                <span class="room-badge-num">05</span>
+                <span class="room-badge-clean">Reflexão do Paciente</span>
+            </div>
+            <h4 class="room-name">Pós-Consulta (Decisão)</h4>
+            <p class="room-desc">Paciente com plano cirúrgico em mãos. Follow-up atencioso White Glove a cada 3 a 5 dias.</p>
+            <div class="room-footer">
+                <div class="room-meta-item">
+                    <span class="meta-label">Trava de Entrada:</span>
+                    <strong class="meta-value">Follow-up a cada 3-5 dias</strong>
+                </div>
+                <div class="room-meta-item">
+                    <span class="meta-label">Inteligência:</span>
+                    <span class="meta-tag-capi">Pipeline Cirúrgico</span>
+                </div>
+                <div class="room-meta-item">
+                    <span class="meta-label">Responsável:</span>
+                    <span class="meta-role">Ana & Dr. Mário</span>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="room-card room-card-highlight">
+            <div class="room-card-top">
+                <span class="room-badge-num">06</span>
+                <span class="room-badge-clean">Confirmação do Sonho</span>
+            </div>
+            <h4 class="room-name">Cirurgia Fechada</h4>
+            <p class="room-desc">Entrada cirúrgica quitada e data reservada no hospital (Einstein, Sírio ou Vila Nova Star).</p>
+            <div class="room-footer">
+                <div class="room-meta-item">
+                    <span class="meta-label">Trava de Entrada:</span>
+                    <strong class="meta-value">Depósito Cirúrgico Recebido</strong>
+                </div>
+                <div class="room-meta-item">
+                    <span class="meta-label">Inteligência:</span>
+                    <span class="meta-tag-capi">CRM_Paciente_Cirurgia (R$ 75k+)</span>
+                </div>
+                <div class="room-meta-item">
+                    <span class="meta-label">Responsável:</span>
+                    <span class="meta-role">Dr. Mário & Ana</span>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="room-card">
+            <div class="room-card-top">
+                <span class="room-badge-num">07</span>
+                <span class="room-badge-clean">Segurança Médica</span>
+            </div>
+            <h4 class="room-name">Pré-operatório</h4>
+            <p class="room-desc">Exames de sangue, risco cardiológico, ultrassonografias e fotografias médicas de planejamento.</p>
+            <div class="room-footer">
+                <div class="room-meta-item">
+                    <span class="meta-label">Trava de Entrada:</span>
+                    <strong class="meta-value">Risco Cirúrgico Homologado</strong>
+                </div>
+                <div class="room-meta-item">
+                    <span class="meta-label">Inteligência:</span>
+                    <span class="meta-tag-capi">Etapa Clínica</span>
+                </div>
+                <div class="room-meta-item">
+                    <span class="meta-label">Responsável:</span>
+                    <span class="meta-role">Equipe Médica</span>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="room-card">
+            <div class="room-card-top">
+                <span class="room-badge-num">08</span>
+                <span class="room-badge-clean">Cuidado Vitalício</span>
+            </div>
+            <h4 class="room-name">Pós-operatório</h4>
+            <p class="room-desc">Acompanhamento cirúrgico contínuo: curativos, drenagens linfáticas e revisões de 7 a 180 dias.</p>
+            <div class="room-footer">
+                <div class="room-meta-item">
+                    <span class="meta-label">Trava de Entrada:</span>
+                    <strong class="meta-value">Protocolo de Recuperação</strong>
+                </div>
+                <div class="room-meta-item">
+                    <span class="meta-label">Inteligência:</span>
+                    <span class="meta-tag-capi">Fidelização e Indicações</span>
+                </div>
+                <div class="room-meta-item">
+                    <span class="meta-label">Responsável:</span>
+                    <span class="meta-role">Equipe Multidisciplinar</span>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="room-card">
+            <div class="room-card-top">
+                <span class="room-badge-num">09</span>
+                <span class="room-badge-clean">Registro Preservado</span>
+            </div>
+            <h4 class="room-name">Arquivado</h4>
+            <p class="room-desc">Contatos sem perfil no momento ou com adiamento de planos. Histórico preservado com respeito.</p>
+            <div class="room-footer">
+                <div class="room-meta-item">
+                    <span class="meta-label">Trava de Entrada:</span>
+                    <strong class="meta-value">Preservação sem Exclusão</strong>
+                </div>
+                <div class="room-meta-item">
+                    <span class="meta-label">Inteligência:</span>
+                    <span class="meta-tag-capi">Sem Disparo</span>
+                </div>
+                <div class="room-meta-item">
+                    <span class="meta-label">Responsável:</span>
+                    <span class="meta-role">Arquivo Geral</span>
+                </div>
+            </div>
+        </div>
+        
+</div>
+</div>
 <h3 id="1-triagem-/-descoberta-a-porta-de-entrada" class="subsection-title">1. Triagem / Descoberta (<em>"A Porta de Entrada"</em>)</h3>
 <ul class="luxury-list">
 <li><strong>Quem está aqui:</strong> O paciente que acabou de preencher o formulário no nosso site ou enviou a primeira mensagem no WhatsApp.</li>
@@ -831,12 +2398,12 @@ O objetivo desta ferramenta é simples: <strong>fazer com que nenhum paciente se
 <li><strong>Quem está aqui:</strong> O paciente em conversa ativa. A Ana já deu oi e agora está investigando a queixa médica com a pergunta de ouro: <em>"O que mais te incomoda hoje no seu corpo e qual é o seu objetivo com a cirurgia?"</em>.</li>
 <li><strong>Casos Especiais nesta Sala:</strong> Pacientes que precisaram reagendar ou que estamos em processo de <strong>resgate VIP</strong> (como o Sr. Cláudio de Luna) também descansam aqui, sempre com o reloginho de retorno configurado.</li>
 </ul>
-<h3 id="3-📅-agendado-sinal-50-pago-a-reserva-sagrada-da-agenda" class="subsection-title">3. 📅 Agendado (Sinal 50% Pago) (<em>"A Reserva Sagrada da Agenda"</em>)</h3>
+<h3 id="3-agendado-sinal-50-pago-a-reserva-sagrada-da-agenda" class="subsection-title">3. Agendado (Sinal 50% Pago) (<em>"A Reserva Sagrada da Agenda"</em>)</h3>
 <ul class="luxury-list">
 <li><strong>QUANDO MOVER PARA CÁ:</strong> Apenas e exclusivamente quando o paciente <strong>já pagou o sinal de 50% da consulta via Pix</strong> (R$ 175 para Internet/Indicação ou R$ 425 para Indicação Médica) e o comprovante foi recebido.</li>
 <li><strong>O que significa:</strong> O horário do Dr. Mário está oficialmente bloqueado para ele. Não haverá sobreposição com outro paciente. O paciente recebe o endereço completo da Rua Jericó e as orientações de manobrista.</li>
 </ul>
-<h3 id="4-✅-consulta-realizada-presencial-a-saída-da-sala-do-doutor" class="subsection-title">4. ✅ Consulta Realizada (Presencial) (<em>"A Saída da Sala do Doutor"</em>)</h3>
+<h3 id="4-consulta-realizada-presencial-a-saída-da-sala-do-doutor" class="subsection-title">4. Consulta Realizada (Presencial) (<em>"A Saída da Sala do Doutor"</em>)</h3>
 <ul class="luxury-list">
 <li><strong>QUANDO MOVER PARA CÁ:</strong> No exato momento em que a consulta presencial termina na clínica e a recepcionista/Ana acerta o <strong>saldo restante dos outros 50%</strong> (R$ 175 ou R$ 425) na máquina de cartão ou Pix.</li>
 <li><strong>O que significa:</strong> O ciclo da Primeira Consulta foi concluído com sucesso e respeito mútuo.</li>
@@ -846,7 +2413,7 @@ O objetivo desta ferramenta é simples: <strong>fazer com que nenhum paciente se
 <li><strong>Quem está aqui:</strong> O paciente já saiu da clínica, amou o Dr. Mário, está com a pasta e o planejamento cirúrgico em mãos e está conversando com a família, organizando férias ou aguardando exames prévios.</li>
 <li><strong>Papel da Ana:</strong> Fazer o acompanhamento afetuoso e atencioso (Follow-up White Glove) a cada 3 a 5 dias, tirando dúvidas com o doutor e facilitando a tomada de decisão.</li>
 </ul>
-<h3 id="6-💎-cirurgia-fechada-depósito-o-sonho-confirmado" class="subsection-title">6. 💎 Cirurgia Fechada (Depósito) (<em>"O Sonho Confirmado"</em>)</h3>
+<h3 id="6-cirurgia-fechada-depósito-o-sonho-confirmado" class="subsection-title">6. Cirurgia Fechada (Depósito) (<em>"O Sonho Confirmado"</em>)</h3>
 <ul class="luxury-list">
 <li><strong>QUANDO MOVER PARA CÁ:</strong> O paciente efetuou o depósito/sinal da cirurgia plástica e reservou a data do bloco cirúrgico no hospital (Einstein, Sírio ou Vila Nova Star).</li>
 <li><strong>Comemoração da Clínica:</strong> Esta é a grande vitória do trabalho conjunto entre o tráfego, o acolhimento da Ana e a maestria médica do Dr. Mário.</li>
@@ -859,52 +2426,189 @@ O objetivo desta ferramenta é simples: <strong>fazer com que nenhum paciente se
 <ul class="luxury-list">
 <li><strong>Quem está aqui:</strong> Paciente já operado, em fase de curativos, drenagens linfáticas, retorno de 7, 15, 30, 90 e 180 dias. É onde nascem os depoimentos espontâneos e as indicações de amigas e familiares.</li>
 </ul>
-<h3 id="9-🥶-arquivado-/-não-converteu-a-gaveta-de-arquivo" class="subsection-title">9. 🥶 Arquivado / Não Converteu (<em>"A Gaveta de Arquivo"</em>)</h3>
+<h3 id="9-arquivado-/-não-converteu-a-gaveta-de-arquivo" class="subsection-title">9. Arquivado / Não Converteu (<em>"A Gaveta de Arquivo"</em>)</h3>
 <ul class="luxury-list">
 <li><strong>Quem está aqui:</strong> Paciente que declarou que não tem interesse no momento, número incorreto/inexistente ou pessoas que buscavam tratamentos que o Dr. Mário não realiza pelo SUS/convênio. Não apagamos o registro: ele fica guardado com respeito.</li>
 </ul>
-<hr class="luxury-divider" />
+<div class="luxury-hairline"></div>
 <p class="luxury-p"><a id="capitulo-3-anatomia-do-cartao-do-paciente"></a></p>
-<div class="section-divider"></div><h2 id="🪪-capítulo-3-anatomia-do-cartão-do-paciente-guia-visual-botão-por-botão" class="section-title"><span class="anchor-tag">#</span>🪪 Capítulo 3: Anatomia do Cartão do Paciente (Guia Visual Botão por Botão)</h2>
-<p class="luxury-p">Cada cartão retangular no painel é como uma <strong>Ficha de Prontuário Inteligente</strong>. Vamos entender o que significa cada símbolo e como utilizá-los:</p>
-<div class="code-card"><div class="code-header"><span class="code-lang">Visualização do Cartão</span><button class="btn-copy-mini" onclick="copyCardCode(this)">📋 Copiar</button></div><pre class="code-body"><code>┌─────────────────────────────────────────────────────────────┐
-│ 🔴 145 pts   [INSTAGRAM]   [CLÍNICO]          14/10, 10:20  │
-│                                                             │
-│ Cláudio de Luna                                             │
-│ +55 11 99676-8256                                           │
-│ 🩺 Abdômen e Contorno Peito / Tórax                         │
-│ ⏰ Imediato (próximos 30-60 dias)                           │
-│                                                             │
-│ 🏷️ ORIGEM & VALOR:                                          │
-│ [🌐 Internet]  [👥 Indicação]  [🩺 Médica/VIP]             │
-│ [📋 Copiar Texto Dr. Mário (50% Pix)]                       │
-│                                                             │
-│ ⏰ RETORNO: 16/10/2026 - Resgate VIP Sexta-feira            │
-│                                                             │
-│ 💬 SCRIPT WHATS / AÇÃO:   [✨ IA]  [✏️ Editar]  [📋 Copiar]  │
-│ "Olá, Sr. Cláudio! Passando para saber..."   [🟢 WhatsApp]  │
-└─────────────────────────────────────────────────────────────┘</code></pre></div>
+
+            <div class="section-anchor-wrap" id="capítulo-3-anatomia-do-cartão-do-paciente-guia-visual-botão-por-botão">
+                <div class="section-divider"></div>
+                <div class="section-header-row">
+                    <h2 class="section-title">Capítulo 3: Anatomia do Cartão do Paciente (Guia Visual Botão por Botão)</h2>
+                    <a href="#capítulo-3-anatomia-do-cartão-do-paciente-guia-visual-botão-por-botão" class="anchor-link-pill" title="Link permanente para esta seção">#</a>
+                </div>
+            </div>
+            
+<p class="luxury-p">Cada cartão retangular no painel é como uma <strong>Ficha de Prontuário Inteligente</strong>. Vamos entender o que significa cada elemento e como utilizá-los:</p>
+
+    <div class="crm-mockup-wrapper">
+        <div class="crm-mockup-header-bar">
+            <div class="mockup-header-title">
+                <span class="mockup-indicator-dot"></span>
+                <strong>Demonstração do Prontuário Inteligente de Relacionamento</strong>
+                <span class="mockup-badge-live">Interativo</span>
+            </div>
+            <div class="mockup-tip">Clique nas opções de consulta para verificar a atualização de valores</div>
+        </div>
+
+        <div class="crm-card-preview" id="crmCardPreview">
+            <!-- Header do Card -->
+            <div class="crm-card-head">
+                <div class="crm-card-tags">
+                    <span class="crm-score-pill crm-score-hot" title="Termômetro de Interesse Máximo">
+                        HOT • 145 pts
+                    </span>
+                    <span class="crm-source-tag">INSTAGRAM</span>
+                    <span class="crm-clinical-tag">CLÍNICO</span>
+                </div>
+                <span class="crm-date-tag">14/10, 10:20 (Hoje)</span>
+            </div>
+
+            <!-- Dados Principais do Paciente -->
+            <div class="crm-patient-profile">
+                <div class="crm-patient-avatar">CL</div>
+                <div class="crm-patient-info">
+                    <h4 class="crm-patient-name">Sr. Cláudio de Luna <span class="crm-verified-badge">VIP</span></h4>
+                    <div class="crm-patient-phone">+55 11 99676-8256 • São Paulo (Vila Nova Conceição)</div>
+                </div>
+            </div>
+
+            <div class="crm-patient-meta-grid">
+                <div class="crm-meta-cell">
+                    <span class="cell-label">Procedimento Desejado</span>
+                    <span class="cell-data">Abdômen e Contorno Peito / Tórax</span>
+                </div>
+                <div class="crm-meta-cell">
+                    <span class="cell-label">Urgência Declarada</span>
+                    <span class="cell-data">Imediato (próximos 30-60 dias)</span>
+                </div>
+            </div>
+
+            <!-- Matriz de 3 Preços Interativa -->
+            <div class="crm-pricing-box">
+                <div class="pricing-header">
+                    <span class="pricing-label">ORIGEM E VALOR DA CONSULTA (MATRIZ OFICIAL):</span>
+                    <span class="pricing-rule-hint">Selecione para calibrar o sinal</span>
+                </div>
+                <div class="pricing-pills-row">
+                    <button type="button" class="pricing-pill active" id="pillInternet" onclick="selectPricing('internet', 350, 175, this)">
+                        <span class="pill-title">Internet</span>
+                        <span class="pill-price">R$ 350 • Sinal R$ 175</span>
+                    </button>
+                    <button type="button" class="pricing-pill" id="pillIndicacao" onclick="selectPricing('indicacao', 350, 175, this)">
+                        <span class="pill-title">Indicação</span>
+                        <span class="pill-price">R$ 350 • Sinal R$ 175</span>
+                    </button>
+                    <button type="button" class="pricing-pill" id="pillMedica" onclick="selectPricing('medica', 850, 425, this)">
+                        <span class="pill-title">Médica / VIP</span>
+                        <span class="pill-price">R$ 850 • Sinal R$ 425</span>
+                    </button>
+                </div>
+                <div class="pricing-status-summary" id="pricingSummary">
+                    Consulta <strong>Internet</strong>: Total <strong>R$ 350,00</strong> | Reserva de 50% via Pix: <strong class="highlight-deposit">R$ 175,00</strong> (Disparo Meta CAPI: <code>Schedule</code> R$ 175)
+                </div>
+            </div>
+
+            <!-- Botão do Script 50% Pix do Dr. Mário -->
+            <div class="crm-script-copy-cta">
+                <button type="button" class="btn-copy-dr-mario-card" onclick="copyDrMarioScriptCard(this)">
+                    Copiar Texto Dr. Mário (50% Pix & Reversão Cirúrgica)
+                </button>
+                <small class="copy-helper-text">Copia o roteiro oficial que ancora os 50% de reserva e a reversão de 100% no procedimento cirúrgico.</small>
+            </div>
+
+            <!-- Relógio de Retorno / Follow-up -->
+            <div class="crm-fup-box crm-fup-warning">
+                <div class="fup-left">
+                    <div>
+                        <div class="fup-title">Retorno Agendado: <strong>Sexta-feira (16/10) às 10h00</strong></div>
+                        <div class="fup-note">Motivo: <em>Resgate VIP Sr. Cláudio (Oferta dos 2 horários privativos)</em></div>
+                    </div>
+                </div>
+                <span class="fup-badge-state">Prioritário</span>
+            </div>
+
+            <!-- Script Box & Disparos -->
+            <div class="crm-action-box">
+                <div class="action-box-head">
+                    <span class="action-label">SCRIPT ATIVO NO PRONTUÁRIO:</span>
+                    <div class="action-head-tools">
+                        <button class="tool-btn" onclick="showToast('Sugestão regenerada pelo modelo de inteligência!')">IA</button>
+                        <button class="tool-btn" onclick="toggleEditScript()">Editar</button>
+                        <button class="tool-btn" onclick="copyActiveCardDraft()">Copiar</button>
+                    </div>
+                </div>
+                <div class="action-draft-text" id="actionDraftText">
+                    "Olá, Sr. Cláudio! Passando para checar como estão seus horários. Reorganizamos a agenda da próxima semana e temos duas janelas exclusivas para sua consulta com o Dr. Mário: Quarta (21/10) às 15h30 ou Quinta (22/10) às 16h00. Qual fica melhor para o senhor?"
+                </div>
+                <div class="action-footer-row">
+                    <a href="https://wa.me/5511996768256" target="_blank" class="btn-whats-action" onclick="showToast('Abrindo WhatsApp Web com número e mensagem preenchidos!')">
+                        <span>Conversar no WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Legenda explicativa do cartão -->
+        <div class="crm-hotspots-legend">
+            <h5 class="legend-title">Estrutura e Elementos-Chave do Cartão:</h5>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <span class="legend-badge">01</span>
+                    <div><strong>Termômetro (Score):</strong> HOT (atendimento prioritário em menos de 10 min); WARM (atendimento consultivo); COLD (curioso).</div>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-badge">02</span>
+                    <div><strong>Tag [CLÍNICO]:</strong> Indica botox, preenchimento ou peeling (ajuste de tom para procedimento ambulatorial).</div>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-badge">03</span>
+                    <div><strong>Pílulas de Valor:</strong> Ajustam o sinal para R$ 175 (Geral) ou R$ 425 (VIP/Médicos) e transmitem à Meta CAPI.</div>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-badge">04</span>
+                    <div><strong>Copiar Script 50%:</strong> Roteiro oficial que blinda a reserva e explica a reversão integral em crédito cirúrgico.</div>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-badge">05</span>
+                    <div><strong>Relógio de Retorno:</strong> Borda Vermelha = Atrasado; Borda Laranja = Retorno Hoje; Borda Cinza = Futuro.</div>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-badge">06</span>
+                    <div><strong>Botão WhatsApp:</strong> Abre o WhatsApp Web diretamente com o número e o roteiro prontos para envio.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 <h3 id="1-o-termômetro-de-interesse-pontuação-/-score" class="subsection-title">1. O Termômetro de Interesse (Pontuação / Score)</h3>
-<p class="luxury-p">No canto superior esquerdo, você verá uma bolinha colorida e um número:</p>
+<p class="luxury-p">No canto superior esquerdo, você verá a indicação de temperatura e a pontuação:</p>
 <ul class="luxury-list">
-<li>🔴 <strong>Vermelho (HOT - Mais de 130 pts):</strong> <strong>Paciente de Altíssimo Valor!</strong> Tem queixa cirúrgica clara, urgência imediata e mora em bairro nobre de São Paulo. Deve ser atendido em <strong>menos de 10 minutos</strong> com prioridade máxima.</li>
-<li>🟡 <strong>Amarelo (WARM - 60 a 130 pts):</strong> Paciente interessado, mas com plano para os próximos 3 a 6 meses. Acolhimento caloroso e consultivo.</li>
-<li>🔵 <strong>Azul (COLD - Menos de 60 pts):</strong> Paciente frio, curioso ou que só fez uma pergunta genérica.</li>
+<li><strong>Score Alto / HOT (Mais de 130 pts):</strong> <strong>Paciente de Altíssimo Valor!</strong> Tem queixa cirúrgica clara, urgência imediata e mora em bairro nobre de São Paulo. Deve ser atendido em <strong>menos de 10 minutos</strong> com prioridade máxima.</li>
+<li><strong>Score Médio / WARM (60 a 130 pts):</strong> Paciente interessado, mas com plano para os próximos 3 a 6 meses. Acolhimento caloroso e consultivo.</li>
+<li><strong>Score Baixo / COLD (Menos de 60 pts):</strong> Paciente frio, curioso ou que só fez uma pergunta genérica.</li>
 </ul>
 <h3 id="2-a-tag-roxa-clínico" class="subsection-title">2. A Tag Roxa <code class="inline-code">[CLÍNICO]</code></h3>
-<p class="luxury-p">Quando essa etiqueta roxa aparece, significa que o paciente mencionou apenas procedimentos pequenos (Botox, toxina botulínica, preenchimento, bioestimulador ou peeling).</p>
+<p class="luxury-p">Quando essa etiqueta aparece, significa que o paciente mencionou apenas procedimentos pequenos (Botox, toxina botulínica, preenchimento, bioestimulador ou peeling).</p>
 <ul class="luxury-list">
 <li><strong>Por que é útil:</strong> Para a Ana e o Dr. Mário saberem na hora que aquele atendimento não é para uma cirurgia de R$ 50 mil a R$ 80 mil, ajustando o tom da conversa.</li>
 </ul>
 <h3 id="3-pílulas-de-origem-valor-da-consulta-a-matriz-dos-3-preços" class="subsection-title">3. Pílulas de Origem & Valor da Consulta (A Matriz dos 3 Preços)</h3>
 <p class="luxury-p">No meio do cartão, você tem três botões para clicar:</p>
 <ul class="luxury-list">
-<li><strong>🌐 Internet (Padrão):</strong> Paciente que veio pelo Google ou Instagram. A consulta custa <strong>R$ 350</strong>. O sinal de 50% via Pix é de <strong>R$ 175</strong>.</li>
-<li><strong>👥 Indicação (Pacientes):</strong> Indicado por outro paciente feliz do doutor. O valor é o mesmo da internet: <strong>R$ 350</strong> (sinal de <strong>R$ 175</strong>).</li>
-<li><strong>🩺 Médica/VIP:</strong> Paciente encaminhado por colega médico, parente de médico ou do círculo pessoal VIP do Dr. Mário. O valor integral da consulta é <strong>R$ 850</strong> (sinal de 50% via Pix é de <strong>R$ 425</strong>).</li>
+<li><strong>Internet (Padrão):</strong> Paciente que veio pelo Google ou Instagram. A consulta custa <strong>R$ 350</strong>. O sinal de 50% via Pix é de <strong>R$ 175</strong>.</li>
+<li><strong>Indicação (Pacientes):</strong> Indicado por outro paciente feliz do doutor. O valor é o mesmo da internet: <strong>R$ 350</strong> (sinal de <strong>R$ 175</strong>).</li>
+<li><strong>Médica / VIP:</strong> Paciente encaminhado por colega médico, parente de médico ou do círculo pessoal VIP do Dr. Mário. O valor integral da consulta é <strong>R$ 850</strong> (sinal de 50% via Pix é de <strong>R$ 425</strong>).</li>
 </ul>
-<blockquote class="luxury-quote"><strong>Atenção:</strong> Ao clicar na pílula correspondente, o cartão atualiza os valores e o sistema já sabe exatamente qual régua financeira aplicar.</blockquote>
-<h3 id="4-botão-📋-copiar-texto-dr-mário-50-pix" class="subsection-title">4. Botão <code class="inline-code">[📋 Copiar Texto Dr. Mário (50% Pix)]</code></h3>
+
+            <div class="luxury-quote-box">
+                <div class="quote-accent-bar"></div>
+                <div class="quote-text"><strong>Atenção:</strong> Ao clicar na pílula correspondente, o cartão atualiza os valores e o sistema já sabe exatamente qual régua financeira aplicar.</div>
+            </div>
+            
+<h3 id="4-botão-copiar-texto-dr-mário-50-pix" class="subsection-title">4. Botão <code class="inline-code">[Copiar Texto Dr. Mário (50% Pix)]</code></h3>
 <p class="luxury-p">Ao clicar neste botão, o sistema copia para a sua área de transferência o roteiro perfeito que justifica o sinal de 50%, mencionando:</p>
 <ul class="luxury-list">
 <li>Intervalos amplos entre consultas (sem pressa nem sala cheia);</li>
@@ -922,36 +2626,67 @@ O objetivo desta ferramenta é simples: <strong>fazer com que nenhum paciente se
 </ul>
 <p class="luxury-p"><strong>Como as bordas do cartão te ajudam:</strong></p>
 <ul class="luxury-list">
-<li>🔴 <strong>Borda Vermelha no Cartão:</strong> <strong>ATENÇÃO MÁXIMA!</strong> O retorno deste paciente está atrasado. Fale com ele agora!</li>
-<li>🟠 <strong>Borda Laranja no Cartão:</strong> O retorno está marcado para <strong>HOJE</strong>. Está na sua lista de tarefas do dia.</li>
-<li>⚪ <strong>Borda Cinza Normal:</strong> Retorno agendado para os próximos dias. Pode ficar tranquila.</li>
+<li><strong>Borda Vermelha no Cartão:</strong> <strong>ATENÇÃO MÁXIMA!</strong> O retorno deste paciente está atrasado. Fale com ele agora!</li>
+<li><strong>Borda Laranja no Cartão:</strong> O retorno está marcado para <strong>HOJE</strong>. Está na sua lista de tarefas do dia.</li>
+<li><strong>Borda Cinza Normal:</strong> Retorno agendado para os próximos dias. Pode ficar tranquila.</li>
 </ul>
 <h3 id="6-script-whatsapp-edição-e-disparo-com-1-clique" class="subsection-title">6. Script WhatsApp, Edição e Disparo com 1 Clique</h3>
 <p class="luxury-p">No rodapé de cada cartão, você encontra a central de comunicação:</p>
 <ul class="luxury-list">
-<li><strong>✨ Botão de IA (Varinha Mágica):</strong> Gera na hora uma sugestão de mensagem educada e personalizada pelo modelo Gemini, baseada no nome e na cirurgia de interesse.</li>
-<li><strong>✏️ Botão de Editar (Lápis):</strong> Abre uma caixinha de texto no cartão. Você pode digitar ou colar qualquer mensagem personalizada (como o roteiro de resgate do Sr. Cláudio) e clicar em <strong>Salvar Script</strong>. A mensagem fica guardada para sempre no prontuário do paciente!</li>
-<li><strong>📋 Botão Copiar:</strong> Copia a mensagem completa para colar onde quiser.</li>
-<li><strong>🟢 Botão Verde do WhatsApp:</strong> O botão mais poderoso do sistema. Ao clicar nele, o WhatsApp Web se abre sozinho na sua tela, <strong>com o número do paciente e a mensagem completa já digitada</strong>. Você só precisa apertar <em>Enter</em> para enviar!</li>
+<li><strong>Botão de IA (Sugestão Inteligente):</strong> Gera na hora uma sugestão de mensagem educada e personalizada pelo modelo Gemini, baseada no nome e na cirurgia de interesse.</li>
+<li><strong>Botão de Editar:</strong> Abre uma caixinha de texto no cartão. Você pode digitar ou colar qualquer mensagem personalizada (como o roteiro de resgate do Sr. Cláudio) e clicar em <strong>Salvar Script</strong>. A mensagem fica guardada para sempre no prontuário do paciente!</li>
+<li><strong>Botão Copiar:</strong> Copia a mensagem completa para colar onde quiser.</li>
+<li><strong>Botão WhatsApp:</strong> O botão mais poderoso do sistema. Ao clicar nele, o WhatsApp Web se abre sozinho na sua tela, <strong>com o número do paciente e a mensagem completa já digitada</strong>. Você só precisa apertar <em>Enter</em> para enviar!</li>
 </ul>
-<hr class="luxury-divider" />
+<div class="luxury-hairline"></div>
 <p class="luxury-p"><a id="capitulo-4-a-magica-dos-bastidores"></a></p>
-<div class="section-divider"></div><h2 id="🪄-capítulo-4-a-mágica-dos-bastidores-por-que-arrastar-o-cartão-importa-tanto" class="section-title"><span class="anchor-tag">#</span>🪄 Capítulo 4: A "Mágica" dos Bastidores: Por Que Arrastar o Cartão Importa Tanto?</h2>
+
+            <div class="section-anchor-wrap" id="capítulo-4-a-mágica-dos-bastidores-por-que-arrastar-o-cartão-importa-tanto">
+                <div class="section-divider"></div>
+                <div class="section-header-row">
+                    <h2 class="section-title">Capítulo 4: A Mágica dos Bastidores: Por Que Arrastar o Cartão Importa Tanto?</h2>
+                    <a href="#capítulo-4-a-mágica-dos-bastidores-por-que-arrastar-o-cartão-importa-tanto" class="anchor-link-pill" title="Link permanente para esta seção">#</a>
+                </div>
+            </div>
+            
 <p class="luxury-p">Muitas vezes, a secretária ou a recepção pensa: <em>"Ah, eu já avisei o paciente no WhatsApp, não preciso mexer no sistema agora."</em></p>
 <p class="luxury-p">Aqui está o segredo mais importante de toda a nossa estratégia: <strong>o CRM é o cérebro que conversa em tempo real com a inteligência do Instagram e do Google.</strong></p>
 <h3 id="como-funciona-o-ciclo-da-inteligência" class="subsection-title">Como funciona o ciclo da inteligência:</h3>
-<div class="code-card"><div class="code-header"><span class="code-lang">Visualização do Cartão</span><button class="btn-copy-mini" onclick="copyCardCode(this)">📋 Copiar</button></div><pre class="code-body"><code>[Ana arrasta o cartão para "Agendado (Sinal 50% Pago)"]
-                    │
-                    ▼
-[O CRM dispara um sinal seguro (CAPI) para a Meta/Instagram]
-                    │
-                    ▼
-[A inteligência do anúncio aprende:]
-"Pessoas com esse perfil compram e pagam sinal de R$ 175 a R$ 425!"
-                    │
-                    ▼
-[O Instagram passa a exibir os anúncios do Dr. Mário]
-Exclusivamente para homens e mulheres de altíssimo poder aquisitivo!</code></pre></div>
+
+    <div class="telemetry-cycle-wrapper">
+        <div class="telemetry-step">
+            <div class="step-num-badge">01</div>
+            <div class="step-content">
+                <h5>Ana Paula arrasta o cartão</h5>
+                <p>Move o lead para a coluna <strong>"Agendado (Sinal 50% Pago)"</strong> no exato instante em que o Pix cai na conta da clínica.</p>
+            </div>
+        </div>
+        <div class="telemetry-connector"></div>
+        <div class="telemetry-step step-highlight">
+            <div class="step-num-badge">02</div>
+            <div class="step-content">
+                <h5>Disparo Seguro Meta CAPI (Server-Side)</h5>
+                <p>O servidor envia o evento <code>Schedule</code> com IP individual limpo, cookies First-Party e valor de <strong>R$ 175</strong> ou <strong>R$ 425</strong>.</p>
+            </div>
+        </div>
+        <div class="telemetry-connector"></div>
+        <div class="telemetry-step">
+            <div class="step-num-badge">03</div>
+            <div class="step-content">
+                <h5>Andromeda e GEM Calibram o Público</h5>
+                <p>Os algoritmos preditivos identificam o padrão comportamental: <em>"Pessoas deste perfil agendam consulta particular na Vila Madalena."</em></p>
+            </div>
+        </div>
+        <div class="telemetry-connector"></div>
+        <div class="telemetry-step step-success">
+            <div class="step-num-badge">04</div>
+            <div class="step-content">
+                <h5>Blindagem de Alta Renda nos 173 CEPs Nobres</h5>
+                <p>Os anúncios passam a ser exibidos com máxima prioridade para pacientes qualificados, reduzindo o custo por lead e eliminando curiosos.</p>
+            </div>
+        </div>
+    </div>
+    
 <h3 id="o-que-acontece-se-você-não-arrastar-o-cartão" class="subsection-title">O que acontece se você NÃO arrastar o cartão:</h3>
 <ol class="luxury-numbered-list">
 <li>O Instagram acha que ninguém está agendando consultas.</li>
@@ -963,33 +2698,152 @@ Exclusivamente para homens e mulheres de altíssimo poder aquisitivo!</code></pr
 <li>O robô da Meta acha que pessoas que desmarcam ou somem são o nosso cliente ideal.</li>
 <li>Resultado: Mais pacientes furando a consulta na quarta-feira.</li>
 </ol>
-<blockquote class="luxury-quote"><strong>Regra de Ouro:</strong> Arraste o cartão para <strong>"Agendado (Sinal 50% Pago)"</strong> no mesmo minuto em que o comprovante do Pix cair na conta da clínica. É esse clique que garante o sucesso das nossas campanhas!</blockquote>
-<hr class="luxury-divider" />
+
+            <div class="luxury-quote-box">
+                <div class="quote-accent-bar"></div>
+                <div class="quote-text"><strong>Regra de Ouro:</strong> Arraste o cartão para <strong>"Agendado (Sinal 50% Pago)"</strong> no mesmo minuto em que o comprovante do Pix cair na conta da clínica. É esse clique que garante o sucesso das nossas campanhas!</div>
+            </div>
+            
+<div class="luxury-hairline"></div>
 <p class="luxury-p"><a id="capitulo-5-checklist-matinal-da-ana"></a></p>
-<div class="section-divider"></div><h2 id="☕-capítulo-5-checklist-matinal-da-ana-paula-15-minutos-para-dominar-o-dia" class="section-title"><span class="anchor-tag">#</span>☕ Capítulo 5: Checklist Matinal da Ana Paula (15 Minutos para Dominar o Dia)</h2>
+
+            <div class="section-anchor-wrap" id="capítulo-5-checklist-matinal-da-ana-paula-15-minutos-para-dominar-o-dia">
+                <div class="section-divider"></div>
+                <div class="section-header-row">
+                    <h2 class="section-title">Capítulo 5: Checklist Matinal da Ana Paula (15 Minutos para Dominar o Dia)</h2>
+                    <a href="#capítulo-5-checklist-matinal-da-ana-paula-15-minutos-para-dominar-o-dia" class="anchor-link-pill" title="Link permanente para esta seção">#</a>
+                </div>
+            </div>
+            
 <p class="luxury-p">A Ana não precisa passar o dia inteiro com o CRM aberto. Basta uma rotina disciplinada de <strong>15 minutos pela manhã (das 08h30 às 08h45)</strong> e <strong>10 minutos no fim da tarde (às 17h30)</strong>:</p>
-<h3 id="📋-o-roteiro-das-08h30" class="subsection-title">📋 O Roteiro das 08h30:</h3>
-<ul class="luxury-checklist">
-<li class="check-item"><span class="check-box">⬜</span> <span class="check-text"><strong>Passo 1 (2 min) - Respirar e Abrir o <code class="inline-code">/admin</code>:</strong> Acessar o CRM no navegador do computador da clínica.</span></li>
-<li class="check-item"><span class="check-box">⬜</span> <span class="check-text"><strong>Passo 2 (4 min) - Caçar os Cartões com Borda Vermelha:</strong> Eles são pacientes cujo retorno venceu ontem ou antes. Clicar no botão verde do WhatsApp e enviar uma mensagem calorosa de retomada.</span></li>
-<li class="check-item"><span class="check-box">⬜</span> <span class="check-text"><strong>Passo 3 (4 min) - Atender os Cartões com Borda Laranja:</strong> São os retornos agendados para hoje (ex: <em>"Cobrar exames da Dona Maria"</em>, <em>"Resgatar o Sr. Cláudio"</em>). Enviar as mensagens programadas.</span></li>
-<li class="check-item"><span class="check-box">⬜</span> <span class="check-text"><strong>Passo 4 (3 min) - Visitar a Sala "Triagem / Descoberta":</strong> Ver se novos leads chegaram na noite anterior ou de madrugada. Se houver pacientes lá, clicar em ✨ ou usar a saudação acolhedora e mandar o primeiro oi. Em seguida, arrastar o cartão para <strong>"Qualificação Concierge"</strong>.</span></li>
-<li class="check-item"><span class="check-box">⬜</span> <span class="check-text"><strong>Passo 5 (2 min) - Checar a Sala "📅 Agendado":</strong> Conferir quem são os pacientes que vêm hoje ou amanhã para garantir que o manobrista e o cafezinho da recepção estejam preparados.</span></li>
-</checklist>
-<h3 id="📋-o-fechamento-das-17h30" class="subsection-title">📋 O Fechamento das 17h30:</h3>
-<ul class="luxury-checklist">
-<li class="check-item"><span class="check-box">⬜</span> <span class="check-text"><strong>Passo 1:</strong> Todo paciente que passou em consulta presencial hoje foi arrastado para <strong>"✅ Consulta Realizada"</strong>?</span></li>
-<li class="check-item"><span class="check-box">⬜</span> <span class="check-text"><strong>Passo 2:</strong> As pessoas com quem conversei hoje têm uma nova data cravada no reloginho de retorno para eu não esquecer amanhã?</span></li>
-<li class="check-item"><span class="check-box">⬜</span> <span class="check-text"><strong>Passo 3:</strong> Fechar o dia com a sensação de dever cumprido e a clínica 100% organizada.</span></li>
-</checklist>
-<hr class="luxury-divider" />
+<h3 id="o-roteiro-das-08h30" class="subsection-title">O Roteiro das 08h30:</h3>
+<div class="luxury-checklist-board" id="checklist_morning">
+<div class="checklist-board-header">
+  <div class="board-header-left">
+      <span class="board-badge">ROTINA ESSENCIAL</span>
+      <h4 class="board-title">Roteiro das 08h30: Checklist Matinal de 15 Minutos</h4>
+      <p class="board-subtitle">Execute este checklist na abertura do consultório para garantir zero atrasos e atendimento impecável.</p>
+  </div>
+  <div class="board-header-right">
+      <div class="progress-pill"><span class="progress-count">0 / 5</span> concluídos</div>
+      <button type="button" class="btn-reset-checklist" onclick="resetChecklist('checklist_morning')">Reiniciar</button>
+  </div>
+</div>
+<div class="checklist-progress-bar"><div class="progress-fill" style="width: 0%;"></div></div>
+<ul class="interactive-checklist-list">
+
+        <li class="interactive-check-row" onclick="toggleTaskRow('checklist_morning', 0)">
+            <input type="checkbox" id="checklist_morning_item_0" class="apple-checkbox" onchange="updateChecklistProgress('checklist_morning')">
+            <label for="checklist_morning_item_0" class="check-label" onclick="event.stopPropagation()">
+                <span class="custom-checkbox-box"></span>
+                <span class="check-content-text"><strong>Passo 1 (2 min) - Respirar e Abrir o <code class="inline-code">/admin</code>:</strong> Acessar o CRM no navegador do computador da clínica.</span>
+            </label>
+        </li>
+        
+
+        <li class="interactive-check-row" onclick="toggleTaskRow('checklist_morning', 1)">
+            <input type="checkbox" id="checklist_morning_item_1" class="apple-checkbox" onchange="updateChecklistProgress('checklist_morning')">
+            <label for="checklist_morning_item_1" class="check-label" onclick="event.stopPropagation()">
+                <span class="custom-checkbox-box"></span>
+                <span class="check-content-text"><strong>Passo 2 (4 min) - Caçar os Cartões com Borda Vermelha:</strong> Eles são pacientes cujo retorno venceu ontem ou antes. Clicar no botão do WhatsApp e enviar uma mensagem calorosa de retomada.</span>
+            </label>
+        </li>
+        
+
+        <li class="interactive-check-row" onclick="toggleTaskRow('checklist_morning', 2)">
+            <input type="checkbox" id="checklist_morning_item_2" class="apple-checkbox" onchange="updateChecklistProgress('checklist_morning')">
+            <label for="checklist_morning_item_2" class="check-label" onclick="event.stopPropagation()">
+                <span class="custom-checkbox-box"></span>
+                <span class="check-content-text"><strong>Passo 3 (4 min) - Atender os Cartões com Borda Laranja:</strong> São os retornos agendados para hoje (ex: <em>"Cobrar exames da Dona Maria"</em>, <em>"Resgatar o Sr. Cláudio"</em>). Enviar as mensagens programadas.</span>
+            </label>
+        </li>
+        
+
+        <li class="interactive-check-row" onclick="toggleTaskRow('checklist_morning', 3)">
+            <input type="checkbox" id="checklist_morning_item_3" class="apple-checkbox" onchange="updateChecklistProgress('checklist_morning')">
+            <label for="checklist_morning_item_3" class="check-label" onclick="event.stopPropagation()">
+                <span class="custom-checkbox-box"></span>
+                <span class="check-content-text"><strong>Passo 4 (3 min) - Visitar a Sala "Triagem / Descoberta":</strong> Ver se novos leads chegaram na noite anterior ou de madrugada. Se houver pacientes lá, clicar em IA ou usar a saudação acolhedora e mandar o primeiro oi. Em seguida, arrastar o cartão para <strong>"Qualificação Concierge"</strong>.</span>
+            </label>
+        </li>
+        
+
+        <li class="interactive-check-row" onclick="toggleTaskRow('checklist_morning', 4)">
+            <input type="checkbox" id="checklist_morning_item_4" class="apple-checkbox" onchange="updateChecklistProgress('checklist_morning')">
+            <label for="checklist_morning_item_4" class="check-label" onclick="event.stopPropagation()">
+                <span class="custom-checkbox-box"></span>
+                <span class="check-content-text"><strong>Passo 5 (2 min) - Checar a Sala "Agendado":</strong> Conferir quem são os pacientes que vêm hoje ou amanhã para garantir que o manobrista e o cafezinho da recepção estejam preparados.</span>
+            </label>
+        </li>
+        
+</ul>
+<div class="checklist-congrats" style="display: none;">
+  <span>Rotina concluída com sucesso. A clínica está totalmente preparada para os atendimentos do dia.</span>
+</div>
+</div>
+<h3 id="o-fechamento-das-17h30" class="subsection-title">O Fechamento das 17h30:</h3>
+<div class="luxury-checklist-board" id="checklist_afternoon">
+<div class="checklist-board-header">
+  <div class="board-header-left">
+      <span class="board-badge">ROTINA ESSENCIAL</span>
+      <h4 class="board-title">Fechamento das 17h30: Blindagem do Fim do Dia</h4>
+      <p class="board-subtitle">Assegura que o dia seja concluído com todos os prontuários e retornos organizados.</p>
+  </div>
+  <div class="board-header-right">
+      <div class="progress-pill"><span class="progress-count">0 / 3</span> concluídos</div>
+      <button type="button" class="btn-reset-checklist" onclick="resetChecklist('checklist_afternoon')">Reiniciar</button>
+  </div>
+</div>
+<div class="checklist-progress-bar"><div class="progress-fill" style="width: 0%;"></div></div>
+<ul class="interactive-checklist-list">
+
+        <li class="interactive-check-row" onclick="toggleTaskRow('checklist_afternoon', 0)">
+            <input type="checkbox" id="checklist_afternoon_item_0" class="apple-checkbox" onchange="updateChecklistProgress('checklist_afternoon')">
+            <label for="checklist_afternoon_item_0" class="check-label" onclick="event.stopPropagation()">
+                <span class="custom-checkbox-box"></span>
+                <span class="check-content-text"><strong>Passo 1:</strong> Todo paciente que passou em consulta presencial hoje foi arrastado para <strong>"Consulta Realizada"</strong>?</span>
+            </label>
+        </li>
+        
+
+        <li class="interactive-check-row" onclick="toggleTaskRow('checklist_afternoon', 1)">
+            <input type="checkbox" id="checklist_afternoon_item_1" class="apple-checkbox" onchange="updateChecklistProgress('checklist_afternoon')">
+            <label for="checklist_afternoon_item_1" class="check-label" onclick="event.stopPropagation()">
+                <span class="custom-checkbox-box"></span>
+                <span class="check-content-text"><strong>Passo 2:</strong> As pessoas com quem conversei hoje têm uma nova data cravada no reloginho de retorno para eu não esquecer amanhã?</span>
+            </label>
+        </li>
+        
+
+        <li class="interactive-check-row" onclick="toggleTaskRow('checklist_afternoon', 2)">
+            <input type="checkbox" id="checklist_afternoon_item_2" class="apple-checkbox" onchange="updateChecklistProgress('checklist_afternoon')">
+            <label for="checklist_afternoon_item_2" class="check-label" onclick="event.stopPropagation()">
+                <span class="custom-checkbox-box"></span>
+                <span class="check-content-text"><strong>Passo 3:</strong> Fechar o dia com a sensação de dever cumprido e a clínica 100% organizada.</span>
+            </label>
+        </li>
+        
+</ul>
+<div class="checklist-congrats" style="display: none;">
+  <span>Rotina concluída com sucesso. A clínica está totalmente preparada para os atendimentos do dia.</span>
+</div>
+</div>
+<div class="luxury-hairline"></div>
 <p class="luxury-p"><a id="capitulo-6-rotina-do-dr-mario"></a></p>
-<div class="section-divider"></div><h2 id="🩺-capítulo-6-rotina-de-consultório-do-dr-mário-warde-5-minutos-de-visão-estratégica" class="section-title"><span class="anchor-tag">#</span>🩺 Capítulo 6: Rotina de Consultório do Dr. Mário Warde (5 Minutos de Visão Estratégica)</h2>
+
+            <div class="section-anchor-wrap" id="capítulo-6-rotina-de-consultório-do-dr-mário-warde-5-minutos-de-visão-estratégica">
+                <div class="section-divider"></div>
+                <div class="section-header-row">
+                    <h2 class="section-title">Capítulo 6: Rotina de Consultório do Dr. Mário Warde (5 Minutos de Visão Estratégica)</h2>
+                    <a href="#capítulo-6-rotina-de-consultório-do-dr-mário-warde-5-minutos-de-visão-estratégica" class="anchor-link-pill" title="Link permanente para esta seção">#</a>
+                </div>
+            </div>
+            
 <p class="luxury-p">O Dr. Mário não precisa cadastrar leads nem redigir mensagens. Para o doutor, o CRM é um <strong>Painel de Governança e Inteligência Clínica</strong>.</p>
 <h3 id="1-antes-de-iniciar-o-atendimento-do-dia-3-minutos" class="subsection-title">1. Antes de Iniciar o Atendimento do Dia (3 Minutos):</h3>
 <ul class="luxury-list">
 <li>Abra o CRM no celular ou no iPad do consultório.</li>
-<li>Olhe a coluna <strong>"📅 Agendado (Sinal 50% Pago)"</strong>.</li>
+<li>Olhe a coluna <strong>"Agendado (Sinal 50% Pago)"</strong>.</li>
 <li>Em cada cartão, você já vê antes de abrir a porta:</li>
 <li>O nome do paciente e a idade;</li>
 <li>Qual cirurgia ele sonha fazer (ex: Abdômen, Lipo HD, Deep Plane Facelift, Mastopexia);</li>
@@ -1004,125 +2858,328 @@ Exclusivamente para homens e mulheres de altíssimo poder aquisitivo!</code></pr
 <li>Uma simples pergunta do Dr. Mário para a Ana: <em>"Ana, a paciente Vanessa já decidiu entre operar em novembro ou janeiro? Quer que eu grave um áudio médico tirando aquela dúvida sobre a anestesia?"</em>.</li>
 <li>Esse cuidado cirúrgico converte orçamentos de R$ 60 mil a R$ 100 mil com extrema facilidade e elegância.</li>
 </ul>
-<hr class="luxury-divider" />
+<div class="luxury-hairline"></div>
 <p class="luxury-p"><a id="capitulo-7-os-5-mandamentos-sagrados"></a></p>
-<div class="section-divider"></div><h2 id="📜-capítulo-7-os-5-mandamentos-sagrados-do-crm-na-clínica" class="section-title"><span class="anchor-tag">#</span>📜 Capítulo 7: Os 5 Mandamentos Sagrados do CRM na Clínica</h2>
+
+            <div class="section-anchor-wrap" id="capítulo-7-os-5-mandamentos-sagrados-do-crm-na-clínica">
+                <div class="section-divider"></div>
+                <div class="section-header-row">
+                    <h2 class="section-title">Capítulo 7: Os 5 Mandamentos Sagrados do CRM na Clínica</h2>
+                    <a href="#capítulo-7-os-5-mandamentos-sagrados-do-crm-na-clínica" class="anchor-link-pill" title="Link permanente para esta seção">#</a>
+                </div>
+            </div>
+            
 <p class="luxury-p">Para que a clínica funcione como um relógio suíço de alto padrão, todos na equipe seguem estas cinco regras de ouro:</p>
-<div class="table-container"><table class="luxury-table"><thead><tr>
-<th>Mandamento</th>
-<th>O Que Fazer (Certo)</th>
-<th>O Que Evitar (Errado)</th>
-<th>Por Que Importa?</th>
-</tr></thead><tbody>
-<tr>
-<td><strong>1. Regra do Sinal 50%</strong></td>
-<td>Mover para <em>Agendado</em> <strong>apenas com o comprovante do Pix</strong> na conta.</td>
-<td>Arrastar para <em>Agendado</em> antes do paciente pagar o sinal.</td>
-<td>Impede furos de agenda e treina o algoritmo a trazer quem realmente paga.</td>
-</tr>
-<tr>
-<td><strong>2. Nenhum Lead Esquecido</strong></td>
-<td>Todo paciente em <em>Qualificação</em> ou <em>Pós-Consulta</em> tem <strong>data no relógio</strong>.</td>
-<td>Deixar cartão solto sem data de retorno agendada.</td>
-<td>Paciente de cirurgia plástica demora até 60 dias para decidir; o carinho constante fecha a cirurgia.</td>
-</tr>
-<tr>
-<td><strong>3. Vocabulário Nobre</strong></td>
-<td>Falar sempre <strong>"Primeira Consulta Médica"</strong> ou "Planejamento".</td>
-<td>Usar a palavra "Avaliação", "Taxa" ou "Orçamento".</td>
-<td>"Avaliação" parece vendedor de clínica popular; "Consulta Médica" valoriza os 30 anos do Dr. Mário.</td>
-</tr>
-<tr>
-<td><strong>4. Pílula Certa de Origem</strong></td>
-<td>Marcar <code class="inline-code">Internet</code> (R$ 350) ou <code class="inline-code">Médica/VIP</code> (R$ 850) no cartão.</td>
-<td>Esquecer de mudar a pílula de um paciente encaminhado por médico.</td>
-<td>Registra a receita correta e aciona o valor certo nos eventos de inteligência do Meta Ads.</td>
-</tr>
-<tr>
-<td><strong>5. Atualização no Ato</strong></td>
-<td>Atualizou no WhatsApp? <strong>Leva 3 segundos para mover o cartão</strong>.</td>
-<td>Deixar para atualizar "na sexta-feira à tarde".</td>
-<td>Garante que o Dr. Mário e a gestão sempre enxerguem a realidade exata da clínica em tempo real.</td>
-</tr>
-</tbody></table></div>
-<hr class="luxury-divider" />
+<div class="mandamentos-cards-grid">
+
+        <div class="mandamento-card">
+            <div class="mandamento-header">
+                <span class="mandamento-numeral">I</span>
+                <h4 class="mandamento-title">A Regra Sagrada do Sinal de 50%</h4>
+            </div>
+            <div class="mandamento-body">
+                <div class="mandamento-col mandamento-certo">
+                    <span class="col-tag tag-certo">O QUE FAZER (CERTO)</span>
+                    <p class="col-text">Mover para <em>Agendado</em> <strong>apenas com o comprovante do Pix</strong> recebido na conta da clínica.</p>
+                </div>
+                <div class="mandamento-col mandamento-errado">
+                    <span class="col-tag tag-errado">O QUE EVITAR (ERRADO)</span>
+                    <p class="col-text">Arrastar para <em>Agendado</em> na promessa verbal antes do paciente pagar a reserva.</p>
+                </div>
+            </div>
+            <div class="mandamento-footer">
+                <span class="mandamento-why-label">Por Que Importa:</span>
+                <span class="mandamento-why-text">Garante respeito absoluto aos horários amplos do Dr. Mário e treina o algoritmo da Meta a buscar exclusivamente quem tem compromisso financeiro real.</span>
+            </div>
+        </div>
+        
+
+        <div class="mandamento-card">
+            <div class="mandamento-header">
+                <span class="mandamento-numeral">II</span>
+                <h4 class="mandamento-title">Nenhum Paciente Fica Sem Relógio de Retorno</h4>
+            </div>
+            <div class="mandamento-body">
+                <div class="mandamento-col mandamento-certo">
+                    <span class="col-tag tag-certo">O QUE FAZER (CERTO)</span>
+                    <p class="col-text">Todo cartão em <em>Qualificação</em> ou <em>Pós-Consulta</em> possui uma <strong>data cravada no calendário</strong>.</p>
+                </div>
+                <div class="mandamento-col mandamento-errado">
+                    <span class="col-tag tag-errado">O QUE EVITAR (ERRADO)</span>
+                    <p class="col-text">Deixar o cartão solto sem data de acompanhamento ou com prazo vencido.</p>
+                </div>
+            </div>
+            <div class="mandamento-footer">
+                <span class="mandamento-why-label">Por Que Importa:</span>
+                <span class="mandamento-why-text">A decisão de uma cirurgia de R$ 50k a R$ 85k leva de 15 a 60 dias. O acompanhamento atencioso no timing certo é o que fecha o procedimento.</span>
+            </div>
+        </div>
+        
+
+        <div class="mandamento-card">
+            <div class="mandamento-header">
+                <span class="mandamento-numeral">III</span>
+                <h4 class="mandamento-title">Vocabulário Nobre de Hospitalidade</h4>
+            </div>
+            <div class="mandamento-body">
+                <div class="mandamento-col mandamento-certo">
+                    <span class="col-tag tag-certo">O QUE FAZER (CERTO)</span>
+                    <p class="col-text">Falar sempre <strong>'Primeira Consulta Médica'</strong>, 'Planejamento Cirúrgico' ou 'Reserva de Exclusividade'.</p>
+                </div>
+                <div class="mandamento-col mandamento-errado">
+                    <span class="col-tag tag-errado">O QUE EVITAR (ERRADO)</span>
+                    <p class="col-text">Usar termos populares como 'Avaliação Grátis', 'Orçamento' ou 'Sinalzinho'.</p>
+                </div>
+            </div>
+            <div class="mandamento-footer">
+                <span class="mandamento-why-label">Por Que Importa:</span>
+                <span class="mandamento-why-text">O termo 'avaliação' remete a consultórios populares e desvaloriza os 30 anos de rigor técnico e a maestria médica do Dr. Mário Warde.</span>
+            </div>
+        </div>
+        
+
+        <div class="mandamento-card">
+            <div class="mandamento-header">
+                <span class="mandamento-numeral">IV</span>
+                <h4 class="mandamento-title">Identificação Rigorosa da Origem e Valor</h4>
+            </div>
+            <div class="mandamento-body">
+                <div class="mandamento-col mandamento-certo">
+                    <span class="col-tag tag-certo">O QUE FAZER (CERTO)</span>
+                    <p class="col-text">Marcar a pílula exata: <code>Internet</code> (R$ 350) ou <code>Médica/VIP</code> (R$ 850) no cartão.</p>
+                </div>
+                <div class="mandamento-col mandamento-errado">
+                    <span class="col-tag tag-errado">O QUE EVITAR (ERRADO)</span>
+                    <p class="col-text">Esquecer de mudar a pílula de um paciente encaminhado por médico ou cobrar valor incorreto.</p>
+                </div>
+            </div>
+            <div class="mandamento-footer">
+                <span class="mandamento-why-label">Por Que Importa:</span>
+                <span class="mandamento-why-text">Protege a Linhagem de Preço na Classe A+ e assegura que a Meta CAPI receba o valor correto do evento de compra para otimização de leilão.</span>
+            </div>
+        </div>
+        
+
+        <div class="mandamento-card">
+            <div class="mandamento-header">
+                <span class="mandamento-numeral">V</span>
+                <h4 class="mandamento-title">Atualização Imediata no Ato do Atendimento</h4>
+            </div>
+            <div class="mandamento-body">
+                <div class="mandamento-col mandamento-certo">
+                    <span class="col-tag tag-certo">O QUE FAZER (CERTO)</span>
+                    <p class="col-text">Conversou no WhatsApp ou recebeu o Pix? <strong>Leva apenas 3 segundos</strong> para mover o cartão.</p>
+                </div>
+                <div class="mandamento-col mandamento-errado">
+                    <span class="col-tag tag-errado">O QUE EVITAR (ERRADO)</span>
+                    <p class="col-text">Deixar para atualizar o painel na sexta-feira ou no final da semana.</p>
+                </div>
+            </div>
+            <div class="mandamento-footer">
+                <span class="mandamento-why-label">Por Que Importa:</span>
+                <span class="mandamento-why-text">Permite que o Dr. Mário, a Concierge e a equipe de tráfego enxerguem a realidade exata da clínica em tempo real, sem pontos cegos operacionais.</span>
+            </div>
+        </div>
+        
+</div>
+<div class="luxury-hairline"></div>
 <p class="luxury-p"><a id="capitulo-8-perguntas-frequentes"></a></p>
-<div class="section-divider"></div><h2 id="❓-capítulo-8-perguntas-frequentes-resolução-rápida-de-dúvidas" class="section-title"><span class="anchor-tag">#</span>❓ Capítulo 8: Perguntas Frequentes & Resolução Rápida de Dúvidas</h2>
+
+            <div class="section-anchor-wrap" id="capítulo-8-perguntas-frequentes-resolução-rápida-de-dúvidas">
+                <div class="section-divider"></div>
+                <div class="section-header-row">
+                    <h2 class="section-title">Capítulo 8: Perguntas Frequentes & Resolução Rápida de Dúvidas</h2>
+                    <a href="#capítulo-8-perguntas-frequentes-resolução-rápida-de-dúvidas" class="anchor-link-pill" title="Link permanente para esta seção">#</a>
+                </div>
+            </div>
+            
 <h3 id="1-o-paciente-disse-que-achou-ruim-pagar-50-de-sinal-adiantado-o-que-eu-faço" class="subsection-title">1. "O paciente disse que achou ruim pagar 50% de sinal adiantado. O que eu faço?"</h3>
-<p class="luxury-p">Use o botão <strong>[📋 Copiar Texto Dr. Mário (50% Pix)]</strong> no cartão dele. O texto explica com extrema educação que o Dr. Mário reserva intervalos amplos sem sobreposição de pacientes para garantir privacidade absoluta, e que <strong>100% do valor da consulta vira crédito no plano cirúrgico</strong> caso ele decida operar. Isso transforma a objeção em uma demonstração de exclusividade e prestígio.</p>
+<p class="luxury-p">Use o botão <strong>[Copiar Texto Dr. Mário (50% Pix)]</strong> no cartão dele. O texto explica com extrema educação que o Dr. Mário reserva intervalos amplos sem sobreposição de pacientes para garantir privacidade absoluta, e que <strong>100% do valor da consulta vira crédito no plano cirúrgico</strong> caso ele decida operar. Isso transforma a objeção em uma demonstração de exclusividade e prestígio.</p>
 <h3 id="2-o-paciente-não-foi-à-consulta-como-aconteceu-com-o-sr-cláudio-o-que-fazer" class="subsection-title">2. "O paciente não foi à consulta (como aconteceu com o Sr. Cláudio). O que fazer?"</h3>
-<p class="luxury-p">Nunca delete o cartão e nunca brigue com o paciente. Mova o cartão de volta para a coluna <strong>"Qualificação Concierge"</strong>, clique no reloginho de retorno e agende para dali a 2 ou 3 dias (ex: sexta-feira). No dia marcado, use a <strong>Mensagem de Resgate White Glove</strong> (disponível no botão ✏️ do cartão), elevando o status do paciente sem nenhuma cobrança agressiva.</p>
+<p class="luxury-p">Nunca delete o cartão e nunca brigue com o paciente. Mova o cartão de volta para a coluna <strong>"Qualificação Concierge"</strong>, clique no reloginho de retorno e agende para dali a 2 ou 3 dias (ex: sexta-feira). No dia marcado, use a <strong>Mensagem de Resgate White Glove</strong> (disponível no botão de edição do cartão), elevando o status do paciente sem nenhuma cobrança agressiva.</p>
 <h3 id="3-posso-alterar-o-texto-que-a-inteligência-artificial-sugeriu-no-cartão" class="subsection-title">3. "Posso alterar o texto que a Inteligência Artificial sugeriu no cartão?"</h3>
-<p class="luxury-p"><strong>Sim, com certeza!</strong> Basta clicar no botão <strong>✏️ (Lápis)</strong>, ajustar as palavras como você preferir e clicar em <strong>"Salvar Script"</strong>. O texto digitado por você ficará salvo no banco de dados e será usado automaticamente ao clicar no botão verde do WhatsApp.</p>
+<p class="luxury-p"><strong>Sim, com certeza!</strong> Basta clicar no botão <strong>Editar</strong>, ajustar as palavras como você preferir e clicar em <strong>"Salvar Script"</strong>. O texto digitado por você ficará salvo no banco de dados e será usado automaticamente ao clicar no botão do WhatsApp.</p>
 <h3 id="4-o-paciente-fechou-a-cirurgia-mas-só-vai-operar-daqui-a-4-meses-onde-deixo-o-cartão-dele" class="subsection-title">4. "O paciente fechou a cirurgia mas só vai operar daqui a 4 meses. Onde deixo o cartão dele?"</h3>
-<p class="luxury-p">Ele deve ser movido para <strong>"💎 Cirurgia Fechada (Depósito)"</strong> no momento em que pagar a entrada do procedimento. Quando faltarem 30 dias para a data da cirurgia e ele começar os exames de risco cirúrgico, arraste-o para <strong>"Pré-operatório"</strong>.</p>
-<hr class="luxury-divider" />
-<p class="luxury-p"><div style="text-align: center; margin-top: 40px; padding: 20px; border-top: 1px solid #e2e8f0; color: #64748b; font-size: 13px;"></p>
+<p class="luxury-p">Ele deve ser movido para <strong>"Cirurgia Fechada (Depósito)"</strong> no momento em que pagar a entrada do procedimento. Quando faltarem 30 dias para a data da cirurgia e ele começar os exames de risco cirúrgico, arraste-o para <strong>"Pré-operatório"</strong>.</p>
+<div class="luxury-hairline"></div>
 <p class="luxury-p"><strong>Clínica Dr. Mário Warde | Cirurgia Plástica</strong><br/></p>
 <p class="luxury-p">Rua Jericó, 255 - Conjunto 81 - Sumarezinho / Vila Madalena, São Paulo - SP<br/></p>
 <p class="luxury-p"><em>"A excelência cirúrgica que sussurra elegância."</em></p>
 <p class="luxury-p"></div></p>
+
+                <!-- Rodapé Institucional -->
+                <div class="doc-footer-signature">
+                    <strong>Clínica Dr. Mário Warde | Cirurgia Plástica de Alto Padrão</strong><br/>
+                    Rua Jericó, 255 - Conjunto 81 - Sumarezinho / Vila Madalena, São Paulo - SP<br/>
+                    <em>"A excelência cirúrgica que sussurra elegância."</em>
+                </div>
             </main>
         </div>
     </div>
 
+    <!-- Toast Notification -->
     <div class="toast" id="toast">
-        <span id="toastIcon">✓</span>
-        <span id="toastMsg">Texto copiado com sucesso!</span>
+        <span id="toastMsg">Script copiado com sucesso!</span>
     </div>
 
+    <!-- Interatividade JavaScript Apple -->
     <script>
-        // Init Mermaid
+        // Init Mermaid com cores elegantes
         if (typeof mermaid !== 'undefined') {
-            mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
-        }
-
-        // Toast helper
-        function showToast(msg, icon = '✓') {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastMsg').innerText = msg;
-            document.getElementById('toastIcon').innerText = icon;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2200);
-        }
-
-        // Copy Card preview
-        function copyCardCode(btn) {
-            const code = btn.closest('.code-card').querySelector('code').innerText;
-            navigator.clipboard.writeText(code).then(() => {
-                showToast('Card copiado para a área de transferência!');
-            });
-        }
-
-        // Copy Dr. Mário script
-        function copyDrMarioScript() {
-            const script = `Olá! O Dr. Mário organiza a agenda com intervalos amplos entre os atendimentos, sem sobreposição de pacientes, para garantir total privacidade e uma consulta médica detalhada e sem pressa.\n\nPor essa razão, a confirmação do horário é formalizada mediante a reserva de 50% do valor da consulta via Pix, e o saldo restante é acertado na recepção no dia do atendimento.\n\nUm diferencial da clínica: caso você decida realizar o procedimento cirúrgico com o Dr. Mário, o valor integral da consulta é revertido em crédito no seu plano cirúrgico.\n\nPosso enviar o pix da clínica para travarmos a sua data com o doutor?`;
-            navigator.clipboard.writeText(script).then(() => {
-                showToast('Script do Dr. Mário (50% Pix) copiado!');
-            });
-        }
-
-        // Search in page
-        function handleSearch(query) {
-            query = query.toLowerCase().trim();
-            const links = document.querySelectorAll('.nav-link');
-            links.forEach(l => {
-                const text = l.innerText.toLowerCase();
-                if (!query || text.includes(query)) {
-                    l.style.display = 'flex';
-                } else {
-                    l.style.display = 'none';
+            mermaid.initialize({ 
+                startOnLoad: true, 
+                theme: 'base',
+                themeVariables: {
+                    primaryColor: '#fcf9f8',
+                    primaryTextColor: '#310f0e',
+                    primaryBorderColor: '#ccb9b6',
+                    lineColor: '#6f0f00',
+                    secondaryColor: '#fbfbfd',
+                    tertiaryColor: '#ffffff'
                 }
             });
         }
 
-        // Scrollspy for sidebar
+        // Toast Helper
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2600);
+        }
+
+        // Copy Script do Dr. Mário (50% Pix e Reversão Cirúrgica)
+        function copyDrMarioScriptCard(btn) {
+            const script = `Olá! O Dr. Mário organiza a agenda com intervalos amplos entre os atendimentos, sem sobreposição de pacientes, para garantir total privacidade e uma consulta médica detalhada e sem pressa.\n\nPor essa razão, a confirmação do horário é formalizada mediante a reserva de 50% do valor da consulta via Pix, e o saldo restante é acertado na recepção no dia do atendimento.\n\nUm diferencial da clínica: caso você decida realizar o procedimento cirúrgico com o Dr. Mário, o valor integral da consulta é revertido em crédito no seu plano cirúrgico.\n\nPosso enviar o pix da clínica para travarmos a sua data com o doutor?`;
+            navigator.clipboard.writeText(script).then(() => {
+                showToast('Script do Dr. Mário (50% Pix) copiado para a área de transferência.');
+            });
+        }
+
+        // Seletor dinâmico da Matriz de Preços no Card Mockup
+        function selectPricing(cat, total, deposit, btn) {
+            document.querySelectorAll('.pricing-pill').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const summary = document.getElementById('pricingSummary');
+            let catName = 'Internet';
+            let capiEvent = 'Schedule (R$ 175)';
+            if (cat === 'indicacao') {
+                catName = 'Indicação de Paciente';
+                capiEvent = 'Schedule (R$ 175)';
+            } else if (cat === 'medica') {
+                catName = 'Indicação Médica / Linhagem VIP';
+                capiEvent = 'Schedule VIP (R$ 425)';
+            }
+            
+            summary.innerHTML = `Consulta <strong>${catName}</strong>: Total <strong>R$ ${total},00</strong> | Reserva de 50% via Pix: <strong class="highlight-deposit">R$ ${deposit},00</strong> (Disparo Meta CAPI: <code>${capiEvent}</code>)`;
+            showToast(`Valor calibrado para ${catName}: Sinal de R$ ${deposit},00`);
+        }
+
+        // Copy texto do script no card mockup
+        function copyActiveCardDraft() {
+            const text = document.getElementById('actionDraftText').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Roteiro do Sr. Cláudio copiado para a área de transferência.');
+            });
+        }
+
+        function toggleEditScript() {
+            const textEl = document.getElementById('actionDraftText');
+            const isEditing = textEl.getAttribute('contenteditable') === 'true';
+            if (!isEditing) {
+                textEl.setAttribute('contenteditable', 'true');
+                textEl.focus();
+                showToast('Modo de edição ativado no cartão.');
+            } else {
+                textEl.removeAttribute('contenteditable');
+                showToast('Alteração salva no prontuário do paciente.');
+            }
+        }
+
+        // Checklist Interativo com LocalStorage
+        function toggleTaskRow(boardId, itemIdx) {
+            const checkbox = document.getElementById(`${boardId}_item_${itemIdx}`);
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+                updateChecklistProgress(boardId);
+            }
+        }
+
+        function updateChecklistProgress(boardId) {
+            const board = document.getElementById(boardId);
+            if (!board) return;
+            const checkboxes = board.querySelectorAll('.apple-checkbox');
+            const total = checkboxes.length;
+            let checked = 0;
+            const state = [];
+
+            checkboxes.forEach((cb, idx) => {
+                if (cb.checked) checked++;
+                state.push(cb.checked);
+            });
+
+            const pct = Math.round((checked / total) * 100);
+            const countEl = board.querySelector('.progress-count');
+            const fillEl = board.querySelector('.progress-fill');
+            const congratsEl = board.querySelector('.checklist-congrats');
+
+            if (countEl) countEl.innerText = `${checked} / ${total}`;
+            if (fillEl) fillEl.style.width = `${pct}%`;
+
+            if (congratsEl) {
+                congratsEl.style.display = (checked === total && total > 0) ? 'block' : 'none';
+            }
+
+            try {
+                localStorage.setItem(`crm_checklist_state_${boardId}`, JSON.stringify(state));
+            } catch(e) {}
+        }
+
+        function resetChecklist(boardId) {
+            const board = document.getElementById(boardId);
+            if (!board) return;
+            board.querySelectorAll('.apple-checkbox').forEach(cb => cb.checked = false);
+            updateChecklistProgress(boardId);
+            showToast('Checklist reiniciado para novo dia.');
+        }
+
+        // Carregar estado salvo do checklist
+        window.addEventListener('DOMContentLoaded', () => {
+            ['checklist_morning', 'checklist_afternoon'].forEach(boardId => {
+                try {
+                    const saved = localStorage.getItem(`crm_checklist_state_${boardId}`);
+                    if (saved) {
+                        const arr = JSON.parse(saved);
+                        const board = document.getElementById(boardId);
+                        if (board) {
+                            const checkboxes = board.querySelectorAll('.apple-checkbox');
+                            checkboxes.forEach((cb, idx) => {
+                                if (arr[idx] !== undefined) cb.checked = arr[idx];
+                            });
+                            updateChecklistProgress(boardId);
+                        }
+                    }
+                } catch(e) {}
+            });
+        });
+
+        // Barra de leitura superior
         window.addEventListener('scroll', () => {
-            const sections = document.querySelectorAll('h2[id], h3[id]');
+            const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            const bar = document.getElementById('readingProgressBar');
+            if (bar) bar.style.width = scrolled + '%';
+        });
+
+        // Scrollspy da Sidebar
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('div[id], h2[id], h3[id]');
             let currentId = '';
             sections.forEach(s => {
                 const top = s.getBoundingClientRect().top;
-                if (top <= 120) {
+                if (top <= 140) {
                     currentId = s.id;
                 }
             });
@@ -1136,6 +3193,41 @@ Exclusivamente para homens e mulheres de altíssimo poder aquisitivo!</code></pr
                 });
             }
         });
+
+        // Busca rápida
+        function handleSearch(query) {
+            query = query.toLowerCase().trim();
+            const links = document.querySelectorAll('.nav-link');
+            links.forEach(l => {
+                const text = l.innerText.toLowerCase();
+                if (!query || text.includes(query)) {
+                    l.style.display = 'flex';
+                } else {
+                    l.style.display = 'none';
+                }
+            });
+        }
+
+        // Atalho de Teclado Cmd+K ou /
+        window.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                const input = document.getElementById('searchInput');
+                if (input) input.focus();
+            } else if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                const input = document.getElementById('searchInput');
+                if (input) input.focus();
+            }
+        });
+
+        // Mobile drawer toggle
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.classList.toggle('mobile-open');
+            }
+        }
     </script>
 </body>
 </html>

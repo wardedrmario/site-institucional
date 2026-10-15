@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checklist de Produção & Gravação — Dr. Mário Warde</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0e12;
+      --card-bg: rgba(26, 29, 36, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent-burgundy: #801818;
+      --accent-burgundy-light: #a82020;
+      --accent-gold: #d4af37;
+      --accent-gold-soft: rgba(212, 175, 55, 0.15);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --success: #10b981;
+      --success-soft: rgba(16, 185, 129, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 30px 20px 80px;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(128, 24, 24, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.08) 0%, transparent 40%);
+      background-attachment: fixed;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--accent-gold-soft);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: var(--accent-gold);
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 680px;
+      margin: 0 auto 20px;
+    }
+
+    .meta-bar {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .progress-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-bottom: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .progress-info {
+      flex: 1;
+    }
+
+    .progress-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .progress-bar-bg {
+      background: rgba(255, 255, 255, 0.08);
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      background: linear-gradient(90deg, var(--accent-burgundy), var(--accent-gold));
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .btn-reset {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .btn-reset:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .section-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 26px;
+      margin-bottom: 25px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .section-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--accent-gold-soft);
+      color: var(--accent-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .timeline-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .timeline-table th, .timeline-table td {
+      padding: 12px 14px;
+      text-align: left;
+    }
+
+    .timeline-table th {
+      color: var(--text-muted);
+      font-weight: 500;
+      border-bottom: 1px solid var(--card-border);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .timeline-table tr:not(:last-child) td {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .timeline-time {
+      color: var(--accent-gold);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .checklist-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .checklist-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .checklist-item.checked {
+      background: var(--success-soft);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .checklist-checkbox {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      margin-top: 2px;
+      cursor: pointer;
+      position: relative;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .checklist-checkbox:checked {
+      background: var(--success);
+      border-color: var(--success);
+    }
+
+    .checklist-checkbox:checked::after {
+      content: '✓';
+      position: absolute;
+      color: #fff;
+      font-size: 13px;
+      font-weight: bold;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -52%);
+    }
+
+    .checklist-content {
+      flex: 1;
+    }
+
+    .checklist-label {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-main);
+      transition: all 0.2s;
+    }
+
+    .checklist-item.checked .checklist-label {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    .checklist-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .roteiros-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .roteiro-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s;
+    }
+
+    .roteiro-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(212, 175, 55, 0.3);
+    }
+
+    .roteiro-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 8px;
+      width: fit-content;
+    }
+
+    .tag-fem {
+      background: rgba(244, 114, 182, 0.15);
+      color: #f472b6;
+    }
+
+    .tag-masc {
+      background: rgba(96, 165, 250, 0.15);
+      color: #60a5fa;
+    }
+
+    .roteiro-name {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+
+    .roteiro-hook {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .footer-actions {
+      margin-top: 40px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      background: linear-gradient(135deg, var(--accent-burgundy), #4a0c0c);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-action:hover {
+      box-shadow: 0 4px 20px rgba(128, 24, 24, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: none;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        color: #000;
+        padding: 0;
+      }
+      .container {
+        max-width: 100%;
+      }
+      .section-card, .progress-card {
+        background: #fff;
+        border: 1px solid #ccc;
+        box-shadow: none;
+        page-break-inside: avoid;
+        color: #000;
+      }
+      h1, .section-title, .checklist-label, .roteiro-name {
+        color: #000;
+      }
+      .badge, .btn-action, .btn-reset, .footer-actions {
+        display: none;
+      }
+      .timeline-table th, .timeline-table td {
+        border-color: #ddd;
+        color: #333;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <header>
+      <div class="badge">🎬 Protocolo Operacional Audiovisual</div>
+      <h1>Checklist de Produção & Gravação</h1>
+      <p class="subtitle">Guia mestre para gravação dos 8 criativos de elite (Deep Plane & Contorno Corporal) com o Dr. Mário Warde na Vila Madalena.</p>
+      
+      <div class="meta-bar">
+        <div class="meta-item">📍 Clínica Dr. Mário Warde (SP)</div>
+        <div class="meta-item">⏱️ Duração: 2h30 a 3h00</div>
+        <div class="meta-item">🎯 Meta Ads 2026 / Quiet Luxury</div>
+      </div>
+    </header>
+
+    <!-- Barra de Progresso Interativa -->
+    <div class="progress-card">
+      <div class="progress-info">
+        <div class="progress-title">
+          <span>Progresso do Checklist</span>
+          <span id="progressText">0 de 0 concluídos (0%)</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+      </div>
+      <button class="btn-reset" onclick="resetChecklist()">Desmarcar Todos</button>
+    </div>
+
+    <!-- 1. Cronograma da Sessão -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-icon">🕒</div>
+        <h2 class="section-title">1. Cronograma & Linha do Tempo da Sessão</h2>
+      </div>
+      <table class="timeline-table">
+        <thead>
+          <tr>
+            <th>Horário</th>
+            <th>Etapa</th>
+            <th>Responsável</th>
+            <th>Atividade Principal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="timeline-time">08h00 - 08h30</td>
+            <td>Montagem Técnica</td>
+            <td>Videomaker</td>
+            <td>Luz, áudio, câmera, tripé e teleprompter montados antes da chegada do Dr.</td>
+          </tr>
+          <tr>
+            <td class="timeline-time">08h30 - 08h45</td>
+            <td>Styling & Áudio</td>
+            <td>Produtor & Dr.</td>
+            <td>Pó translúcido antibrilho, microfonação, alinhamento de terno e café.</td>
+          </tr>
+          <tr>
+            <td class="timeline-time">08h45 - 09h45</td>
+            <td>Bloco Feminino</td>
+            <td>Dr. Mário</td>
+            <td>Gravação dos 4 vídeos de Deep Plane (Fios, Riscos/Perícia, Cicatriz, Consulta).</td>
+          </tr>
+          <tr>
+            <td class="timeline-time">09h45 - 10h00</td>
+            <td>Pausa Estratégica</td>
+            <td>Todos</td>
+            <td>Descanso de voz de 15 min, hidratação e troca de figurino (se houver).</td>
+          </tr>
+          <tr>
+            <td class="timeline-time">10h00 - 11h00</td>
+            <td>Bloco Masculino</td>
+            <td>Dr. Mário</td>
+            <td>Gravação dos 4 vídeos masculinos (Emagrecimento, Ginecomastia, Lipo, Retorno).</td>
+          </tr>
+          <tr>
+            <td class="timeline-time">11h00 - 11h30</td>
+            <td>B-Rolls & Detalhes</td>
+            <td>Videomaker</td>
+            <td>Captação de imagens de apoio sem fala (mãos, maquete, corredor, exames).</td>
+          </tr>
+          <tr>
+            <td class="timeline-time">11h30 - 11h45</td>
+            <td>Backup Imediato</td>
+            <td>Videomaker</td>
+            <td>Dupla checagem dos cartões SD e transferência para SSD externo.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 2. Equipamentos & Imagem -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-icon">📷</div>
+        <h2 class="section-title">2. Câmera, Áudio & Iluminação</h2>
+      </div>
+      <div class="checklist-group">
+        <label class="checklist-item" data-id="cam-1">
+          <input type="checkbox" class="checklist-checkbox">
+          <div class="checklist-content">
+            <div class="checklist-label">Câmera Principal em 4K Vertical (9:16)</div>
+            <div class="checklist-desc">Configurada em 4K 60fps ou 24fps (Mirrorless com lente 50/85mm f/1.8 ou iPhone 15/16 Pro em ProRes).</div>
+          </div>
+        </label>
+        <label class="checklist-item" data-id="cam-2">
+          <input type="checkbox" class="checklist-checkbox">
+          <div class="checklist-content">
+            <div class="checklist-label">Tripé Nivelado na Linha dos Olhos</div>
+            <div class="checklist-desc">Evitar ângulos de baixo para cima. O olhar deve ser direto nos olhos do paciente.</div>
+          </div>
+        </label>
+        <label class="checklist-item" data-id="cam-3">
+          <input type="checkbox" class="checklist-checkbox">
+          <div class="checklist-content">
+            <div class="checklist-label">Microfone Lapela Sem Fio Oculto (DJI Mic 2 ou Rode PRO)</div>
+            <div class="checklist-desc">Posicionado no esterno (15 a 20 cm da boca), testado sem ruído de atrito na roupa. Nível em -12dB a -6dB.</div>
+          </div>
+        </label>
+        <label class="checklist-item" data-id="cam-4">
+          <input type="checkbox" class="checklist-checkbox">
+          <div class="checklist-content">
+            <div class="checklist-label">Isolamento Acústico da Sala</div>
+            <div class="checklist-desc">Portas e janelas fechadas. Desligar ar-condicionado barulhento ou ventiladores durante os takes.</div>
+          </div>
+        </label>
+        <label class="checklist-item" data-id="cam-5">
+          <input type="checkbox" class="checklist-checkbox">
+          <div class="checklist-content">
+            <div class="checklist-label">Iluminação Difusa Suave (Key Light 4500K - 5000K)</div>
+            <div class="checklist-desc">Softbox octogonal grande a 45 graus + luz de recorte suave nos ombros para separação do fundo.</div>
+          </div>
+        </label>
+        <label class="checklist-item" data-id="cam-6">
+          <input type="checkbox" class="checklist-checkbox">
+          <div class="checklist-content">
+            <div class="checklist-label">Teleprompter / Tablet na Altura da Lente</div>
+            <div class="checklist-desc">iPad com aplicativo de teleprompter alinhado exatamente no eixo da câmera para olhar 100% natural.</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- 3. Cenário & Styling -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-icon">🏛️</div>
+        <h2 class="section-title">3. Cenografia, Figurino & Styling</h2>
+      </div>
+      <div class="checklist-group">
+        <label class="checklist-item" data-id="cen-1">
+          <input type="checkbox" class="checklist-checkbox">
+          <div class="checklist-content">
+            <div class="checklist-label">Limpeza Visual Total do Consultório</div>
+            <div class="checklist-desc">Zero copos plásticos, fios aparentes, papéis amassados ou embalagens na mesa e no fundo.</div>
+          </div>
+        </label>
+        <label class="checklist-item" data-id="cen-2">
+          <input type="checkbox" class="checklist-checkbox">
+          <div class="checklist-content">
+            <div class="checklist-label">Elementos de Autoridade Médica no Fundo</div>
+            <div class="checklist-desc">Livro clássico de anatomia/arte, maquete anatômica de face, caneta nobre e marcenaria refinada.</div>
+          </div>
+        </label>
+        <label class="checklist-item" data-id="cen-3">
+          <input type="checkbox" class="checklist-checkbox">
+          <div class="checklist-content">
+            <div class="checklist-label">Look 1: Terno Nobre Escuro sem Gravata (Bloco Feminino)</div>
+            <div class="checklist-desc">Alfaiataria impecável (marinho ou chumbo), camisa clara sob medida aberta 1 botão, relógio clássico.</div>
+          </div>
+        </label>
+        <label class="checklist-item" data-id="cen-4">
+          <input type="checkbox" class="checklist-checkbox">
+          <div class="checklist-content">
+            <div class="checklist-label">Look 2: Scrub Premium Escuro ou Blazer Executivo (Bloco Masculino)</div>
+            <div class="checklist-desc">Scrub escuro ajustado (grafite ou azul marinho) transmitindo autoridade cirúrgica direta.</div>
+          </div>
+        </label>
+        <label class="checklist-item" data-id="cen-5">
+          <input type="checkbox" class="checklist-checkbox">
+          <div class="checklist-content">
+            <div class="checklist-label">Maquiagem Antibrilho (Obrigatória em 4K)</div>
+            <div class="checklist-desc">Pó translúcido na testa, nariz e bochechas para neutralizar reflexos da luz. Protetor labial sem brilho.</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- 4. Protocolo de Gravação Anti-Fadiga -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-icon">🎬</div>
+        <h2 class="section-title">4. Protocolo de Gravação em Blocos (Técnica Anti-Fadiga)</h2>
+      </div>
+      <div class="checklist-group">
+        <label class="checklist-item" data-id="prot-1">
+          <input type="checkbox" class="checklist-checkbox">
+          <div class="checklist-content">
+            <div class="checklist-label">Gravação do Gancho Isolado (0 a 4s)</div>
+            <div class="checklist-desc">Repetir apenas a frase inicial até atingir a máxima firmeza, intensidade e contato visual com a lente.</div>
+          </div>
+        </label>
+        <label class="checklist-item" data-id="prot-2">
+          <input type="checkbox" class="checklist-checkbox">
+          <div class="checklist-content">
+            <div class="checklist-label">Gravação da Explicação Anatômica (5 a 25s)</div>
+            <div class="checklist-desc">Gesticulação aberta e didática. Não precisa decorar; pausa de 2 segundos antes e depois de cada take.</div>
+          </div>
+        </label>
+        <label class="checklist-item" data-id="prot-3">
+          <input type="checkbox" class="checklist-checkbox">
+          <div class="checklist-content">
+            <div class="checklist-label">Gravação do Fechamento & CTA (25 a 45s)</div>
+            <div class="checklist-desc">Sorriso leve, olhar acolhedor e convite elegante ao 'Saiba Mais' sem agressividade comercial.</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- 5. Roteiros a Gravar -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-icon">📋</div>
+        <h2 class="section-title">5. Os 8 Roteiros da Sessão</h2>
+      </div>
+      
+      <div class="roteiros-grid">
+        <!-- F1 -->
+        <div class="roteiro-card">
+          <div>
+            <span class="roteiro-tag tag-fem">Feminino 1 • Deep Plane</span>
+            <div class="roteiro-name">A Ilusão dos Fios</div>
+            <div class="roteiro-hook">"Rosto derretendo após os 40? A verdade que nenhum fio sustenta..."</div>
+          </div>
+          <label class="checklist-item" data-id="rot-f1" style="margin-top: 12px; padding: 8px 10px;">
+            <input type="checkbox" class="checklist-checkbox">
+            <div class="checklist-content"><div class="checklist-label" style="font-size: 0.85rem;">Take Aprovado</div></div>
+          </label>
+        </div>
+
+        <!-- F2 -->
+        <div class="roteiro-card">
+          <div>
+            <span class="roteiro-tag tag-fem">Feminino 2 • Perícia & Ética</span>
+            <div class="roteiro-name">O Que Não Te Contam</div>
+            <div class="roteiro-hook">"O que realmente protege o seu rosto de um resultado desastroso?"</div>
+          </div>
+          <label class="checklist-item" data-id="rot-f2" style="margin-top: 12px; padding: 8px 10px;">
+            <input type="checkbox" class="checklist-checkbox">
+            <div class="checklist-content"><div class="checklist-label" style="font-size: 0.85rem;">Take Aprovado</div></div>
+          </label>
+        </div>
+
+        <!-- F3 -->
+        <div class="roteiro-card">
+          <div>
+            <span class="roteiro-tag tag-fem">Feminino 3 • Quiet Luxury</span>
+            <div class="roteiro-name">A Cicatriz Imperceptível</div>
+            <div class="roteiro-hook">"Você saberia dizer se as suas amigas mais elegantes operaram?"</div>
+          </div>
+          <label class="checklist-item" data-id="rot-f3" style="margin-top: 12px; padding: 8px 10px;">
+            <input type="checkbox" class="checklist-checkbox">
+            <div class="checklist-content"><div class="checklist-label" style="font-size: 0.85rem;">Take Aprovado</div></div>
+          </label>
+        </div>
+
+        <!-- F4 -->
+        <div class="roteiro-card">
+          <div>
+            <span class="roteiro-tag tag-fem">Feminino 4 • Fricção Nobre</span>
+            <div class="roteiro-name">A Consulta de 60 Minutos</div>
+            <div class="roteiro-hook">"Você confiaria a cirurgia da sua vida a uma consulta de 15 minutos?"</div>
+          </div>
+          <label class="checklist-item" data-id="rot-f4" style="margin-top: 12px; padding: 8px 10px;">
+            <input type="checkbox" class="checklist-checkbox">
+            <div class="checklist-content"><div class="checklist-label" style="font-size: 0.85rem;">Take Aprovado</div></div>
+          </label>
+        </div>
+
+        <!-- M1 -->
+        <div class="roteiro-card">
+          <div>
+            <span class="roteiro-tag tag-masc">Masculino 1 • Abdômen</span>
+            <div class="roteiro-name">Pós-Emagrecimento</div>
+            <div class="roteiro-hook">"Você venceu a balança. Mas e o espelho?"</div>
+          </div>
+          <label class="checklist-item" data-id="rot-m1" style="margin-top: 12px; padding: 8px 10px;">
+            <input type="checkbox" class="checklist-checkbox">
+            <div class="checklist-content"><div class="checklist-label" style="font-size: 0.85rem;">Take Aprovado</div></div>
+          </label>
+        </div>
+
+        <!-- M2 -->
+        <div class="roteiro-card">
+          <div>
+            <span class="roteiro-tag tag-masc">Masculino 2 • Peitoral</span>
+            <div class="roteiro-name">Ginecomastia & Tórax</div>
+            <div class="roteiro-hook">"Evita camisas claras ou praia por causa do peitoral?"</div>
+          </div>
+          <label class="checklist-item" data-id="rot-m2" style="margin-top: 12px; padding: 8px 10px;">
+            <input type="checkbox" class="checklist-checkbox">
+            <div class="checklist-content"><div class="checklist-label" style="font-size: 0.85rem;">Take Aprovado</div></div>
+          </label>
+        </div>
+
+        <!-- M3 -->
+        <div class="roteiro-card">
+          <div>
+            <span class="roteiro-tag tag-masc">Masculino 3 • Performance</span>
+            <div class="roteiro-name">Lipo HD Natural</div>
+            <div class="roteiro-hook">"O nível de exigência dos seus negócios na sua imagem..."</div>
+          </div>
+          <label class="checklist-item" data-id="rot-m3" style="margin-top: 12px; padding: 8px 10px;">
+            <input type="checkbox" class="checklist-checkbox">
+            <div class="checklist-content"><div class="checklist-label" style="font-size: 0.85rem;">Take Aprovado</div></div>
+          </label>
+        </div>
+
+        <!-- M4 -->
+        <div class="roteiro-card">
+          <div>
+            <span class="roteiro-tag tag-masc">Masculino 4 • Executivo</span>
+            <div class="roteiro-name">Retorno ao Comando</div>
+            <div class="roteiro-hook">"'Não posso me afastar da minha empresa por um mês'..."</div>
+          </div>
+          <label class="checklist-item" data-id="rot-m4" style="margin-top: 12px; padding: 8px 10px;">
+            <input type="checkbox" class="checklist-checkbox">
+            <div class="checklist-content"><div class="checklist-label" style="font-size: 0.85rem;">Take Aprovado</div></div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. B-Rolls Obrigatórios -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-icon">🎞️</div>
+        <h2 class="section-title">6. Captação de B-Rolls (15 minutos ao final)</h2>
+      </div>
+      <div class="checklist-group">
+        <label class="checklist-item" data-id="broll-1">
+          <input type="checkbox" class="checklist-checkbox">
+          <div class="checklist-content">
+            <div class="checklist-label">Close das mãos desenhando em diagrama/tablet</div>
+            <div class="checklist-desc">Caneta digital traçando linhas anatômicas de sustentação facial ou abdominal.</div>
+          </div>
+        </label>
+        <label class="checklist-item" data-id="broll-2">
+          <input type="checkbox" class="checklist-checkbox">
+          <div class="checklist-content">
+            <div class="checklist-label">Mãos do cirurgião manipulando maquete anatômica</div>
+            <div class="checklist-desc">Foco no plano muscular profundo (SMAS) e mandíbula.</div>
+          </div>
+        </label>
+        <label class="checklist-item" data-id="broll-3">
+          <input type="checkbox" class="checklist-checkbox">
+          <div class="checklist-content">
+            <div class="checklist-label">Dr. Mário caminhando lentamente pelo corredor da clínica</div>
+            <div class="checklist-desc">Plano médio e aberto, iluminação nobre, postura serena e elegante.</div>
+          </div>
+        </label>
+        <label class="checklist-item" data-id="broll-4">
+          <input type="checkbox" class="checklist-checkbox">
+          <div class="checklist-content">
+            <div class="checklist-label">Olhar atento analisando exames em tela de computador</div>
+            <div class="checklist-desc">Expressão focada de médico sênior planejando o ato cirúrgico.</div>
+          </div>
+        </label>
+        <label class="checklist-item" data-id="broll-5">
+          <input type="checkbox" class="checklist-checkbox">
+          <div class="checklist-content">
+            <div class="checklist-label">Panorâmica lenta do consultório vazio e silencioso</div>
+            <div class="checklist-desc">Transmite a atmosfera de privacidade exclusiva da Vila Madalena.</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="footer-actions">
+      <button class="btn-action" onclick="window.print()">🖨️ Imprimir / Salvar em PDF</button>
+      <button class="btn-action btn-secondary" onclick="compartilharWhatsApp()">📲 Enviar Resumo no WhatsApp</button>
+    </div>
+
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'checklist_gravacao_dr_mario_warde_v1';
+
+    function initChecklist() {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      const items = document.querySelectorAll('.checklist-item');
+
+      items.forEach(item => {
+        const id = item.getAttribute('data-id');
+        const checkbox = item.querySelector('.checklist-checkbox');
+
+        if (saved[id]) {
+          checkbox.checked = true;
+          item.classList.add('checked');
+        }
+
+        item.addEventListener('click', (e) => {
+          if (e.target !== checkbox) {
+            checkbox.checked = !checkbox.checked;
+          }
+          if (checkbox.checked) {
+            item.classList.add('checked');
+          } else {
+            item.classList.remove('checked');
+          }
+          saveState();
+          updateProgress();
+        });
+      });
+
+      updateProgress();
+    }
+
+    function saveState() {
+      const state = {};
+      document.querySelectorAll('.checklist-item').forEach(item => {
+        const id = item.getAttribute('data-id');
+        const checkbox = item.querySelector('.checklist-checkbox');
+        state[id] = checkbox.checked;
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function updateProgress() {
+      const checkboxes = document.querySelectorAll('.checklist-checkbox');
+      const total = checkboxes.length;
+      let checked = 0;
+
+      checkboxes.forEach(cb => {
+        if (cb.checked) checked++;
+      });
+
+      const pct = total === 0 ? 0 : Math.round((checked / total) * 100);
+      document.getElementById('progressBar').style.width = pct + '%';
+      document.getElementById('progressText').innerText = `${checked} de ${total} concluídos (${pct}%)`;
+    }
+
+    function resetChecklist() {
+      if (confirm('Deseja realmente desmarcar todos os itens do checklist?')) {
+        localStorage.removeItem(STORAGE_KEY);
+        document.querySelectorAll('.checklist-checkbox').forEach(cb => cb.checked = false);
+        document.querySelectorAll('.checklist-item').forEach(item => item.classList.remove('checked'));
+        updateProgress();
+      }
+    }
+
+    function compartilharWhatsApp() {
+      const checkboxes = document.querySelectorAll('.checklist-checkbox');
+      let checked = 0;
+      checkboxes.forEach(cb => { if (cb.checked) checked++; });
+      const total = checkboxes.length;
+      const pct = Math.round((checked / total) * 100);
+
+      const msg = `*Checklist de Gravação - Dr. Mário Warde*\nStatus: ${checked}/${total} itens concluídos (${pct}%)\nLocal: Clínica Vila Madalena\nSessão de 8 Criativos Meta Ads 2026.`;
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+    }
+
+    document.addEventListener('DOMContentLoaded', initChecklist);
+  </script>
+
+</body>
+</html>
