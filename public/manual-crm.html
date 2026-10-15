@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Boas Práticas do CRM | Dr. Mário Warde</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --bg-body: #f8fafc;
+            --bg-surface: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --border-subtle: #f1f5f9;
+            --brand-primary: #0f172a;
+            --brand-gold: #c5a880;
+            --brand-gold-dark: #937341;
+            --brand-green: #10b981;
+            --brand-green-light: #ecfdf5;
+            --brand-amber: #f59e0b;
+            --brand-amber-light: #fffbeb;
+            --brand-indigo: #6366f1;
+            --brand-wine: #722f37;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --radius-xl: 24px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+            --shadow-lg: 0 12px 28px rgba(0,0,0,0.08);
+            --sidebar-width: 320px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            line-height: 1.65;
+            font-size: 15px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-surface);
+            border-right: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .clinic-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .clinic-logo-badge {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--brand-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        .clinic-name {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .sidebar-title {
+            font-size: 17px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+            margin-bottom: 6px;
+        }
+
+        .version-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 8px;
+            background: #ecfdf5;
+            color: #065f46;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .sidebar-search {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .search-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            font-size: 13px;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 12px 8px 34px;
+            background: var(--bg-body);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            color: var(--text-primary);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--text-primary);
+            background: #ffffff;
+            box-shadow: 0 0 0 2px rgba(15,23,42,0.06);
+        }
+
+        .sidebar-nav {
+            padding: 14px 10px;
+            overflow-y: auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 12.5px;
+            font-weight: 500;
+            border-radius: var(--radius-sm);
+            transition: all 0.15s ease;
+            line-height: 1.35;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+            background: var(--border-subtle);
+        }
+
+        .nav-link.active {
+            color: var(--text-primary);
+            background: #ffffff;
+            font-weight: 700;
+            box-shadow: var(--shadow-sm);
+            border-left: 3px solid var(--brand-gold-dark);
+        }
+
+        .nav-level-2 {
+            margin-top: 6px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .nav-level-3 {
+            padding-left: 24px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Main Content Wrapper */
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-navbar {
+            height: 60px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+        }
+
+        .top-breadcrumb {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .top-breadcrumb span {
+            color: var(--text-secondary);
+        }
+
+        .top-breadcrumb strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: var(--radius-sm);
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-action:hover {
+            background: var(--bg-body);
+            color: var(--text-primary);
+        }
+
+        .btn-action-primary {
+            background: var(--brand-primary);
+            color: #ffffff;
+            border-color: var(--brand-primary);
+        }
+
+        .btn-action-primary:hover {
+            background: #1e293b;
+            color: #ffffff;
+        }
+
+        /* Document Canvas */
+        .document-canvas {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 30px 80px 30px;
+            width: 100%;
+        }
+
+        .doc-header-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            margin-bottom: 36px;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .doc-header-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0f172a 0%, var(--brand-gold) 50%, #0f172a 100%);
+        }
+
+        .doc-subtitle-pre {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--brand-gold-dark);
+            margin-bottom: 8px;
+        }
+
+        .doc-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.25;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .doc-meta-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .doc-tag {
+            font-size: 12px;
+            padding: 4px 10px;
+            background: var(--bg-body);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .doc-tag-highlight {
+            background: #ecfdf5;
+            color: #065f46;
+            border-color: #a7f3d0;
+            font-weight: 600;
+        }
+
+        /* Typography */
+        .section-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 48px 0 32px 0;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.4px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            scroll-margin-top: 80px;
+        }
+
+        .anchor-tag {
+            color: var(--brand-gold);
+            font-size: 18px;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+
+        .subsection-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 28px 0 14px 0;
+            letter-spacing: -0.2px;
+            scroll-margin-top: 80px;
+        }
+
+        .subsubsection-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 18px 0 8px 0;
+        }
+
+        .luxury-p {
+            margin-bottom: 16px;
+            color: #334155;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* Callouts / Alerts */
+        .callout {
+            display: flex;
+            gap: 14px;
+            padding: 18px 20px;
+            border-radius: var(--radius-md);
+            margin: 24px 0;
+            border: 1px solid transparent;
+            font-size: 14.5px;
+            line-height: 1.6;
+        }
+
+        .callout-icon {
+            font-size: 20px;
+            line-height: 1;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .callout-note {
+            background: #fdf8f6;
+            border-color: #f3d5ca;
+            color: #4a2820;
+        }
+
+        .callout-important {
+            background: #eff6ff;
+            border-color: #bfdbfe;
+            color: #1e3a8a;
+        }
+
+        .callout-tip {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+            color: #14532d;
+        }
+
+        .callout-warning {
+            background: #fffbeb;
+            border-color: #fde68a;
+            color: #78350f;
+        }
+
+        .luxury-quote {
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-left: 3px solid var(--brand-gold-dark);
+            background: #ffffff;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-style: italic;
+            color: #334155;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Lists */
+        .luxury-list, .luxury-numbered-list {
+            margin: 14px 0 20px 24px;
+            color: #334155;
+        }
+
+        .luxury-list li, .luxury-numbered-list li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .luxury-checklist {
+            list-style: none;
+            margin: 16px 0 24px 0;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .check-item:last-child {
+            border-bottom: none;
+        }
+
+        .check-box {
+            font-size: 16px;
+            line-height: 1.2;
+        }
+
+        .check-text {
+            font-size: 14.5px;
+            color: #334155;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            margin: 24px 0;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .luxury-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13.5px;
+            text-align: left;
+        }
+
+        .luxury-table th {
+            background: #f8fafc;
+            padding: 12px 16px;
+            font-weight: 700;
+            color: #0f172a;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .luxury-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-subtle);
+            color: #334155;
+            vertical-align: top;
+        }
+
+        .luxury-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .luxury-table tr:hover td {
+            background: #fcfdfe;
+        }
+
+        /* Code Card */
+        .code-card {
+            background: #1e293b;
+            border-radius: var(--radius-md);
+            margin: 20px 0;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .code-header {
+            background: #0f172a;
+            padding: 8px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .code-lang {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--brand-gold);
+            letter-spacing: 0.5px;
+        }
+
+        .btn-copy-mini {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #ffffff;
+            padding: 3px 8px;
+            font-size: 11px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-copy-mini:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .code-body {
+            padding: 16px;
+            overflow-x: auto;
+            color: #e2e8f0;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 12.5px;
+            line-height: 1.5;
+        }
+
+        .inline-code {
+            background: #e2e8f0;
+            color: #0f172a;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: monospace;
+        }
+
+        .mermaid-diagram {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin: 24px 0;
+            overflow-x: auto;
+            text-align: center;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #0f172a;
+            color: #ffffff;
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.25s ease;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                display: none;
+            }
+            .main-wrapper {
+                margin-left: 0;
+            }
+            .top-navbar {
+                padding: 0 20px;
+            }
+            .document-canvas {
+                padding: 20px 16px 60px 16px;
+            }
+            .doc-header-card {
+                padding: 24px 20px;
+            }
+            .doc-title {
+                font-size: 26px;
+            }
+        }
+
+        @media print {
+            .sidebar, .top-navbar, .btn-action, .btn-copy-mini {
+                display: none !important;
+            }
+            .main-wrapper {
+                margin-left: 0 !important;
+            }
+            .document-canvas {
+                max-width: 100% !important;
+                padding: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="clinic-brand">
+                    <div class="clinic-logo-badge">W</div>
+                    <span class="clinic-name">Dr. Mário Warde</span>
+                </div>
+                <h1 class="sidebar-title">Manual do CRM</h1>
+                <div class="version-pill">
+                    <span>🟢 Guia Oficial 2026</span>
+                </div>
+            </div>
+
+            <div class="sidebar-search">
+                <div class="search-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Buscar no Manual..." oninput="handleSearch(this.value)">
+                </div>
+            </div>
+
+            <nav class="sidebar-nav" id="sidebarNav">
+                <a href="#clínica-dr-mário-warde-|-cirurgia-plástica-de-alto-padrão" class="nav-link nav-level-3" data-target="clínica-dr-mário-warde-|-cirurgia-plástica-de-alto-padrão"><span class="nav-text">Clínica Dr. Mário Warde | Cirurgia Plástica de Alto Padrão</span></a>
+<a href="#🧭-índice-do-manual" class="nav-link nav-level-2" data-target="🧭-índice-do-manual"><span class="nav-text">🧭 Índice do Manual</span></a>
+<a href="#🏛️-capítulo-1-o-que-é-o-crm-a-linha-do-cuidado-do-paciente" class="nav-link nav-level-2" data-target="🏛️-capítulo-1-o-que-é-o-crm-a-linha-do-cuidado-do-paciente"><span class="nav-text">🏛️ Capítulo 1: O Que É o CRM? (A Linha do Cuidado do Paciente)</span></a>
+<a href="#🚪-capítulo-2-as-9-salas-da-nossa-clínica-entendendo-as-colunas-do-painel" class="nav-link nav-level-2" data-target="🚪-capítulo-2-as-9-salas-da-nossa-clínica-entendendo-as-colunas-do-painel"><span class="nav-text">🚪 Capítulo 2: As 9 "Salas" da Nossa Clínica (Entendendo as Colunas do Painel)</span></a>
+<a href="#1-triagem-/-descoberta-a-porta-de-entrada" class="nav-link nav-level-3" data-target="1-triagem-/-descoberta-a-porta-de-entrada"><span class="nav-text">1. Triagem / Descoberta (*"A Porta de Entrada"*)</span></a>
+<a href="#2-qualificação-concierge-a-sala-de-estar-e-acolhimento" class="nav-link nav-level-3" data-target="2-qualificação-concierge-a-sala-de-estar-e-acolhimento"><span class="nav-text">2. Qualificação Concierge (*"A Sala de Estar e Acolhimento"*)</span></a>
+<a href="#3-📅-agendado-sinal-50-pago-a-reserva-sagrada-da-agenda" class="nav-link nav-level-3" data-target="3-📅-agendado-sinal-50-pago-a-reserva-sagrada-da-agenda"><span class="nav-text">3. 📅 Agendado (Sinal 50% Pago) (*"A Reserva Sagrada da Agenda"*)</span></a>
+<a href="#4-✅-consulta-realizada-presencial-a-saída-da-sala-do-doutor" class="nav-link nav-level-3" data-target="4-✅-consulta-realizada-presencial-a-saída-da-sala-do-doutor"><span class="nav-text">4.  Consulta Realizada (Presencial) (*"A Saída da Sala do Doutor"*)</span></a>
+<a href="#5-pós-consulta-decisão-o-momento-de-reflexão-do-paciente" class="nav-link nav-level-3" data-target="5-pós-consulta-decisão-o-momento-de-reflexão-do-paciente"><span class="nav-text">5. Pós-Consulta (Decisão) (*"O Momento de Reflexão do Paciente"*)</span></a>
+<a href="#6-💎-cirurgia-fechada-depósito-o-sonho-confirmado" class="nav-link nav-level-3" data-target="6-💎-cirurgia-fechada-depósito-o-sonho-confirmado"><span class="nav-text">6. 💎 Cirurgia Fechada (Depósito) (*"O Sonho Confirmado"*)</span></a>
+<a href="#7-pré-operatório-o-cuidado-e-a-segurança-médica" class="nav-link nav-level-3" data-target="7-pré-operatório-o-cuidado-e-a-segurança-médica"><span class="nav-text">7. Pré-operatório (*"O Cuidado e a Segurança Médica"*)</span></a>
+<a href="#8-pós-operatório-/-recorrência-o-vínculo-para-toda-a-vida" class="nav-link nav-level-3" data-target="8-pós-operatório-/-recorrência-o-vínculo-para-toda-a-vida"><span class="nav-text">8. Pós-operatório / Recorrência (*"O Vínculo para Toda a Vida"*)</span></a>
+<a href="#9-🥶-arquivado-/-não-converteu-a-gaveta-de-arquivo" class="nav-link nav-level-3" data-target="9-🥶-arquivado-/-não-converteu-a-gaveta-de-arquivo"><span class="nav-text">9. 🥶 Arquivado / Não Converteu (*"A Gaveta de Arquivo"*)</span></a>
+<a href="#🪪-capítulo-3-anatomia-do-cartão-do-paciente-guia-visual-botão-por-botão" class="nav-link nav-level-2" data-target="🪪-capítulo-3-anatomia-do-cartão-do-paciente-guia-visual-botão-por-botão"><span class="nav-text">🪪 Capítulo 3: Anatomia do Cartão do Paciente (Guia Visual Botão por Botão)</span></a>
+<a href="#1-o-termômetro-de-interesse-pontuação-/-score" class="nav-link nav-level-3" data-target="1-o-termômetro-de-interesse-pontuação-/-score"><span class="nav-text">1. O Termômetro de Interesse (Pontuação / Score)</span></a>
+<a href="#2-a-tag-roxa-clínico" class="nav-link nav-level-3" data-target="2-a-tag-roxa-clínico"><span class="nav-text">2. A Tag Roxa `[CLÍNICO]`</span></a>
+<a href="#3-pílulas-de-origem-valor-da-consulta-a-matriz-dos-3-preços" class="nav-link nav-level-3" data-target="3-pílulas-de-origem-valor-da-consulta-a-matriz-dos-3-preços"><span class="nav-text">3. Pílulas de Origem & Valor da Consulta (A Matriz dos 3 Preços)</span></a>
+<a href="#4-botão-📋-copiar-texto-dr-mário-50-pix" class="nav-link nav-level-3" data-target="4-botão-📋-copiar-texto-dr-mário-50-pix"><span class="nav-text">4. Botão `[📋 Copiar Texto Dr. Mário (50% Pix)]`</span></a>
+<a href="#5-o-relógio-de-retorno-alarmes-de-follow-up" class="nav-link nav-level-3" data-target="5-o-relógio-de-retorno-alarmes-de-follow-up"><span class="nav-text">5. O Relógio de Retorno (Alarmes de Follow-up)</span></a>
+<a href="#6-script-whatsapp-edição-e-disparo-com-1-clique" class="nav-link nav-level-3" data-target="6-script-whatsapp-edição-e-disparo-com-1-clique"><span class="nav-text">6. Script WhatsApp, Edição e Disparo com 1 Clique</span></a>
+<a href="#🪄-capítulo-4-a-mágica-dos-bastidores-por-que-arrastar-o-cartão-importa-tanto" class="nav-link nav-level-2" data-target="🪄-capítulo-4-a-mágica-dos-bastidores-por-que-arrastar-o-cartão-importa-tanto"><span class="nav-text">🪄 Capítulo 4: A "Mágica" dos Bastidores: Por Que Arrastar o Cartão Importa Tanto?</span></a>
+<a href="#como-funciona-o-ciclo-da-inteligência" class="nav-link nav-level-3" data-target="como-funciona-o-ciclo-da-inteligência"><span class="nav-text">Como funciona o ciclo da inteligência:</span></a>
+<a href="#o-que-acontece-se-você-não-arrastar-o-cartão" class="nav-link nav-level-3" data-target="o-que-acontece-se-você-não-arrastar-o-cartão"><span class="nav-text">O que acontece se você NÃO arrastar o cartão:</span></a>
+<a href="#o-que-acontece-se-você-arrastar-na-hora-errada-sem-o-pix-pago" class="nav-link nav-level-3" data-target="o-que-acontece-se-você-arrastar-na-hora-errada-sem-o-pix-pago"><span class="nav-text">O que acontece se você arrastar na hora errada (sem o Pix pago):</span></a>
+<a href="#☕-capítulo-5-checklist-matinal-da-ana-paula-15-minutos-para-dominar-o-dia" class="nav-link nav-level-2" data-target="☕-capítulo-5-checklist-matinal-da-ana-paula-15-minutos-para-dominar-o-dia"><span class="nav-text">Capítulo 5: Checklist Matinal da Ana Paula (15 Minutos para Dominar o Dia)</span></a>
+<a href="#📋-o-roteiro-das-08h30" class="nav-link nav-level-3" data-target="📋-o-roteiro-das-08h30"><span class="nav-text">📋 O Roteiro das 08h30:</span></a>
+<a href="#📋-o-fechamento-das-17h30" class="nav-link nav-level-3" data-target="📋-o-fechamento-das-17h30"><span class="nav-text">📋 O Fechamento das 17h30:</span></a>
+<a href="#🩺-capítulo-6-rotina-de-consultório-do-dr-mário-warde-5-minutos-de-visão-estratégica" class="nav-link nav-level-2" data-target="🩺-capítulo-6-rotina-de-consultório-do-dr-mário-warde-5-minutos-de-visão-estratégica"><span class="nav-text">🩺 Capítulo 6: Rotina de Consultório do Dr. Mário Warde (5 Minutos de Visão Estratégica)</span></a>
+<a href="#1-antes-de-iniciar-o-atendimento-do-dia-3-minutos" class="nav-link nav-level-3" data-target="1-antes-de-iniciar-o-atendimento-do-dia-3-minutos"><span class="nav-text">1. Antes de Iniciar o Atendimento do Dia (3 Minutos):</span></a>
+<a href="#2-ao-término-do-dia-de-consultório-2-minutos" class="nav-link nav-level-3" data-target="2-ao-término-do-dia-de-consultório-2-minutos"><span class="nav-text">2. Ao Término do Dia de Consultório (2 Minutos):</span></a>
+<a href="#📜-capítulo-7-os-5-mandamentos-sagrados-do-crm-na-clínica" class="nav-link nav-level-2" data-target="📜-capítulo-7-os-5-mandamentos-sagrados-do-crm-na-clínica"><span class="nav-text">📜 Capítulo 7: Os 5 Mandamentos Sagrados do CRM na Clínica</span></a>
+<a href="#❓-capítulo-8-perguntas-frequentes-resolução-rápida-de-dúvidas" class="nav-link nav-level-2" data-target="❓-capítulo-8-perguntas-frequentes-resolução-rápida-de-dúvidas"><span class="nav-text">Capítulo 8: Perguntas Frequentes & Resolução Rápida de Dúvidas</span></a>
+<a href="#1-o-paciente-disse-que-achou-ruim-pagar-50-de-sinal-adiantado-o-que-eu-faço" class="nav-link nav-level-3" data-target="1-o-paciente-disse-que-achou-ruim-pagar-50-de-sinal-adiantado-o-que-eu-faço"><span class="nav-text">1. "O paciente disse que achou ruim pagar 50% de sinal adiantado. O que eu faço?"</span></a>
+<a href="#2-o-paciente-não-foi-à-consulta-como-aconteceu-com-o-sr-cláudio-o-que-fazer" class="nav-link nav-level-3" data-target="2-o-paciente-não-foi-à-consulta-como-aconteceu-com-o-sr-cláudio-o-que-fazer"><span class="nav-text">2. "O paciente não foi à consulta (como aconteceu com o Sr. Cláudio). O que fazer?"</span></a>
+<a href="#3-posso-alterar-o-texto-que-a-inteligência-artificial-sugeriu-no-cartão" class="nav-link nav-level-3" data-target="3-posso-alterar-o-texto-que-a-inteligência-artificial-sugeriu-no-cartão"><span class="nav-text">3. "Posso alterar o texto que a Inteligência Artificial sugeriu no cartão?"</span></a>
+<a href="#4-o-paciente-fechou-a-cirurgia-mas-só-vai-operar-daqui-a-4-meses-onde-deixo-o-cartão-dele" class="nav-link nav-level-3" data-target="4-o-paciente-fechou-a-cirurgia-mas-só-vai-operar-daqui-a-4-meses-onde-deixo-o-cartão-dele"><span class="nav-text">4. "O paciente fechou a cirurgia mas só vai operar daqui a 4 meses. Onde deixo o cartão dele?"</span></a>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="main-wrapper">
+            <header class="top-navbar">
+                <div class="top-breadcrumb">
+                    <span>Clínica Dr. Mário Warde</span> &nbsp;›&nbsp; <span>Gestão da Clínica</span> &nbsp;›&nbsp; <strong>Manual do CRM</strong>
+                </div>
+                <div class="top-actions">
+                    <a href="/admin" class="btn-action">
+                        <span>⬅️</span> Voltar ao CRM
+                    </a>
+                    <button class="btn-action" onclick="window.print()">
+                        <span>🖨️</span> Imprimir / PDF
+                    </button>
+                    <button class="btn-action btn-action-primary" onclick="copyDrMarioScript()">
+                        <span>📋</span> Copiar Script Dr. Mário
+                    </button>
+                </div>
+            </header>
+
+            <main class="document-canvas" id="docCanvas">
+                <div class="doc-header-card">
+                    <div class="doc-subtitle-pre">Hospitalidade Médica & Gestão da Jornada</div>
+                    <h1 class="doc-title">Manual de Boas Práticas do CRM</h1>
+                    <p style="color: var(--text-secondary); font-size: 16px;">
+                        Guia prático e humanizado para a <strong>Ana Paula (Concierge)</strong> e o <strong>Dr. Mário Warde (Cirurgião Plástico)</strong> dominarem a ferramenta com serenidade e alta eficiência.
+                    </p>
+                    <div class="doc-meta-tags">
+                        <span class="doc-tag doc-tag-highlight">🟢 Guia Oficial 2026</span>
+                        <span class="doc-tag">📅 Atualizado em 14/10/2026</span>
+                        <span class="doc-tag">👩‍💼 Concierge: Ana Paula</span>
+                        <span class="doc-tag">🩺 Cirurgião: Dr. Mário Warde</span>
+                    </div>
+                </div>
+
+                <h1 class="main-title">Manual de Boas Práticas e Operação do CRM</h1>
+<h3 id="clínica-dr-mário-warde-|-cirurgia-plástica-de-alto-padrão" class="subsection-title">Clínica Dr. Mário Warde | Cirurgia Plástica de Alto Padrão</h3>
+<p class="luxury-p"><strong>Guia Prático de Hospitalidade Médica & Gestão da Jornada do Paciente</strong></p>
+<p class="luxury-p"><em>Dedicado à Ana Paula (Concierge) e ao Dr. Mário Warde</em></p>
+<hr class="luxury-divider" />
+<div class="callout callout-note"><div class="callout-icon">💌</div><div class="callout-content"><strong>Uma Carta de Boas-Vindas aos Guardiões da Clínica</strong>
+Este manual foi escrito especialmente para vocês. Aqui não existem termos complicados de tecnologia, vendas ou marketing. O nosso CRM não é uma planilha fria nem um "funil de vendas"; ele é o <strong>Prontuário de Relacionamento e Hospitalidade</strong> da nossa clínica.
+Cada cartão que vocês veem na tela representa uma vida, um sonho de transformação física, uma dor profunda que o paciente muitas vezes esconde do mundo, e a confiança depositada nas mãos do Dr. Mário Warde.
+O objetivo desta ferramenta é simples: <strong>fazer com que nenhum paciente seja esquecido, que o tempo da Ana seja produtivo e sereno, e que a agenda do Dr. Mário seja blindada contra furos e atrasos.</strong></div></div>
+<hr class="luxury-divider" />
+<div class="section-divider"></div><h2 id="🧭-índice-do-manual" class="section-title"><span class="anchor-tag">#</span>🧭 Índice do Manual</h2>
+<ol class="luxury-numbered-list">
+<li><a href="#capitulo-1-o-que-e-o-crm" class="doc-link">O Que É o CRM? (A Linha do Cuidado do Paciente)</a></li>
+<li><a href="#capitulo-2-as-9-salas-da-clinica" class="doc-link">As 9 "Salas" da Nossa Clínica (Entendendo as Colunas do Painel)</a></li>
+<li><a href="#capitulo-3-anatomia-do-cartao-do-paciente" class="doc-link">Anatomia do Cartão do Paciente (Guia Visual Botão por Botão)</a></li>
+<li><a href="#capitulo-4-a-magica-dos-bastidores" class="doc-link">A "Mágica" dos Bastidores: Por Que Arrastar o Cartão Importa Tanto?</a></li>
+<li><a href="#capitulo-5-checklist-matinal-da-ana" class="doc-link">Checklist Matinal da Ana Paula (15 Minutos para Dominar o Dia)</a></li>
+<li><a href="#capitulo-6-rotina-do-dr-mario" class="doc-link">Rotina de Consultório do Dr. Mário Warde (5 Minutos de Visão Estratégica)</a></li>
+<li><a href="#capitulo-7-os-5-mandamentos-sagrados" class="doc-link">Os 5 Mandamentos Sagrados do CRM na Clínica</a></li>
+<li><a href="#capitulo-8-perguntas-frequentes" class="doc-link">Perguntas Frequentes & Resolução Rápida de Dúvidas</a></li>
+</ol>
+<hr class="luxury-divider" />
+<p class="luxury-p"><a id="capitulo-1-o-que-e-o-crm"></a></p>
+<div class="section-divider"></div><h2 id="🏛️-capítulo-1-o-que-é-o-crm-a-linha-do-cuidado-do-paciente" class="section-title"><span class="anchor-tag">#</span>🏛️ Capítulo 1: O Que É o CRM? (A Linha do Cuidado do Paciente)</h2>
+<p class="luxury-p">No mundo corporativo, as pessoas costumam chamar isso de <em>"pipeline"</em> ou <em>"funil de vendas"</em>. Na nossa clínica boutique, chamamos de <strong>Linha do Cuidado e Hospitalidade Médica</strong>.</p>
+<p class="luxury-p">Imagine o CRM como o <strong>Grande Fichário Eletrônico da Recepção da Vila Madalena</strong>, mas com superpoderes:</p>
+<ul class="luxury-list">
+<li><strong>Ele nunca perde um recado:</strong> Chega de bilhetinhos amarelos no teclado ou conversas soltas no WhatsApp que vão sumindo conforme novos contatos entram.</li>
+<li><strong>Ele tem memória fotográfica:</strong> Lembra se a paciente tem queixa de mama caída, se o senhor Cláudio quer tirar a gordura do abdômen e do tórax, ou se a consulta está marcada para a próxima quarta-feira.</li>
+<li><strong>Ele tem alarmes visuais:</strong> Avisa a Ana com cores vibrantes quando um retorno está atrasado (vermelho) ou deve ser feito hoje (laranja).</li>
+<li><strong>Ele protege o Dr. Mário:</strong> Garante que o doutor só se sente à mesa para atender pacientes que realmente têm perfil e já confirmaram a reserva com compromisso financeiro (o sinal de 50%).</li>
+</ul>
+<blockquote class="luxury-quote"><strong>Em resumo:</strong> O CRM é o assistente invisível que cuida da organização da clínica para que a Ana e o Dr. Mário possam focar no que fazem de melhor: acolher, ouvir e transformar a vida dos pacientes.</blockquote>
+<hr class="luxury-divider" />
+<p class="luxury-p"><a id="capitulo-2-as-9-salas-da-clinica"></a></p>
+<div class="section-divider"></div><h2 id="🚪-capítulo-2-as-9-salas-da-nossa-clínica-entendendo-as-colunas-do-painel" class="section-title"><span class="anchor-tag">#</span>🚪 Capítulo 2: As 9 "Salas" da Nossa Clínica (Entendendo as Colunas do Painel)</h2>
+<p class="luxury-p">Quando você entra no painel <code class="inline-code">/admin</code>, vê nove colunas organizadas da esquerda para a direita. Pense nelas não como colunas de computador, mas como as <strong>salas pelas quais o paciente caminha dentro da nossa clínica</strong>:</p>
+<div class="mermaid-diagram"><pre class="mermaid">flowchart LR
+    A["1. Triagem<br/>(Novo Contato)"] --> B["2. Qualificação<br/>(Acolhimento)"]
+    B --> C["3. 📅 Agendado<br/>(Sinal 50% Pago)"]
+    C --> D["4. ✅ Consulta<br/>(Quitação Presencial)"]
+    D --> E["5. Pós-Consulta<br/>(Decisão do Sonho)"]
+    E --> F["6. 💎 Cirurgia Fechada<br/>(Depósito)"]
+    F --> G["7. Pré-op<br/>(Exames)"]
+    G --> H["8. Pós-op<br/>(Cuidado Vitalício)"]
+    B -.-> I["9. 🥶 Arquivado<br/>(Gaveta de Arquivo)"]</pre></div>
+<h3 id="1-triagem-/-descoberta-a-porta-de-entrada" class="subsection-title">1. Triagem / Descoberta (<em>"A Porta de Entrada"</em>)</h3>
+<ul class="luxury-list">
+<li><strong>Quem está aqui:</strong> O paciente que acabou de preencher o formulário no nosso site ou enviou a primeira mensagem no WhatsApp.</li>
+<li><strong>O que a Ana deve fazer:</strong> Dar as boas-vindas com cordialidade e acolhimento nos primeiros 10 a 15 minutos (tempo de ouro).</li>
+<li><strong>Objetivo:</strong> Iniciar o diálogo e entender quem é a pessoa.</li>
+</ul>
+<h3 id="2-qualificação-concierge-a-sala-de-estar-e-acolhimento" class="subsection-title">2. Qualificação Concierge (<em>"A Sala de Estar e Acolhimento"</em>)</h3>
+<ul class="luxury-list">
+<li><strong>Quem está aqui:</strong> O paciente em conversa ativa. A Ana já deu oi e agora está investigando a queixa médica com a pergunta de ouro: <em>"O que mais te incomoda hoje no seu corpo e qual é o seu objetivo com a cirurgia?"</em>.</li>
+<li><strong>Casos Especiais nesta Sala:</strong> Pacientes que precisaram reagendar ou que estamos em processo de <strong>resgate VIP</strong> (como o Sr. Cláudio de Luna) também descansam aqui, sempre com o reloginho de retorno configurado.</li>
+</ul>
+<h3 id="3-📅-agendado-sinal-50-pago-a-reserva-sagrada-da-agenda" class="subsection-title">3. 📅 Agendado (Sinal 50% Pago) (<em>"A Reserva Sagrada da Agenda"</em>)</h3>
+<ul class="luxury-list">
+<li><strong>QUANDO MOVER PARA CÁ:</strong> Apenas e exclusivamente quando o paciente <strong>já pagou o sinal de 50% da consulta via Pix</strong> (R$ 175 para Internet/Indicação ou R$ 425 para Indicação Médica) e o comprovante foi recebido.</li>
+<li><strong>O que significa:</strong> O horário do Dr. Mário está oficialmente bloqueado para ele. Não haverá sobreposição com outro paciente. O paciente recebe o endereço completo da Rua Jericó e as orientações de manobrista.</li>
+</ul>
+<h3 id="4-✅-consulta-realizada-presencial-a-saída-da-sala-do-doutor" class="subsection-title">4. ✅ Consulta Realizada (Presencial) (<em>"A Saída da Sala do Doutor"</em>)</h3>
+<ul class="luxury-list">
+<li><strong>QUANDO MOVER PARA CÁ:</strong> No exato momento em que a consulta presencial termina na clínica e a recepcionista/Ana acerta o <strong>saldo restante dos outros 50%</strong> (R$ 175 ou R$ 425) na máquina de cartão ou Pix.</li>
+<li><strong>O que significa:</strong> O ciclo da Primeira Consulta foi concluído com sucesso e respeito mútuo.</li>
+</ul>
+<h3 id="5-pós-consulta-decisão-o-momento-de-reflexão-do-paciente" class="subsection-title">5. Pós-Consulta (Decisão) (<em>"O Momento de Reflexão do Paciente"</em>)</h3>
+<ul class="luxury-list">
+<li><strong>Quem está aqui:</strong> O paciente já saiu da clínica, amou o Dr. Mário, está com a pasta e o planejamento cirúrgico em mãos e está conversando com a família, organizando férias ou aguardando exames prévios.</li>
+<li><strong>Papel da Ana:</strong> Fazer o acompanhamento afetuoso e atencioso (Follow-up White Glove) a cada 3 a 5 dias, tirando dúvidas com o doutor e facilitando a tomada de decisão.</li>
+</ul>
+<h3 id="6-💎-cirurgia-fechada-depósito-o-sonho-confirmado" class="subsection-title">6. 💎 Cirurgia Fechada (Depósito) (<em>"O Sonho Confirmado"</em>)</h3>
+<ul class="luxury-list">
+<li><strong>QUANDO MOVER PARA CÁ:</strong> O paciente efetuou o depósito/sinal da cirurgia plástica e reservou a data do bloco cirúrgico no hospital (Einstein, Sírio ou Vila Nova Star).</li>
+<li><strong>Comemoração da Clínica:</strong> Esta é a grande vitória do trabalho conjunto entre o tráfego, o acolhimento da Ana e a maestria médica do Dr. Mário.</li>
+</ul>
+<h3 id="7-pré-operatório-o-cuidado-e-a-segurança-médica" class="subsection-title">7. Pré-operatório (<em>"O Cuidado e a Segurança Médica"</em>)</h3>
+<ul class="luxury-list">
+<li><strong>Quem está aqui:</strong> Paciente realizando exames de sangue, risco cirúrgico cardiológico, ultrassonografias, fotos médicas de pré-operatório e assinando termos de consentimento.</li>
+</ul>
+<h3 id="8-pós-operatório-/-recorrência-o-vínculo-para-toda-a-vida" class="subsection-title">8. Pós-operatório / Recorrência (<em>"O Vínculo para Toda a Vida"</em>)</h3>
+<ul class="luxury-list">
+<li><strong>Quem está aqui:</strong> Paciente já operado, em fase de curativos, drenagens linfáticas, retorno de 7, 15, 30, 90 e 180 dias. É onde nascem os depoimentos espontâneos e as indicações de amigas e familiares.</li>
+</ul>
+<h3 id="9-🥶-arquivado-/-não-converteu-a-gaveta-de-arquivo" class="subsection-title">9. 🥶 Arquivado / Não Converteu (<em>"A Gaveta de Arquivo"</em>)</h3>
+<ul class="luxury-list">
+<li><strong>Quem está aqui:</strong> Paciente que declarou que não tem interesse no momento, número incorreto/inexistente ou pessoas que buscavam tratamentos que o Dr. Mário não realiza pelo SUS/convênio. Não apagamos o registro: ele fica guardado com respeito.</li>
+</ul>
+<hr class="luxury-divider" />
+<p class="luxury-p"><a id="capitulo-3-anatomia-do-cartao-do-paciente"></a></p>
+<div class="section-divider"></div><h2 id="🪪-capítulo-3-anatomia-do-cartão-do-paciente-guia-visual-botão-por-botão" class="section-title"><span class="anchor-tag">#</span>🪪 Capítulo 3: Anatomia do Cartão do Paciente (Guia Visual Botão por Botão)</h2>
+<p class="luxury-p">Cada cartão retangular no painel é como uma <strong>Ficha de Prontuário Inteligente</strong>. Vamos entender o que significa cada símbolo e como utilizá-los:</p>
+<div class="code-card"><div class="code-header"><span class="code-lang">Visualização do Cartão</span><button class="btn-copy-mini" onclick="copyCardCode(this)">📋 Copiar</button></div><pre class="code-body"><code>┌─────────────────────────────────────────────────────────────┐
+│ 🔴 145 pts   [INSTAGRAM]   [CLÍNICO]          14/10, 10:20  │
+│                                                             │
+│ Cláudio de Luna                                             │
+│ +55 11 99676-8256                                           │
+│ 🩺 Abdômen e Contorno Peito / Tórax                         │
+│ ⏰ Imediato (próximos 30-60 dias)                           │
+│                                                             │
+│ 🏷️ ORIGEM & VALOR:                                          │
+│ [🌐 Internet]  [👥 Indicação]  [🩺 Médica/VIP]             │
+│ [📋 Copiar Texto Dr. Mário (50% Pix)]                       │
+│                                                             │
+│ ⏰ RETORNO: 16/10/2026 - Resgate VIP Sexta-feira            │
+│                                                             │
+│ 💬 SCRIPT WHATS / AÇÃO:   [✨ IA]  [✏️ Editar]  [📋 Copiar]  │
+│ "Olá, Sr. Cláudio! Passando para saber..."   [🟢 WhatsApp]  │
+└─────────────────────────────────────────────────────────────┘</code></pre></div>
+<h3 id="1-o-termômetro-de-interesse-pontuação-/-score" class="subsection-title">1. O Termômetro de Interesse (Pontuação / Score)</h3>
+<p class="luxury-p">No canto superior esquerdo, você verá uma bolinha colorida e um número:</p>
+<ul class="luxury-list">
+<li>🔴 <strong>Vermelho (HOT - Mais de 130 pts):</strong> <strong>Paciente de Altíssimo Valor!</strong> Tem queixa cirúrgica clara, urgência imediata e mora em bairro nobre de São Paulo. Deve ser atendido em <strong>menos de 10 minutos</strong> com prioridade máxima.</li>
+<li>🟡 <strong>Amarelo (WARM - 60 a 130 pts):</strong> Paciente interessado, mas com plano para os próximos 3 a 6 meses. Acolhimento caloroso e consultivo.</li>
+<li>🔵 <strong>Azul (COLD - Menos de 60 pts):</strong> Paciente frio, curioso ou que só fez uma pergunta genérica.</li>
+</ul>
+<h3 id="2-a-tag-roxa-clínico" class="subsection-title">2. A Tag Roxa <code class="inline-code">[CLÍNICO]</code></h3>
+<p class="luxury-p">Quando essa etiqueta roxa aparece, significa que o paciente mencionou apenas procedimentos pequenos (Botox, toxina botulínica, preenchimento, bioestimulador ou peeling).</p>
+<ul class="luxury-list">
+<li><strong>Por que é útil:</strong> Para a Ana e o Dr. Mário saberem na hora que aquele atendimento não é para uma cirurgia de R$ 50 mil a R$ 80 mil, ajustando o tom da conversa.</li>
+</ul>
+<h3 id="3-pílulas-de-origem-valor-da-consulta-a-matriz-dos-3-preços" class="subsection-title">3. Pílulas de Origem & Valor da Consulta (A Matriz dos 3 Preços)</h3>
+<p class="luxury-p">No meio do cartão, você tem três botões para clicar:</p>
+<ul class="luxury-list">
+<li><strong>🌐 Internet (Padrão):</strong> Paciente que veio pelo Google ou Instagram. A consulta custa <strong>R$ 350</strong>. O sinal de 50% via Pix é de <strong>R$ 175</strong>.</li>
+<li><strong>👥 Indicação (Pacientes):</strong> Indicado por outro paciente feliz do doutor. O valor é o mesmo da internet: <strong>R$ 350</strong> (sinal de <strong>R$ 175</strong>).</li>
+<li><strong>🩺 Médica/VIP:</strong> Paciente encaminhado por colega médico, parente de médico ou do círculo pessoal VIP do Dr. Mário. O valor integral da consulta é <strong>R$ 850</strong> (sinal de 50% via Pix é de <strong>R$ 425</strong>).</li>
+</ul>
+<blockquote class="luxury-quote"><strong>Atenção:</strong> Ao clicar na pílula correspondente, o cartão atualiza os valores e o sistema já sabe exatamente qual régua financeira aplicar.</blockquote>
+<h3 id="4-botão-📋-copiar-texto-dr-mário-50-pix" class="subsection-title">4. Botão <code class="inline-code">[📋 Copiar Texto Dr. Mário (50% Pix)]</code></h3>
+<p class="luxury-p">Ao clicar neste botão, o sistema copia para a sua área de transferência o roteiro perfeito que justifica o sinal de 50%, mencionando:</p>
+<ul class="luxury-list">
+<li>Intervalos amplos entre consultas (sem pressa nem sala cheia);</li>
+<li>Total privacidade na clínica;</li>
+<li>O benefício inegociável de que <strong>100% do valor da consulta é abatido como crédito no plano cirúrgico</strong> caso ela opere com o doutor.</li>
+</ul>
+<p class="luxury-p">Basta clicar no botão e colar no WhatsApp (<code class="inline-code">Ctrl+V</code> ou <code class="inline-code">Cmd+V</code>).</p>
+<h3 id="5-o-relógio-de-retorno-alarmes-de-follow-up" class="subsection-title">5. O Relógio de Retorno (Alarmes de Follow-up)</h3>
+<p class="luxury-p">Nunca confie na memória para lembrar de falar com um paciente daqui a três dias.</p>
+<ul class="luxury-list">
+<li>Clique em <strong>"Agendar retorno..."</strong>;</li>
+<li>Escolha a data no calendário;</li>
+<li>Escreva um motivo curto (ex: <em>"Cobrar exames de sangue"</em>, <em>"Enviar orçamento do hospital"</em>, <em>"Resgate do Sr. Cláudio"</em>);</li>
+<li>Clique em <strong>Salvar</strong>.</li>
+</ul>
+<p class="luxury-p"><strong>Como as bordas do cartão te ajudam:</strong></p>
+<ul class="luxury-list">
+<li>🔴 <strong>Borda Vermelha no Cartão:</strong> <strong>ATENÇÃO MÁXIMA!</strong> O retorno deste paciente está atrasado. Fale com ele agora!</li>
+<li>🟠 <strong>Borda Laranja no Cartão:</strong> O retorno está marcado para <strong>HOJE</strong>. Está na sua lista de tarefas do dia.</li>
+<li>⚪ <strong>Borda Cinza Normal:</strong> Retorno agendado para os próximos dias. Pode ficar tranquila.</li>
+</ul>
+<h3 id="6-script-whatsapp-edição-e-disparo-com-1-clique" class="subsection-title">6. Script WhatsApp, Edição e Disparo com 1 Clique</h3>
+<p class="luxury-p">No rodapé de cada cartão, você encontra a central de comunicação:</p>
+<ul class="luxury-list">
+<li><strong>✨ Botão de IA (Varinha Mágica):</strong> Gera na hora uma sugestão de mensagem educada e personalizada pelo modelo Gemini, baseada no nome e na cirurgia de interesse.</li>
+<li><strong>✏️ Botão de Editar (Lápis):</strong> Abre uma caixinha de texto no cartão. Você pode digitar ou colar qualquer mensagem personalizada (como o roteiro de resgate do Sr. Cláudio) e clicar em <strong>Salvar Script</strong>. A mensagem fica guardada para sempre no prontuário do paciente!</li>
+<li><strong>📋 Botão Copiar:</strong> Copia a mensagem completa para colar onde quiser.</li>
+<li><strong>🟢 Botão Verde do WhatsApp:</strong> O botão mais poderoso do sistema. Ao clicar nele, o WhatsApp Web se abre sozinho na sua tela, <strong>com o número do paciente e a mensagem completa já digitada</strong>. Você só precisa apertar <em>Enter</em> para enviar!</li>
+</ul>
+<hr class="luxury-divider" />
+<p class="luxury-p"><a id="capitulo-4-a-magica-dos-bastidores"></a></p>
+<div class="section-divider"></div><h2 id="🪄-capítulo-4-a-mágica-dos-bastidores-por-que-arrastar-o-cartão-importa-tanto" class="section-title"><span class="anchor-tag">#</span>🪄 Capítulo 4: A "Mágica" dos Bastidores: Por Que Arrastar o Cartão Importa Tanto?</h2>
+<p class="luxury-p">Muitas vezes, a secretária ou a recepção pensa: <em>"Ah, eu já avisei o paciente no WhatsApp, não preciso mexer no sistema agora."</em></p>
+<p class="luxury-p">Aqui está o segredo mais importante de toda a nossa estratégia: <strong>o CRM é o cérebro que conversa em tempo real com a inteligência do Instagram e do Google.</strong></p>
+<h3 id="como-funciona-o-ciclo-da-inteligência" class="subsection-title">Como funciona o ciclo da inteligência:</h3>
+<div class="code-card"><div class="code-header"><span class="code-lang">Visualização do Cartão</span><button class="btn-copy-mini" onclick="copyCardCode(this)">📋 Copiar</button></div><pre class="code-body"><code>[Ana arrasta o cartão para "Agendado (Sinal 50% Pago)"]
+                    │
+                    ▼
+[O CRM dispara um sinal seguro (CAPI) para a Meta/Instagram]
+                    │
+                    ▼
+[A inteligência do anúncio aprende:]
+"Pessoas com esse perfil compram e pagam sinal de R$ 175 a R$ 425!"
+                    │
+                    ▼
+[O Instagram passa a exibir os anúncios do Dr. Mário]
+Exclusivamente para homens e mulheres de altíssimo poder aquisitivo!</code></pre></div>
+<h3 id="o-que-acontece-se-você-não-arrastar-o-cartão" class="subsection-title">O que acontece se você NÃO arrastar o cartão:</h3>
+<ol class="luxury-numbered-list">
+<li>O Instagram acha que ninguém está agendando consultas.</li>
+<li>Ele conclui que o anúncio falhou e começa a testar pessoas aleatórias, trazendo curiosos sem dinheiro ou pessoas de cidades distantes.</li>
+<li>A clínica gasta dinheiro e o WhatsApp da Ana se enche de contatos desqualificados.</li>
+</ol>
+<h3 id="o-que-acontece-se-você-arrastar-na-hora-errada-sem-o-pix-pago" class="subsection-title">O que acontece se você arrastar na hora errada (sem o Pix pago):</h3>
+<ol class="luxury-numbered-list">
+<li>O robô da Meta acha que pessoas que desmarcam ou somem são o nosso cliente ideal.</li>
+<li>Resultado: Mais pacientes furando a consulta na quarta-feira.</li>
+</ol>
+<blockquote class="luxury-quote"><strong>Regra de Ouro:</strong> Arraste o cartão para <strong>"Agendado (Sinal 50% Pago)"</strong> no mesmo minuto em que o comprovante do Pix cair na conta da clínica. É esse clique que garante o sucesso das nossas campanhas!</blockquote>
+<hr class="luxury-divider" />
+<p class="luxury-p"><a id="capitulo-5-checklist-matinal-da-ana"></a></p>
+<div class="section-divider"></div><h2 id="☕-capítulo-5-checklist-matinal-da-ana-paula-15-minutos-para-dominar-o-dia" class="section-title"><span class="anchor-tag">#</span>☕ Capítulo 5: Checklist Matinal da Ana Paula (15 Minutos para Dominar o Dia)</h2>
+<p class="luxury-p">A Ana não precisa passar o dia inteiro com o CRM aberto. Basta uma rotina disciplinada de <strong>15 minutos pela manhã (das 08h30 às 08h45)</strong> e <strong>10 minutos no fim da tarde (às 17h30)</strong>:</p>
+<h3 id="📋-o-roteiro-das-08h30" class="subsection-title">📋 O Roteiro das 08h30:</h3>
+<ul class="luxury-checklist">
+<li class="check-item"><span class="check-box">⬜</span> <span class="check-text"><strong>Passo 1 (2 min) - Respirar e Abrir o <code class="inline-code">/admin</code>:</strong> Acessar o CRM no navegador do computador da clínica.</span></li>
+<li class="check-item"><span class="check-box">⬜</span> <span class="check-text"><strong>Passo 2 (4 min) - Caçar os Cartões com Borda Vermelha:</strong> Eles são pacientes cujo retorno venceu ontem ou antes. Clicar no botão verde do WhatsApp e enviar uma mensagem calorosa de retomada.</span></li>
+<li class="check-item"><span class="check-box">⬜</span> <span class="check-text"><strong>Passo 3 (4 min) - Atender os Cartões com Borda Laranja:</strong> São os retornos agendados para hoje (ex: <em>"Cobrar exames da Dona Maria"</em>, <em>"Resgatar o Sr. Cláudio"</em>). Enviar as mensagens programadas.</span></li>
+<li class="check-item"><span class="check-box">⬜</span> <span class="check-text"><strong>Passo 4 (3 min) - Visitar a Sala "Triagem / Descoberta":</strong> Ver se novos leads chegaram na noite anterior ou de madrugada. Se houver pacientes lá, clicar em ✨ ou usar a saudação acolhedora e mandar o primeiro oi. Em seguida, arrastar o cartão para <strong>"Qualificação Concierge"</strong>.</span></li>
+<li class="check-item"><span class="check-box">⬜</span> <span class="check-text"><strong>Passo 5 (2 min) - Checar a Sala "📅 Agendado":</strong> Conferir quem são os pacientes que vêm hoje ou amanhã para garantir que o manobrista e o cafezinho da recepção estejam preparados.</span></li>
+</checklist>
+<h3 id="📋-o-fechamento-das-17h30" class="subsection-title">📋 O Fechamento das 17h30:</h3>
+<ul class="luxury-checklist">
+<li class="check-item"><span class="check-box">⬜</span> <span class="check-text"><strong>Passo 1:</strong> Todo paciente que passou em consulta presencial hoje foi arrastado para <strong>"✅ Consulta Realizada"</strong>?</span></li>
+<li class="check-item"><span class="check-box">⬜</span> <span class="check-text"><strong>Passo 2:</strong> As pessoas com quem conversei hoje têm uma nova data cravada no reloginho de retorno para eu não esquecer amanhã?</span></li>
+<li class="check-item"><span class="check-box">⬜</span> <span class="check-text"><strong>Passo 3:</strong> Fechar o dia com a sensação de dever cumprido e a clínica 100% organizada.</span></li>
+</checklist>
+<hr class="luxury-divider" />
+<p class="luxury-p"><a id="capitulo-6-rotina-do-dr-mario"></a></p>
+<div class="section-divider"></div><h2 id="🩺-capítulo-6-rotina-de-consultório-do-dr-mário-warde-5-minutos-de-visão-estratégica" class="section-title"><span class="anchor-tag">#</span>🩺 Capítulo 6: Rotina de Consultório do Dr. Mário Warde (5 Minutos de Visão Estratégica)</h2>
+<p class="luxury-p">O Dr. Mário não precisa cadastrar leads nem redigir mensagens. Para o doutor, o CRM é um <strong>Painel de Governança e Inteligência Clínica</strong>.</p>
+<h3 id="1-antes-de-iniciar-o-atendimento-do-dia-3-minutos" class="subsection-title">1. Antes de Iniciar o Atendimento do Dia (3 Minutos):</h3>
+<ul class="luxury-list">
+<li>Abra o CRM no celular ou no iPad do consultório.</li>
+<li>Olhe a coluna <strong>"📅 Agendado (Sinal 50% Pago)"</strong>.</li>
+<li>Em cada cartão, você já vê antes de abrir a porta:</li>
+<li>O nome do paciente e a idade;</li>
+<li>Qual cirurgia ele sonha fazer (ex: Abdômen, Lipo HD, Deep Plane Facelift, Mastopexia);</li>
+<li>O tempo de urgência que ele declarou no formulário;</li>
+<li>A etiqueta de valor (<code class="inline-code">Internet</code> ou <code class="inline-code">Médica/VIP</code>).</li>
+<li><strong>Vantagem Clínica:</strong> O doutor já entra na consulta sabendo exatamente onde direcionar o diálogo e quais fotos de antes/depois ou técnicas de contorno corporal demonstrar.</li>
+</ul>
+<h3 id="2-ao-término-do-dia-de-consultório-2-minutos" class="subsection-title">2. Ao Término do Dia de Consultório (2 Minutos):</h3>
+<ul class="luxury-list">
+<li>Olhe a coluna <strong>"Pós-Consulta (Decisão)"</strong>.</li>
+<li>Estes são os pacientes que já foram examinados e estão com o plano cirúrgico em mãos.</li>
+<li>Uma simples pergunta do Dr. Mário para a Ana: <em>"Ana, a paciente Vanessa já decidiu entre operar em novembro ou janeiro? Quer que eu grave um áudio médico tirando aquela dúvida sobre a anestesia?"</em>.</li>
+<li>Esse cuidado cirúrgico converte orçamentos de R$ 60 mil a R$ 100 mil com extrema facilidade e elegância.</li>
+</ul>
+<hr class="luxury-divider" />
+<p class="luxury-p"><a id="capitulo-7-os-5-mandamentos-sagrados"></a></p>
+<div class="section-divider"></div><h2 id="📜-capítulo-7-os-5-mandamentos-sagrados-do-crm-na-clínica" class="section-title"><span class="anchor-tag">#</span>📜 Capítulo 7: Os 5 Mandamentos Sagrados do CRM na Clínica</h2>
+<p class="luxury-p">Para que a clínica funcione como um relógio suíço de alto padrão, todos na equipe seguem estas cinco regras de ouro:</p>
+<div class="table-container"><table class="luxury-table"><thead><tr>
+<th>Mandamento</th>
+<th>O Que Fazer (Certo)</th>
+<th>O Que Evitar (Errado)</th>
+<th>Por Que Importa?</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>1. Regra do Sinal 50%</strong></td>
+<td>Mover para <em>Agendado</em> <strong>apenas com o comprovante do Pix</strong> na conta.</td>
+<td>Arrastar para <em>Agendado</em> antes do paciente pagar o sinal.</td>
+<td>Impede furos de agenda e treina o algoritmo a trazer quem realmente paga.</td>
+</tr>
+<tr>
+<td><strong>2. Nenhum Lead Esquecido</strong></td>
+<td>Todo paciente em <em>Qualificação</em> ou <em>Pós-Consulta</em> tem <strong>data no relógio</strong>.</td>
+<td>Deixar cartão solto sem data de retorno agendada.</td>
+<td>Paciente de cirurgia plástica demora até 60 dias para decidir; o carinho constante fecha a cirurgia.</td>
+</tr>
+<tr>
+<td><strong>3. Vocabulário Nobre</strong></td>
+<td>Falar sempre <strong>"Primeira Consulta Médica"</strong> ou "Planejamento".</td>
+<td>Usar a palavra "Avaliação", "Taxa" ou "Orçamento".</td>
+<td>"Avaliação" parece vendedor de clínica popular; "Consulta Médica" valoriza os 30 anos do Dr. Mário.</td>
+</tr>
+<tr>
+<td><strong>4. Pílula Certa de Origem</strong></td>
+<td>Marcar <code class="inline-code">Internet</code> (R$ 350) ou <code class="inline-code">Médica/VIP</code> (R$ 850) no cartão.</td>
+<td>Esquecer de mudar a pílula de um paciente encaminhado por médico.</td>
+<td>Registra a receita correta e aciona o valor certo nos eventos de inteligência do Meta Ads.</td>
+</tr>
+<tr>
+<td><strong>5. Atualização no Ato</strong></td>
+<td>Atualizou no WhatsApp? <strong>Leva 3 segundos para mover o cartão</strong>.</td>
+<td>Deixar para atualizar "na sexta-feira à tarde".</td>
+<td>Garante que o Dr. Mário e a gestão sempre enxerguem a realidade exata da clínica em tempo real.</td>
+</tr>
+</tbody></table></div>
+<hr class="luxury-divider" />
+<p class="luxury-p"><a id="capitulo-8-perguntas-frequentes"></a></p>
+<div class="section-divider"></div><h2 id="❓-capítulo-8-perguntas-frequentes-resolução-rápida-de-dúvidas" class="section-title"><span class="anchor-tag">#</span>❓ Capítulo 8: Perguntas Frequentes & Resolução Rápida de Dúvidas</h2>
+<h3 id="1-o-paciente-disse-que-achou-ruim-pagar-50-de-sinal-adiantado-o-que-eu-faço" class="subsection-title">1. "O paciente disse que achou ruim pagar 50% de sinal adiantado. O que eu faço?"</h3>
+<p class="luxury-p">Use o botão <strong>[📋 Copiar Texto Dr. Mário (50% Pix)]</strong> no cartão dele. O texto explica com extrema educação que o Dr. Mário reserva intervalos amplos sem sobreposição de pacientes para garantir privacidade absoluta, e que <strong>100% do valor da consulta vira crédito no plano cirúrgico</strong> caso ele decida operar. Isso transforma a objeção em uma demonstração de exclusividade e prestígio.</p>
+<h3 id="2-o-paciente-não-foi-à-consulta-como-aconteceu-com-o-sr-cláudio-o-que-fazer" class="subsection-title">2. "O paciente não foi à consulta (como aconteceu com o Sr. Cláudio). O que fazer?"</h3>
+<p class="luxury-p">Nunca delete o cartão e nunca brigue com o paciente. Mova o cartão de volta para a coluna <strong>"Qualificação Concierge"</strong>, clique no reloginho de retorno e agende para dali a 2 ou 3 dias (ex: sexta-feira). No dia marcado, use a <strong>Mensagem de Resgate White Glove</strong> (disponível no botão ✏️ do cartão), elevando o status do paciente sem nenhuma cobrança agressiva.</p>
+<h3 id="3-posso-alterar-o-texto-que-a-inteligência-artificial-sugeriu-no-cartão" class="subsection-title">3. "Posso alterar o texto que a Inteligência Artificial sugeriu no cartão?"</h3>
+<p class="luxury-p"><strong>Sim, com certeza!</strong> Basta clicar no botão <strong>✏️ (Lápis)</strong>, ajustar as palavras como você preferir e clicar em <strong>"Salvar Script"</strong>. O texto digitado por você ficará salvo no banco de dados e será usado automaticamente ao clicar no botão verde do WhatsApp.</p>
+<h3 id="4-o-paciente-fechou-a-cirurgia-mas-só-vai-operar-daqui-a-4-meses-onde-deixo-o-cartão-dele" class="subsection-title">4. "O paciente fechou a cirurgia mas só vai operar daqui a 4 meses. Onde deixo o cartão dele?"</h3>
+<p class="luxury-p">Ele deve ser movido para <strong>"💎 Cirurgia Fechada (Depósito)"</strong> no momento em que pagar a entrada do procedimento. Quando faltarem 30 dias para a data da cirurgia e ele começar os exames de risco cirúrgico, arraste-o para <strong>"Pré-operatório"</strong>.</p>
+<hr class="luxury-divider" />
+<p class="luxury-p"><div style="text-align: center; margin-top: 40px; padding: 20px; border-top: 1px solid #e2e8f0; color: #64748b; font-size: 13px;"></p>
+<p class="luxury-p"><strong>Clínica Dr. Mário Warde | Cirurgia Plástica</strong><br/></p>
+<p class="luxury-p">Rua Jericó, 255 - Conjunto 81 - Sumarezinho / Vila Madalena, São Paulo - SP<br/></p>
+<p class="luxury-p"><em>"A excelência cirúrgica que sussurra elegância."</em></p>
+<p class="luxury-p"></div></p>
+            </main>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">
+        <span id="toastIcon">✓</span>
+        <span id="toastMsg">Texto copiado com sucesso!</span>
+    </div>
+
+    <script>
+        // Init Mermaid
+        if (typeof mermaid !== 'undefined') {
+            mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+        }
+
+        // Toast helper
+        function showToast(msg, icon = '✓') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            document.getElementById('toastIcon').innerText = icon;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2200);
+        }
+
+        // Copy Card preview
+        function copyCardCode(btn) {
+            const code = btn.closest('.code-card').querySelector('code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                showToast('Card copiado para a área de transferência!');
+            });
+        }
+
+        // Copy Dr. Mário script
+        function copyDrMarioScript() {
+            const script = `Olá! O Dr. Mário organiza a agenda com intervalos amplos entre os atendimentos, sem sobreposição de pacientes, para garantir total privacidade e uma consulta médica detalhada e sem pressa.\n\nPor essa razão, a confirmação do horário é formalizada mediante a reserva de 50% do valor da consulta via Pix, e o saldo restante é acertado na recepção no dia do atendimento.\n\nUm diferencial da clínica: caso você decida realizar o procedimento cirúrgico com o Dr. Mário, o valor integral da consulta é revertido em crédito no seu plano cirúrgico.\n\nPosso enviar o pix da clínica para travarmos a sua data com o doutor?`;
+            navigator.clipboard.writeText(script).then(() => {
+                showToast('Script do Dr. Mário (50% Pix) copiado!');
+            });
+        }
+
+        // Search in page
+        function handleSearch(query) {
+            query = query.toLowerCase().trim();
+            const links = document.querySelectorAll('.nav-link');
+            links.forEach(l => {
+                const text = l.innerText.toLowerCase();
+                if (!query || text.includes(query)) {
+                    l.style.display = 'flex';
+                } else {
+                    l.style.display = 'none';
+                }
+            });
+        }
+
+        // Scrollspy for sidebar
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('h2[id], h3[id]');
+            let currentId = '';
+            sections.forEach(s => {
+                const top = s.getBoundingClientRect().top;
+                if (top <= 120) {
+                    currentId = s.id;
+                }
+            });
+            if (currentId) {
+                document.querySelectorAll('.nav-link').forEach(l => {
+                    if (l.getAttribute('data-target') === currentId) {
+                        l.classList.add('active');
+                    } else {
+                        l.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

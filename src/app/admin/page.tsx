@@ -90,6 +90,18 @@ Algum desses momentos fica mais confortável para o senhor passar aqui na clíni
               </Link>
             </div>
 
+            {/* Manual do CRM */}
+            <a 
+              href="/manual-crm.html" 
+              target="_blank" 
+              rel="noreferrer"
+              className="bg-white hover:bg-slate-50 text-[#1d1d1f] px-3.5 py-1.5 rounded-lg text-sm font-semibold transition-all shadow-sm border border-black/5 flex items-center gap-1.5 hover:shadow-md cursor-pointer"
+              title="Abrir Manual de Boas Práticas e Operação do CRM"
+            >
+              <span>📖</span>
+              <span>Manual do CRM</span>
+            </a>
+
             {/* Leads Counter */}
             <div className="bg-white px-4 py-2 rounded-lg shadow-sm border border-black/5 flex items-center gap-2">
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
