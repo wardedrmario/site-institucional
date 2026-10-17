@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -17,6 +17,8 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
     city: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
+  const isSubmittingRef = useRef(false);
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let val = e.target.value.replace(/\D/g, '');
     if (val.length > 11) val = val.slice(0, 11);
@@ -45,6 +47,12 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmittingRef.current || isSubmitting || isRedirecting) {
+      return;
+    }
+    if (!formData.name || !formData.phone) return;
+
+    isSubmittingRef.current = true;
     setIsSubmitting(true);
     
     try {
@@ -116,6 +124,9 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
         // Falha no banco não deve impedir o paciente de ir pro WhatsApp
       }
 
+      // Trava ativa: Indica que os dados foram salvos e o redirecionamento está em curso
+      setIsRedirecting(true);
+
       const text = encodeURIComponent(
         `Olá! Meu nome é ${formData.name}. Gostaria de iniciar meu planejamento cirúrgico com o Dr. Mário Warde para ${formData.procedure} (Previsão: ${timeframeText}, Preferência: ${formData.hospitalPreference}).${utmData}`
       );
@@ -127,8 +138,9 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
 
     } catch (error) {
       console.error(error);
-    } finally {
+      isSubmittingRef.current = false;
       setIsSubmitting(false);
+      setIsRedirecting(false);
     }
   };
 
@@ -352,10 +364,22 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
 
             <button 
               type="submit" 
-              disabled={isSubmitting}
-              className="w-full bg-wine hover:bg-black text-white font-medium text-sm px-6 py-4 rounded-xl transition-all duration-300 mt-3 shadow-md hover:shadow-lg disabled:opacity-50"
+              disabled={isSubmitting || isRedirecting}
+              className="w-full bg-wine hover:bg-black text-white font-medium text-sm px-6 py-4 rounded-xl transition-all duration-300 mt-3 shadow-md hover:shadow-lg disabled:opacity-75 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              {isSubmitting ? 'Iniciando...' : 'Falar com o Concierge no WhatsApp ›'}
+              {isRedirecting ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin inline-block" />
+                  <span>Redirecionando para o WhatsApp...</span>
+                </>
+              ) : isSubmitting ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin inline-block" />
+                  <span>Iniciando...</span>
+                </>
+              ) : (
+                'Falar com o Concierge no WhatsApp ›'
+              )}
             </button>
 
             <div className="flex items-center justify-center gap-2 pt-2">

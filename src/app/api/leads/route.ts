@@ -67,6 +67,55 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { name, phone, email, city, procedure, timeframe, utms } = body;
 
+    if (!name || !phone) {
+      return NextResponse.json({ success: false, error: 'Nome e telefone são obrigatórios' }, { status: 400 });
+    }
+
+    let dbUrl = process.env.POSTGRES_URL || process.env.DATABASE_URL;
+    if (dbUrl && !dbUrl.startsWith('postgres')) {
+      dbUrl = process.env.DATABASE_URL && process.env.DATABASE_URL.startsWith('postgres') ? process.env.DATABASE_URL : undefined;
+    }
+
+    // --- TRAVA DE DEDUPLICAÇÃO ANTI-DOUBLE SUBMIT (Postgres Neon) ---
+    // Impede que requisições repetidas nos últimos 10 minutos gerem leads duplicados no CRM
+    const cleanDigits = phone.replace(/\D/g, '');
+    const phoneWith55 = cleanDigits.startsWith('55') ? cleanDigits : '55' + cleanDigits;
+    const phoneWithout55 = cleanDigits.startsWith('55') ? cleanDigits.slice(2) : cleanDigits;
+    const cleanEmail = (email || '').trim().toLowerCase();
+
+    if (dbUrl) {
+      try {
+        const sql = neon(dbUrl as string);
+        const existing = await sql`
+          SELECT id, name, phone, created_at 
+          FROM leads
+          WHERE (
+            (${cleanDigits} != '' AND (
+              regexp_replace(phone, '[^0-9]', '', 'g') = ${cleanDigits} OR
+              regexp_replace(phone, '[^0-9]', '', 'g') = ${phoneWith55} OR
+              regexp_replace(phone, '[^0-9]', '', 'g') = ${phoneWithout55}
+            ))
+            OR (${cleanEmail} != '' AND LOWER(email) = ${cleanEmail})
+          )
+          AND created_at >= NOW() - INTERVAL '10 minutes'
+          ORDER BY created_at DESC
+          LIMIT 1;
+        `;
+
+        if (existing && existing.length > 0) {
+          console.log(`🛡️ [DEDUPLICAÇÃO ATIVA] Lead idêntico recebido em menos de 10 min (${name} - ${phone}). Bloqueando insert duplicado.`);
+          return NextResponse.json({
+            success: true,
+            deduplicated: true,
+            leadId: existing[0].id,
+            message: 'Lead já registrado recentemente. Duplicidade bloqueada com sucesso.'
+          }, { status: 200 });
+        }
+      } catch (checkErr) {
+        console.warn('Aviso na checagem de deduplicação (seguindo fluxo):', checkErr);
+      }
+    }
+
     const leadId = crypto.randomUUID();
     const utmsJson = JSON.stringify(utms || {});
 
@@ -88,10 +137,6 @@ export async function POST(request: Request) {
     (rawLead as any).ai_suggestion = aiSuggestion;
 
     // 2. Insere no Banco de Dados Neon (se configurado)
-    let dbUrl = process.env.POSTGRES_URL || process.env.DATABASE_URL;
-    if (dbUrl && !dbUrl.startsWith('postgres')) {
-      dbUrl = process.env.DATABASE_URL && process.env.DATABASE_URL.startsWith('postgres') ? process.env.DATABASE_URL : undefined;
-    }
     if (dbUrl) {
       const sql = neon(dbUrl as string);
       
