@@ -34,8 +34,8 @@ O Dr. Mário estava revisando o planejamento dos atendimentos e me pediu para fa
 
 Como estamos abrindo a grade exclusiva da próxima semana, reservei duas opções de horários privativos e sem sobreposição com o Dr. Mário para conversarem com calma:
 
-🗓️ Quarta-feira (21/10) às 15h30
-🗓️ Quinta-feira (22/10) às 16h00
+Quarta-feira (21/10) às 15h30
+Quinta-feira (22/10) às 16h00
 
 Algum desses momentos fica mais confortável para o senhor passar aqui na clínica na Vila Madalena?`;
 

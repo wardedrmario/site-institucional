@@ -48,11 +48,18 @@ export function LeadFormHomens({ onClose }: { onClose?: () => void }) {
     setIsSubmitting(true);
     
     try {
+      // Gera um ID único para este Lead (para desduplicação perfeita Meta CAPI)
+      const leadEventId = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2) + Date.now().toString(36);
+
       // Envia para o tracking endpoint se configurado
       await fetch('/api/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          ...formData,
+          sourceUrl: typeof window !== 'undefined' ? window.location.origin + window.location.pathname : 'https://drmariowarde.com/homens-consulta1',
+          eventId: leadEventId
+        })
       }).catch(() => null);
       
       const whatsappNumber = "5511966496116"; 
@@ -75,12 +82,13 @@ export function LeadFormHomens({ onClose }: { onClose?: () => void }) {
         // ignore
       }
 
-      // 📊 DISPARA O EVENTO 'Lead' PARA O DATALAYER (GTM & PIXEL)
+      // 📊 DISPARA O EVENTO 'Lead' PARA O DATALAYER (GTM & PIXEL) COM EVENT_ID DEDUPLICADO
       if (typeof window !== 'undefined') {
         const win = window as Window & typeof globalThis & { dataLayer?: Record<string, unknown>[] };
         win.dataLayer = win.dataLayer || [];
         win.dataLayer.push({
           event: 'Lead',
+          event_id: leadEventId,
           user_data: {
             email: formData.email,
             phone: formData.phone,
