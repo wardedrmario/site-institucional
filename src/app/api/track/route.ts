@@ -73,8 +73,21 @@ export async function POST(request: Request) {
       };
 
       // Injeção do código de teste para depuração no painel do Meta
-      if (testCode) {
-        eventData.test_event_code = testCode;
+      let resolvedTestCode = testCode;
+      if (!resolvedTestCode && sourceUrl) {
+        try {
+          const parsedSource = new URL(sourceUrl);
+          resolvedTestCode = parsedSource.searchParams.get('test_event_code') || parsedSource.searchParams.get('test_code') || undefined;
+        } catch {}
+      }
+      if (!resolvedTestCode) {
+        try {
+          const reqUrl = new URL(request.url);
+          resolvedTestCode = reqUrl.searchParams.get('test_event_code') || reqUrl.searchParams.get('test_code') || undefined;
+        } catch {}
+      }
+      if (resolvedTestCode) {
+        eventData.test_event_code = resolvedTestCode;
       }
 
       const metaPayload = { data: [eventData] };

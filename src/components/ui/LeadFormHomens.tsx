@@ -59,14 +59,22 @@ export function LeadFormHomens({ onClose }: { onClose?: () => void }) {
       // Gera um ID único para este Lead (para desduplicação perfeita Meta CAPI)
       const leadEventId = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2) + Date.now().toString(36);
 
+      // Extração de test_event_code para testes ao vivo no Meta Events Manager
+      let testCodeParam = '';
+      if (typeof window !== 'undefined') {
+        const urlParams = new URLSearchParams(window.location.search);
+        testCodeParam = urlParams.get('test_event_code') || urlParams.get('test_code') || '';
+      }
+
       // Envia para o tracking endpoint se configurado
       await fetch('/api/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
-          sourceUrl: typeof window !== 'undefined' ? window.location.origin + window.location.pathname : 'https://drmariowarde.com/homens-consulta1',
-          eventId: leadEventId
+          sourceUrl: typeof window !== 'undefined' ? window.location.href : 'https://drmariowarde.com/homens-consulta1',
+          eventId: leadEventId,
+          testCode: testCodeParam || undefined
         })
       }).catch(() => null);
       
