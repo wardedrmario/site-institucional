@@ -82,8 +82,8 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
         // 🎯 DISPARO DIRETO DO META PIXEL CLIENT-SIDE (COM EVENT_ID PARA DEDUPLICAÇÃO PERFEITA CAPI)
         if (typeof win.fbq === 'function') {
           win.fbq('track', 'Lead', {
-            content_name: formData.procedure,
-            content_category: 'Cirurgia Plástica',
+            content_name: 'Planejamento Personalizado',
+            content_category: 'Atendimento Exclusivo',
             status: 'lead_captured',
             currency: 'BRL',
             value: 0.00

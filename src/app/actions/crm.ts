@@ -141,10 +141,10 @@ export async function updateLeadStatus(leadId: string, newStatus: string, leadDa
     const depositValue = isMedicalRef ? 425.00 : 175.00; // 50% de R$ 850 ou R$ 350
 
     await sendMetaCapi('Schedule', depositValue, leadData, leadId, {
-      content_name: leadData.procedure ? `Reserva Consulta (50%) - ${leadData.procedure}` : `Reserva Consulta (50% - R$ ${depositValue})`,
-      status_etapa: 'Agendamento Confirmado (Sinal 50% Pago)',
-      tipo_evento: isMedicalRef ? 'Reserva de Agenda (Indicação Médica - R$ 425)' : 'Reserva de Agenda (Internet/Indicação - R$ 175)',
-      categoria_consulta: isMedicalRef ? 'Indicação Médica (R$ 850)' : 'Internet / Indicação Paciente (R$ 350)'
+      content_name: `Reserva de Atendimento (Sinal)`,
+      status_etapa: 'Agendamento Confirmado',
+      tipo_evento: isMedicalRef ? 'Atendimento Personalizado (A)' : 'Atendimento Personalizado (B)',
+      categoria_consulta: isMedicalRef ? 'Categoria A' : 'Categoria B'
     });
   }
 
@@ -155,10 +155,10 @@ export async function updateLeadStatus(leadId: string, newStatus: string, leadDa
     const balanceValue = isMedicalRef ? 425.00 : 175.00; // Saldo de 50% na recepção
 
     await sendMetaCapi('Purchase', balanceValue, leadData, leadId, {
-      content_name: leadData.procedure ? `Quitação Consulta - ${leadData.procedure}` : `Quitação Consulta Presencial (R$ ${balanceValue})`,
-      status_etapa: 'Consulta Realizada Presencial',
-      tipo_evento: isMedicalRef ? 'Quitação Consulta (Indicação Médica - R$ 425)' : 'Quitação Consulta (Internet/Indicação - R$ 175)',
-      categoria_consulta: isMedicalRef ? 'Indicação Médica (R$ 850)' : 'Internet / Indicação Paciente (R$ 350)'
+      content_name: `Atendimento Concluído`,
+      status_etapa: 'Atendimento Realizado Presencial',
+      tipo_evento: isMedicalRef ? 'Atendimento Personalizado (A)' : 'Atendimento Personalizado (B)',
+      categoria_consulta: isMedicalRef ? 'Categoria A' : 'Categoria B'
     });
   }
 
@@ -195,9 +195,9 @@ export async function updateLeadStatus(leadId: string, newStatus: string, leadDa
     }
 
     await sendMetaCapi(eventName, eventValue, leadData, leadId, {
-      content_name: leadData.procedure || 'Cirurgia Plástica',
-      status_etapa: 'Depósito / Confirmação Cirúrgica',
-      tipo_evento: 'Fechamento de Procedimento'
+      content_name: 'Contratação de Serviço Exclusivo',
+      status_etapa: 'Confirmação',
+      tipo_evento: 'Fechamento de Serviço'
     });
   }
 
