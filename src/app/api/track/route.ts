@@ -87,7 +87,13 @@ export async function POST(request: Request) {
       });
       
       const metaResult = await metaResponse.json();
-      console.log(`Meta API Response for ${finalEventName}:`, metaResult);
+      if (!metaResponse.ok || metaResult.error) {
+        console.error(`❌ [META CAPI ERRO] Falha no envio de ${finalEventName}:`, JSON.stringify(metaResult));
+      } else {
+        console.log(`✅ [META CAPI SUCESSO] ${finalEventName} enviado com sucesso:`, JSON.stringify(metaResult));
+      }
+    } else {
+      console.warn(`⚠️ [META CAPI AVISO] META_ACCESS_TOKEN ausente na Vercel! Evento ${finalEventName} ignorado no servidor.`);
     }
 
     return NextResponse.json({ success: true, eventId: finalEventId, eventName: finalEventName, message: 'Evento recebido.' });

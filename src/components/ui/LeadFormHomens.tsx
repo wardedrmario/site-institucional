@@ -90,9 +90,12 @@ export function LeadFormHomens({ onClose }: { onClose?: () => void }) {
         // ignore
       }
 
-      // 📊 DISPARA O EVENTO 'Lead' PARA O DATALAYER (GTM & PIXEL) COM EVENT_ID DEDUPLICADO
+      // 📊 DISPARA O EVENTO 'Lead' PARA O DATALAYER (GTM & GA4) E DIRETAMENTE PARA O META PIXEL COM EVENT_ID DEDUPLICADO
       if (typeof window !== 'undefined') {
-        const win = window as Window & typeof globalThis & { dataLayer?: Record<string, unknown>[] };
+        const win = window as Window & typeof globalThis & { 
+          dataLayer?: Record<string, unknown>[];
+          fbq?: (...args: unknown[]) => void;
+        };
         win.dataLayer = win.dataLayer || [];
         win.dataLayer.push({
           event: 'Lead',
@@ -105,6 +108,18 @@ export function LeadFormHomens({ onClose }: { onClose?: () => void }) {
           }
         });
         console.log("🔥 EVENTO 'Lead' EMPURRADO PARA O DATALAYER COM SUCESSO!", win.dataLayer);
+
+        // 🎯 DISPARO DIRETO DO META PIXEL CLIENT-SIDE (COM EVENT_ID PARA DEDUPLICAÇÃO PERFEITA CAPI)
+        if (typeof win.fbq === 'function') {
+          win.fbq('track', 'Lead', {
+            content_name: formData.procedure,
+            content_category: 'Cirurgia Plástica Masculina',
+            status: 'lead_captured',
+            currency: 'BRL',
+            value: 0.00
+          }, { eventID: leadEventId });
+          console.log("🔥 EVENTO 'Lead' MASCULINO DISPARADO VIA FBQ CLIENT-SIDE COM SUCESSO!", leadEventId);
+        }
       }
 
       // 🧲 ENVIA OS DADOS PARA O NOSSO CRM INVISÍVEL (API)
