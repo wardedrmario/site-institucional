@@ -60,46 +60,7 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
       // Gera um ID único para este Lead (para desduplicação)
       const leadEventId = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2) + Date.now().toString(36);
 
-      // Extração de test_event_code para testes ao vivo no Meta Events Manager
-      let testCodeParam = '';
-      if (typeof window !== 'undefined') {
-        const urlParams = new URLSearchParams(window.location.search);
-        testCodeParam = urlParams.get('test_event_code') || urlParams.get('test_code') || '';
-      }
-
-      // Envia para o tracking endpoint se configurado
-      await fetch('/api/track', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          sourceUrl: typeof window !== 'undefined' ? window.location.href : 'https://drmariowarde.com/',
-          eventId: leadEventId,
-          testCode: testCodeParam || undefined
-        })
-      }).catch(() => null);
-      
-      const whatsappNumber = "5511966496116"; 
-      const timeframeText = formData.timeframe === 'Outro, vou te explicar' 
-        ? `Outro (${formData.timeframeDetails})` 
-        : formData.timeframe;
-
-      let utmData = '';
-      let utmObject = {};
-      try {
-        const saved = localStorage.getItem('__mw_utms');
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          utmObject = parsed;
-          if (parsed.camp_id || parsed.utm_campaign) {
-            utmData = `\n\n[Ref: ${parsed.camp_id || parsed.utm_campaign}]`;
-          }
-        }
-      } catch {
-        // ignore
-      }
-
-      // 📊 DISPARA O EVENTO 'Lead' PARA O DATALAYER (GTM & GA4) E DIRETAMENTE PARA O META PIXEL
+      // 📊 1. DISPARO IMEDIATO E SÍNCRONO NO NAVEGADOR (0ms LATÊNCIA)
       if (typeof window !== 'undefined') {
         const win = window as Window & typeof globalThis & { 
           dataLayer?: Record<string, unknown>[];
@@ -130,6 +91,48 @@ export function LeadForm({ onClose }: { onClose?: () => void }) {
           console.log("🔥 EVENTO 'Lead' DISPARADO VIA FBQ CLIENT-SIDE COM SUCESSO!", leadEventId);
         }
       }
+
+      // Extração de test_event_code para testes ao vivo no Meta Events Manager
+      let testCodeParam = '';
+      if (typeof window !== 'undefined') {
+        const urlParams = new URLSearchParams(window.location.search);
+        testCodeParam = urlParams.get('test_event_code') || urlParams.get('test_code') || '';
+      }
+
+      // 🌐 2. DISPARO SERVER-SIDE (CAPI) VIA /api/track
+      const trackPromise = fetch('/api/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          sourceUrl: typeof window !== 'undefined' ? window.location.href : 'https://drmariowarde.com/',
+          eventId: leadEventId,
+          testCode: testCodeParam || undefined
+        }),
+        keepalive: true
+      }).catch(() => null);
+      
+      const whatsappNumber = "5511966496116"; 
+      const timeframeText = formData.timeframe === 'Outro, vou te explicar' 
+        ? `Outro (${formData.timeframeDetails})` 
+        : formData.timeframe;
+
+      let utmData = '';
+      let utmObject = {};
+      try {
+        const saved = localStorage.getItem('__mw_utms');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          utmObject = parsed;
+          if (parsed.camp_id || parsed.utm_campaign) {
+            utmData = `\n\n[Ref: ${parsed.camp_id || parsed.utm_campaign}]`;
+          }
+        }
+      } catch {
+        // ignore
+      }
+
+      await trackPromise;
 
       // 🧲 ENVIA OS DADOS PARA O NOSSO CRM INVISÍVEL (API)
       try {
