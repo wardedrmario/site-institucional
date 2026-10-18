@@ -45,8 +45,8 @@ async function sendMetaCapi(
   extraCustomData: Record<string, unknown> = {}
 ) {
   try {
-    const pixelId = process.env.META_PIXEL_ID || "4376073622648258";
-    const token = process.env.META_ACCESS_TOKEN || process.env.META_CAPI_TOKEN;
+    const pixelId = process.env.META_PIXEL_ID || process.env.meta_pixel_id || process.env.meta_pixel_Id || "4376073622648258";
+    const token = process.env.META_CAPI_TOKEN || process.env.meta_capi_token || process.env.META_ACCESS_TOKEN || process.env.meta_access_token;
 
     if (!token) {
       console.warn('⚠️ [META CAPI] Token de acesso ausente (META_CAPI_TOKEN / META_ACCESS_TOKEN). Evento não disparado.');

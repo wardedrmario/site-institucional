@@ -38,8 +38,8 @@ export async function POST(request: Request) {
     const fbp = body.fbp || (fbpMatch ? fbpMatch[1] : undefined);
     const fbc = body.fbc || (fbcMatch ? fbcMatch[1] : undefined);
 
-    const metaPixelId = process.env.META_PIXEL_ID || "4376073622648258";
-    const metaAccessToken = process.env.META_ACCESS_TOKEN || process.env.META_CAPI_TOKEN;
+    const metaPixelId = process.env.META_PIXEL_ID || process.env.meta_pixel_id || process.env.meta_pixel_Id || "4376073622648258";
+    const metaAccessToken = process.env.META_CAPI_TOKEN || process.env.meta_capi_token || process.env.META_ACCESS_TOKEN || process.env.meta_access_token;
 
     // Se for apenas ping de teste de infraestrutura/conexão, não envia para o Pixel em produção para não poluir o Gerenciador
     if (finalEventName.toLowerCase().includes('ping') || finalEventName.toLowerCase().includes('teste')) {
