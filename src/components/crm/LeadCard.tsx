@@ -106,13 +106,78 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
     });
   };
 
-  const handleCopyDrMarioScript = () => {
-    const firstName = lead.name.split(' ')[0] || 'Tudo bem?';
-    const script = `Olá, ${firstName}! O Dr. Mário organiza a agenda com intervalos amplos entre os atendimentos, sem sobreposição de pacientes, para garantir total privacidade e uma consulta médica detalhada e sem pressa.\n\nPor essa razão, a confirmação do horário é formalizada mediante a reserva de 50% do valor da consulta via Pix, e o saldo restante é acertado na recepção no dia do atendimento.\n\nUm diferencial da clínica: caso você decida realizar o procedimento cirúrgico com o Dr. Mário, o valor integral da consulta é revertido em crédito no seu plano cirúrgico.\n\nPosso enviar o pix da clínica para travarmos a sua data com o doutor?`;
-    
+  const [activeScriptKey, setActiveScriptKey] = useState<string | null>(null);
+
+  // Helpers para extrair Nome e Procedimento limpos (Zero risco de enviar [Nome] ou [Procedimento])
+  const getCleanFirstName = (fullName: string) => {
+    const raw = (fullName || '').trim();
+    if (!raw) return 'tudo bem';
+    const parts = raw.split(/\s+/);
+    const first = parts[0];
+    if (/^(dr\.?|dra\.?|sr\.?|sra\.?|srta\.?|dona|seu)$/i.test(first) && parts.length > 1) {
+      return `${first} ${parts[1]}`;
+    }
+    return first;
+  };
+
+  const getCleanProcedure = (proc: string) => {
+    const p = (proc || '').toLowerCase();
+    if (p.includes('deep plane') || p.includes('facial') || p.includes('lifting') || p.includes('blefaro') || p.includes('rosto') || p.includes('pescoço')) {
+      return 'rejuvenescimento facial';
+    }
+    if (p.includes('combinad') || (p.includes('face') && p.includes('corpo')) || (p.includes('tórax') && p.includes('abd'))) {
+      return 'planejamento cirúrgico combinado';
+    }
+    if (p.includes('mama') || p.includes('mastopexia') || p.includes('prótese') || p.includes('silicone')) {
+      return 'cirurgia mamária';
+    }
+    if (p.includes('corporal') || p.includes('abd') || p.includes('lipo')) {
+      return 'contorno corporal';
+    }
+    if (!proc || proc === '-' || p.includes('não informado')) {
+      return 'seu planejamento cirúrgico';
+    }
+    return proc.replace(/\s*\(.*?\)\s*/g, '').trim();
+  };
+
+  const buildPlaybookScript = (type: 'primeiro_contato' | 'convite_direto' | 'contorno_preco' | 'reserva_pix' | 'endereco') => {
+    const firstName = getCleanFirstName(lead.name);
+    const cleanProc = getCleanProcedure(lead.procedure);
+    const consultTotal = category === 'indicacao_medica' ? '850,00' : '350,00';
+    const depositVal = category === 'indicacao_medica' ? '425,00' : '175,00';
+
+    switch (type) {
+      case 'primeiro_contato':
+        return `Olá, ${firstName}! Tudo bem? Aqui é a Ana Paula, Concierge exclusiva do Dr. Mário Warde. Recebemos o seu cadastro sobre ${cleanProc}. Para eu preparar o seu atendimento com todo cuidado, me conta um pouquinho: o que mais tem te incomodado hoje e qual é o seu principal objetivo com a cirurgia?`;
+
+      case 'convite_direto':
+        return `Perfeito, ${firstName}, compreendo perfeitamente. Essa queixa é justamente uma das maiores especialidades do Dr. Mário, buscando sempre um reposicionamento estruturado, natural e sem estigmas.\n\nPara o Dr. Mário avaliar a sua anatomia pessoalmente e desenhar o seu planejamento cirúrgico, você prefere agendar a sua Primeira Consulta presencialmente aqui na clínica (Vila Madalena) ou por vídeo (Telemedicina)?`;
+
+      case 'contorno_preco':
+        return `Compreendo perfeitamente a sua necessidade de planejamento, ${firstName}.\n\nComo o Dr. Mário realiza cirurgias personalizadas e opera exclusivamente em estrutura hospitalar de primeira linha (como Sírio-Libanês, Vila Nova Star e Albert Einstein), o orçamento cirúrgico não é padronizado e só pode ser definido após ele avaliar a sua anatomia em consulta, inclusive por norma do Conselho Federal de Medicina.\n\nO primeiro passo é a Primeira Consulta Médica detalhada (o valor é de R$ ${consultTotal}, sendo 100% revertido em crédito no seu plano cirúrgico). Você prefere que eu veja um horário presencial aqui na Vila Madalena ou por vídeo (Telemedicina) esta semana?`;
+
+      case 'reserva_pix':
+        return `Olá, ${firstName}! O Dr. Mário organiza a agenda com intervalos amplos entre os atendimentos, sem sobreposição de pacientes, para garantir total privacidade e uma consulta médica detalhada e sem pressa.\n\nPor essa razão, a confirmação do horário é formalizada mediante a reserva de 50% do valor da consulta via Pix (R$ ${depositVal}), e o saldo restante é acertado no dia do atendimento.\n\nUm diferencial da clínica: caso você decida realizar o procedimento cirúrgico com o Dr. Mário, o valor integral da consulta (R$ ${consultTotal}) é revertido em crédito no seu plano cirúrgico.\n\nPosso enviar a chave Pix da clínica para travarmos a sua data com o doutor?`;
+
+      case 'endereco':
+        return `A clínica do Dr. Mário Warde está localizada em uma região nobre e de fácil acesso na Vila Madalena:\n\nEndereço: Rua Jericó, 255 - Conjunto 81 — Vila Madalena (Sumarezinho), São Paulo - SP | CEP: 05435-040 (o edifício conta com estacionamento e serviço de Valet no local, próximo à estação Vila Madalena do Metrô).\n\nLocalização no Google Maps: https://maps.google.com/?q=Rua+Jerico,255,Vila+Madalena,Sao+Paulo,SP,05435-040`;
+    }
+  };
+
+  const handleSelectQuickScript = (type: 'primeiro_contato' | 'convite_direto' | 'contorno_preco' | 'reserva_pix' | 'endereco') => {
+    const script = buildPlaybookScript(type);
+    setLocalNextAction(script);
+    setActionDraft(script);
+    setActiveScriptKey(type);
+    lead.nextAction = script;
+
     navigator.clipboard.writeText(script).then(() => {
       setCopiedScript(true);
       setTimeout(() => setCopiedScript(false), 2200);
+    });
+
+    startActionTransition(async () => {
+      await updateLeadAction(lead.id, script);
     });
   };
 
@@ -456,15 +521,86 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
               </div>
             )}
 
-            {/* Script Formal do Dr. Mário (Regra 50% Pix) */}
-            <button
-              type="button"
-              onClick={handleCopyDrMarioScript}
-              className="flex items-center justify-center gap-2 w-full py-2 px-3 bg-white hover:bg-slate-50 text-slate-800 rounded-lg border border-slate-300 text-xs font-semibold transition-all hover:border-slate-400 cursor-pointer shadow-2xs"
-              title="Copiar texto formal com dedicação de tempo, privacidade e crédito cirúrgico"
-            >
-              <span>{copiedScript ? 'Texto Copiado' : 'Copiar Texto Dr. Mário (Regra 50% Pix)'}</span>
-            </button>
+            {/* Central de Scripts Rápidos (Preenchidos com Nome e Procedimento, Sem Colchetes) */}
+            <div className="pt-1 border-t border-slate-200/80 flex flex-col gap-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
+                  Scripts Prontos (Sem Colchetes)
+                </span>
+                {copiedScript && (
+                  <span className="text-[11px] font-bold text-emerald-700">
+                    Copiado e aplicado
+                  </span>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => handleSelectQuickScript('primeiro_contato')}
+                  className={`py-1.5 px-2.5 rounded-lg border text-xs font-semibold transition-all text-left truncate cursor-pointer ${
+                    activeScriptKey === 'primeiro_contato'
+                      ? 'bg-[#310f0e] text-white border-[#310f0e]'
+                      : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-300'
+                  }`}
+                  title="Passo 1: Saudação inicial acolhedora já com nome e procedimento do paciente"
+                >
+                  1. 1º Contato
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleSelectQuickScript('convite_direto')}
+                  className={`py-1.5 px-2.5 rounded-lg border text-xs font-semibold transition-all text-left truncate cursor-pointer ${
+                    activeScriptKey === 'convite_direto'
+                      ? 'bg-[#310f0e] text-white border-[#310f0e]'
+                      : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-300'
+                  }`}
+                  title="Passo 2: Valida a queixa sem interrogatório e já convida para Presencial ou Telemedicina"
+                >
+                  2. Convite Direto
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleSelectQuickScript('contorno_preco')}
+                  className={`py-1.5 px-2.5 rounded-lg border text-xs font-semibold transition-all text-left truncate cursor-pointer ${
+                    activeScriptKey === 'contorno_preco'
+                      ? 'bg-[#310f0e] text-white border-[#310f0e]'
+                      : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-300'
+                  }`}
+                  title="Contorno de Preço Cirúrgico (Proibido R$ 32k/35k — Foco no valor da Consulta e hospitais)"
+                >
+                  3. Contorno Preço
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleSelectQuickScript('reserva_pix')}
+                  className={`py-1.5 px-2.5 rounded-lg border text-xs font-semibold transition-all text-left truncate cursor-pointer ${
+                    activeScriptKey === 'reserva_pix'
+                      ? 'bg-[#310f0e] text-white border-[#310f0e]'
+                      : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-300'
+                  }`}
+                  title="Passo 4: Formalização da Reserva de 50% via Pix + 100% Crédito Cirúrgico"
+                >
+                  4. Reserva 50% Pix
+                </button>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => handleSelectQuickScript('endereco')}
+                className={`w-full py-1.5 px-2.5 rounded-lg border text-xs font-semibold transition-all text-center cursor-pointer ${
+                  activeScriptKey === 'endereco'
+                    ? 'bg-[#310f0e] text-white border-[#310f0e]'
+                    : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-300'
+                }`}
+                title="Enviar endereço completo da Vila Madalena + Valet + Link clicável do Google Maps"
+              >
+                5. Endereço Completo + Valet + Google Maps
+              </button>
+            </div>
           </div>
 
           {/* Script Concierge & Mensagem WhatsApp */}

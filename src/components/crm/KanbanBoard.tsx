@@ -118,6 +118,37 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
       }
 
       const status = lead.status || 'triagem';
+
+      // Gera script padrão limpo (sem colchetes) caso o lead não tenha script salvo
+      const rawName = (lead.name || '').trim();
+      const nameParts = rawName.split(/\s+/);
+      const firstName =
+        nameParts.length > 1 && /^(dr\.?|dra\.?|sr\.?|sra\.?|srta\.?|dona|seu)$/i.test(nameParts[0])
+          ? `${nameParts[0]} ${nameParts[1]}`
+          : nameParts[0] || 'tudo bem';
+
+      const procLower = (lead.procedure || '').toLowerCase();
+      let cleanProc = 'seu planejamento cirúrgico';
+      if (procLower.includes('deep plane') || procLower.includes('facial') || procLower.includes('lifting') || procLower.includes('blefaro') || procLower.includes('rosto') || procLower.includes('pescoço')) {
+        cleanProc = 'rejuvenescimento facial';
+      } else if (procLower.includes('combinad') || (procLower.includes('face') && procLower.includes('corpo')) || (procLower.includes('tórax') && procLower.includes('abd'))) {
+        cleanProc = 'planejamento cirúrgico combinado';
+      } else if (procLower.includes('mama') || procLower.includes('mastopexia') || procLower.includes('prótese') || procLower.includes('silicone')) {
+        cleanProc = 'cirurgia mamária';
+      } else if (procLower.includes('corporal') || procLower.includes('abd') || procLower.includes('lipo')) {
+        cleanProc = 'contorno corporal';
+      } else if (lead.procedure && lead.procedure !== '-' && !procLower.includes('não informado')) {
+        cleanProc = lead.procedure.replace(/\s*\(.*?\)\s*/g, '').trim();
+      }
+
+      const defaultFirstContact = `Olá, ${firstName}! Tudo bem? Aqui é a Ana Paula, Concierge exclusiva do Dr. Mário Warde. Recebemos o seu cadastro sobre ${cleanProc}. Para eu preparar o seu atendimento com todo cuidado, me conta um pouquinho: o que mais tem te incomodado hoje e qual é o seu principal objetivo com a cirurgia?`;
+
+      const hasValidCustomAction =
+        lead.ai_suggestion &&
+        lead.ai_suggestion.trim() !== '' &&
+        lead.ai_suggestion.trim() !== '-' &&
+        lead.ai_suggestion.trim() !== 'Qualificar via Whats';
+
       const mappedLead: Lead = {
         id: lead.id,
         name: lead.name,
@@ -127,7 +158,7 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
         source: source,
         score: calculatedScore,
         scoreLabel: calculatedScore > 130 ? 'HOT' : calculatedScore >= 60 ? 'WARM' : 'COLD',
-        nextAction: lead.ai_suggestion || (lead.status === 'triagem' ? 'Qualificar via Whats' : '-'),
+        nextAction: hasValidCustomAction ? (lead.ai_suggestion as string) : defaultFirstContact,
         createdAt: lead.created_at,
         isClinical: isClinical,
         followupDate: lead.followup_date || null,

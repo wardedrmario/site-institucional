@@ -220,55 +220,87 @@ export async function updateLeadStatus(leadId: string, newStatus: string, leadDa
 }
 
 export async function generateAiForLead(leadId: string, leadData: { procedure?: string, timeframe?: string, city?: string, name?: string }) {
+  const rawName = (leadData.name || '').trim();
+  const nameParts = rawName.split(/\s+/);
+  const firstName =
+    nameParts.length > 1 && /^(dr\.?|dra\.?|sr\.?|sra\.?|srta\.?|dona|seu)$/i.test(nameParts[0])
+      ? `${nameParts[0]} ${nameParts[1]}`
+      : nameParts[0] || 'Paciente';
+
+  const procLower = (leadData.procedure || '').toLowerCase();
+  let cleanProc = 'seu planejamento cirúrgico';
+  if (procLower.includes('deep plane') || procLower.includes('facial') || procLower.includes('lifting') || procLower.includes('blefaro') || procLower.includes('rosto') || procLower.includes('pescoço')) {
+    cleanProc = 'rejuvenescimento facial';
+  } else if (procLower.includes('combinad') || (procLower.includes('face') && procLower.includes('corpo')) || (procLower.includes('tórax') && procLower.includes('abd'))) {
+    cleanProc = 'planejamento cirúrgico combinado';
+  } else if (procLower.includes('mama') || procLower.includes('mastopexia') || procLower.includes('prótese') || procLower.includes('silicone')) {
+    cleanProc = 'cirurgia mamária';
+  } else if (procLower.includes('corporal') || procLower.includes('abd') || procLower.includes('lipo')) {
+    cleanProc = 'contorno corporal';
+  } else if (leadData.procedure && leadData.procedure !== '-' && !procLower.includes('não informado')) {
+    cleanProc = leadData.procedure.replace(/\s*\(.*?\)\s*/g, '').trim();
+  }
+
+  const fallbackSuggestion = `Olá, ${firstName}! Tudo bem? Aqui é a Ana Paula, Concierge exclusiva do Dr. Mário Warde. Recebemos o seu cadastro sobre ${cleanProc}. Para eu preparar o seu atendimento com todo cuidado, me conta um pouquinho: o que mais tem te incomodado hoje e qual é o seu principal objetivo com a cirurgia?`;
+
   const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) return { success: false, error: 'Sem API Key do Gemini' };
 
-  const prompt = `Atue como Ana Paula, a Concierge exclusiva do Dr. Mário Warde, uma clínica de cirurgia plástica de alto padrão (Boutique de Luxo).
-Escreva a MENSAGEM EXATA DE WHATSAPP que deve ser enviada para este paciente, seguindo estritamente os scripts do nosso Playbook "White Glove".
+  const saveSuggestionToDb = async (textToSave: string) => {
+    const dbUrl = getDbUrl();
+    if (dbUrl) {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { neon } = require('@neondatabase/serverless');
+      const sql = neon(dbUrl as string);
+      await sql`UPDATE leads SET ai_suggestion = ${textToSave} WHERE id = ${leadId}`;
+      revalidatePath('/admin');
+    }
+  };
 
-Regras:
+  if (!apiKey) {
+    await saveSuggestionToDb(fallbackSuggestion);
+    return { success: true, suggestion: fallbackSuggestion };
+  }
+
+  const prompt = `Atue como Ana Paula, a Concierge exclusiva do Dr. Mário Warde, clínica de cirurgia plástica de alto padrão em São Paulo (Vila Madalena).
+Escreva a MENSAGEM EXATA DE WHATSAPP para abordar este paciente, seguindo as Regras de Ouro Versão 1.4 do nosso Playbook:
+
+Regras Inegociáveis:
 1. NUNCA use a palavra "Avaliação". Use SEMPRE "Primeira Consulta".
-2. Mantenha um tom sofisticado, empático e focado na dor/sonho da paciente.
-3. Não use gírias ou excesso de emojis. Apenas o texto pronto para ser copiado e enviado.
-4. Se apresente como Ana Paula, Concierge do Dr. Mário Warde.
-5. Inicie saudando a pessoa pelo nome fornecido.
-6. Apenas retorne a mensagem de whatsapp, não inclua aspas no início/fim nem explicações da IA.
+2. NUNCA cite valores de cirurgia no chat (proibido falar R$ 32.000 ou R$ 35.000).
+3. NUNCA faça interrogatórios robóticos ("Há quanto tempo busca?"). Seja calorosa, breve (máximo 3 frases curtas) e humana.
+4. ZERO emojis, ZERO colchetes ([Nome] ou [Procedimento]), ZERO símbolos ">" ou aspas no início/fim.
+5. Inicie saudando pelo primeiro nome (${firstName}), apresente-se como Ana Paula, Concierge do Dr. Mário Warde, valide o interesse em ${cleanProc} e pergunte de forma acolhedora o que mais incomoda hoje ou se prefere consulta Presencial na Vila Madalena ou por Telemedicina.
 
-Dados do Lead:
-- Nome: ${leadData.name || 'Paciente'}
-- Procedimento de interesse: ${leadData.procedure || 'Não informado'}
-- Urgência: ${leadData.timeframe || 'Não informada'}
-- Cidade: ${leadData.city || 'Não informada'}`;
+Dados do Paciente:
+- Nome: ${firstName}
+- Procedimento: ${cleanProc}
+- Janela desejada: ${leadData.timeframe || 'Não informada'}
+- Região: ${leadData.city || 'São Paulo'}`;
 
   try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`, {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.7, maxOutputTokens: 300 }
+        generationConfig: { temperature: 0.6, maxOutputTokens: 250 }
       })
     });
     
-    if (!res.ok) return { success: false, error: 'Erro na chamada ao Gemini' };
-    const data = await res.json();
-    const suggestion = data.candidates?.[0]?.content?.parts?.[0]?.text?.replace(/["\n]/g, '').trim();
-    
-    if (suggestion) {
-      const dbUrl = getDbUrl();
-      if (dbUrl) {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const { neon } = require('@neondatabase/serverless');
-        const sql = neon(dbUrl as string);
-        await sql`UPDATE leads SET ai_suggestion = ${suggestion} WHERE id = ${leadId}`;
-        revalidatePath('/admin');
-      }
-      return { success: true, suggestion };
+    if (!res.ok) {
+      await saveSuggestionToDb(fallbackSuggestion);
+      return { success: true, suggestion: fallbackSuggestion };
     }
-    return { success: false, error: 'Nenhuma sugestão retornada' };
+    const data = await res.json();
+    const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const suggestion = rawText.replace(/^["“>]+|["”]+$/g, '').replace(/\[.*?\]/g, '').trim() || fallbackSuggestion;
+    
+    await saveSuggestionToDb(suggestion);
+    return { success: true, suggestion };
   } catch (err) {
-    console.error('Erro na IA:', err);
-    return { success: false, error: 'Erro interno' };
+    console.error('Erro na IA (usando fallback seguro):', err);
+    await saveSuggestionToDb(fallbackSuggestion);
+    return { success: true, suggestion: fallbackSuggestion };
   }
 }
 
