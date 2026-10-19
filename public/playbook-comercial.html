@@ -12,8 +12,8 @@
 
     <style>
         /* ==========================================================================
-           DESIGN TOKENS • QUIET LUXURY & APPLE HEALTH (100% SEM EMOJIS)
-           Clínica Dr. Mário Warde | Cirurgia Plástica de Alto Padrão
+           DESIGN TOKENS • ATELIER DE LUXO (CLÍNICA DR. MÁRIO WARDE)
+           Padrão Maison de Cirurgia • Bordô Profundo, Champanhe e Ouro Envelhecido
            ========================================================================== */
         @font-face {
             font-family: 'Amolina Boutique Sans';
@@ -27,64 +27,60 @@
         }
 
         :root {
-            --wine-900: #310f0e;       /* Vinho Nobre */
-            --wine-800: #4a1715;
-            --wine-700: #6f0f00;       /* Borgonha */
-            --wine-50: #fcf9f8;
-            --wine-tint: rgba(49, 15, 14, 0.04);
-            --wine-tint-hover: rgba(49, 15, 14, 0.08);
+            /* Paleta Nobre Atelier */
+            --atelier-wine-950: #1a0808;
+            --atelier-wine-900: #290d0c;   /* Fundo Nobre Sidebar */
+            --atelier-wine-800: #3d1413;
+            --atelier-wine-700: #591715;   /* Vinho Bordô Acento */
+            --atelier-wine-50: #fbf8f7;
 
-            --chumbo-900: #1d1d1f;     /* Apple Dark Text */
-            --chumbo-800: #2c2c2e;
-            --chumbo-700: #2c2c2e;     /* High contrast body text */
-            --chumbo-500: #86868b;     /* Apple Muted Gray */
-            --chumbo-300: #d2d2d7;
-            --chumbo-100: #f5f5f7;     /* Apple Card Gray */
-            
-            --apple-bg: #fbfbfd;       /* Apple Page Off-White */
-            --surface-pure: #ffffff;
-            
-            --champagne-500: #ccb9b6;  /* Nude Champanhe */
-            --champagne-200: #f2ebe9;
-            --champagne-100: #f9f5f4;
+            --atelier-gold-500: #c5a880;   /* Ouro Real */
+            --atelier-gold-600: #a7885b;
+            --atelier-gold-100: #f5eedf;
 
-            --gold-500: #c5a880;       /* Dourado Nobre */
-            --gold-600: #937341;
-            
-            --emerald-600: #059669;    /* Verde Clínico */
+            --champagne-border: rgba(197, 168, 128, 0.35);
+            --champagne-light: #f7f2ed;
+
+            --chumbo-900: #141416;         /* Preto Editorial */
+            --chumbo-800: #232326;
+            --chumbo-700: #2c2c2e;         /* Texto Principal com Alto Contraste */
+            --chumbo-500: #71717a;
+            --chumbo-300: #d4d4d8;
+            --chumbo-100: #f4f4f5;
+
+            --surface-bg: #fdfbf9;         /* Linho Suave Off-White */
+            --surface-card: #ffffff;
+
+            --emerald-600: #059669;
             --emerald-50: #ecfdf5;
             --emerald-border: #a7f3d0;
 
             --amber-600: #d97706;
             --amber-50: #fffbeb;
-            --amber-border: #fde68a;
 
             --border-hairline: rgba(0, 0, 0, 0.07);
-            --border-champagne: rgba(204, 185, 182, 0.45);
 
             --font-title: 'Amolina Boutique Sans', 'Amolina', 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
-            --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+            --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
 
             --radius-pill: 9999px;
             --radius-sm: 8px;
             --radius-md: 14px;
             --radius-lg: 20px;
-            --radius-xl: 28px;
+            --radius-xl: 26px;
+
+            --sidebar-width: 340px;
 
             --shadow-subtle: 0 2px 10px rgba(0, 0, 0, 0.025);
-            --shadow-card: 0 4px 20px -2px rgba(49, 15, 14, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
-            --shadow-elevated: 0 12px 32px -4px rgba(49, 15, 14, 0.08), 0 2px 8px rgba(0, 0, 0, 0.03);
+            --shadow-card: 0 4px 20px -2px rgba(41, 13, 12, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+            --shadow-elevated: 0 14px 34px -4px rgba(41, 13, 12, 0.09), 0 3px 10px rgba(0, 0, 0, 0.03);
 
-            --sidebar-width: 320px;
-
-            /* Tipografia Calibrada */
-            --base-font-size: 17px;
+            --base-font-size: 17.5px;
             --line-height-body: 1.8;
         }
 
-        /* Seletor dinâmico de tamanho de fonte */
         body.font-large {
-            --base-font-size: 19px;
+            --base-font-size: 19.5px;
             --line-height-body: 1.85;
         }
 
@@ -100,7 +96,7 @@
 
         body {
             font-family: var(--font-body);
-            background-color: var(--apple-bg);
+            background-color: var(--surface-bg);
             color: var(--chumbo-700);
             line-height: var(--line-height-body);
             font-size: var(--base-font-size);
@@ -114,7 +110,7 @@
             top: 0;
             left: 0;
             height: 3px;
-            background: linear-gradient(90deg, var(--wine-900), var(--wine-700), var(--gold-500));
+            background: linear-gradient(90deg, var(--atelier-wine-700), var(--atelier-gold-500));
             width: 0%;
             z-index: 9999;
             transition: width 0.1s linear;
@@ -126,14 +122,12 @@
         }
 
         /* ==========================================================================
-           SIDEBAR • macOS FINDER STYLE (COMPACTA, ORDENADA E LIMPA)
+           SIDEBAR • MAISON BORDÔ (PADRÃO ALTA COSTURA MÉDICA)
            ========================================================================== */
         .sidebar {
             width: var(--sidebar-width);
-            background: rgba(255, 255, 255, 0.94);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border-right: 1px solid var(--border-hairline);
+            background: linear-gradient(180deg, var(--atelier-wine-900) 0%, var(--atelier-wine-950) 100%);
+            border-right: 1px solid rgba(197, 168, 128, 0.25);
             position: fixed;
             top: 0;
             bottom: 0;
@@ -141,34 +135,35 @@
             display: flex;
             flex-direction: column;
             z-index: 100;
+            color: #ffffff;
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
         }
 
         .sidebar-brand-box {
-            padding: 24px 20px 18px 20px;
-            border-bottom: 1px solid var(--border-hairline);
+            padding: 28px 24px 22px 24px;
+            border-bottom: 1px solid rgba(197, 168, 128, 0.18);
         }
 
         .brand-seal-row {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 10px;
+            gap: 14px;
+            margin-bottom: 14px;
         }
 
         .clinic-medallion {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--wine-900) 0%, var(--wine-700) 100%);
-            color: var(--gold-500);
-            border-radius: 9px;
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--atelier-gold-500) 0%, var(--atelier-gold-600) 100%);
+            color: var(--atelier-wine-950);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: var(--font-title);
-            font-size: 18px;
+            font-size: 22px;
             font-weight: 700;
-            border: 1px solid rgba(197, 168, 128, 0.35);
-            box-shadow: 0 4px 10px rgba(49, 15, 14, 0.12);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
         }
 
         .brand-titles {
@@ -177,178 +172,135 @@
         }
 
         .brand-author {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
-            letter-spacing: 0.05em;
-            color: var(--wine-900);
+            letter-spacing: 0.08em;
+            color: #ffffff;
             text-transform: uppercase;
         }
 
         .brand-tagline {
-            font-size: 11px;
-            color: var(--chumbo-500);
-            letter-spacing: 0.02em;
+            font-size: 11.5px;
+            color: var(--atelier-gold-500);
+            letter-spacing: 0.04em;
         }
 
         .sidebar-doc-title {
             font-family: var(--font-title);
-            font-size: 20px;
-            color: var(--chumbo-900);
-            line-height: 1.2;
-            margin-bottom: 6px;
+            font-size: 24px;
+            color: #ffffff;
+            line-height: 1.15;
+            margin-bottom: 8px;
         }
 
         .sidebar-live-pill {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: var(--wine-50);
-            border: 1px solid var(--border-champagne);
-            color: var(--wine-900);
-            padding: 2px 10px;
+            background: rgba(197, 168, 128, 0.15);
+            border: 1px solid rgba(197, 168, 128, 0.3);
+            color: var(--atelier-gold-100);
+            padding: 3px 12px;
             border-radius: var(--radius-pill);
-            font-size: 10px;
+            font-size: 10.5px;
             font-weight: 600;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.05em;
             text-transform: uppercase;
         }
 
         .sidebar-live-pill .dot {
-            width: 5px;
-            height: 5px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            background: var(--emerald-600);
-        }
-
-        /* Search input */
-        .sidebar-search-box {
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--border-hairline);
-        }
-
-        .search-shell {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .search-icon-text {
-            position: absolute;
-            left: 10px;
-            font-size: 11px;
-            color: var(--chumbo-500);
-            pointer-events: none;
-            font-weight: 600;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 8px 36px 8px 32px;
-            background: var(--apple-bg);
-            border: 1px solid var(--border-hairline);
-            border-radius: var(--radius-sm);
-            font-size: 13px;
-            color: var(--chumbo-900);
-            outline: none;
-            transition: all 0.2s ease;
-            font-family: var(--font-body);
-        }
-
-        .search-input:focus {
-            border-color: var(--wine-900);
-            background: #ffffff;
-            box-shadow: 0 0 0 2px rgba(49, 15, 14, 0.08);
-        }
-
-        .search-key-badge {
-            position: absolute;
-            right: 8px;
-            font-size: 10px;
-            background: rgba(0, 0, 0, 0.04);
-            border: 1px solid var(--border-hairline);
-            padding: 1px 5px;
-            border-radius: 4px;
-            color: var(--chumbo-500);
-            font-family: monospace;
-            pointer-events: none;
+            background: #10b981;
+            box-shadow: 0 0 8px #10b981;
         }
 
         /* Navigation List */
         .sidebar-nav-scroll {
-            padding: 12px 10px 24px 10px;
+            padding: 16px 14px 24px 14px;
             overflow-y: auto;
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 3px;
         }
 
         .nav-category-label {
             font-size: 10.5px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--gold-600);
-            padding: 14px 10px 4px 10px;
+            letter-spacing: 0.12em;
+            color: var(--atelier-gold-500);
+            padding: 16px 12px 6px 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 8px;
+        }
+
+        .nav-category-label:first-child {
+            border-top: none;
+            margin-top: 0;
         }
 
         .nav-link {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 8px 10px;
+            gap: 12px;
+            padding: 10px 14px;
             border-radius: var(--radius-sm);
             text-decoration: none;
-            color: var(--chumbo-800);
-            font-size: 13.5px;
+            color: #e4e4e7;
+            font-size: 14px;
             font-weight: 500;
             transition: all 0.15s ease;
             line-height: 1.35;
         }
 
         .nav-link:hover {
-            background: var(--wine-tint-hover);
-            color: var(--wine-900);
+            background: rgba(197, 168, 128, 0.15);
+            color: #ffffff;
+            transform: translateX(2px);
         }
 
         .nav-link.active {
-            background: var(--wine-900);
-            color: #ffffff !important;
-            font-weight: 600;
-            box-shadow: 0 2px 8px rgba(49, 15, 14, 0.2);
+            background: linear-gradient(135deg, var(--atelier-gold-500) 0%, var(--atelier-gold-600) 100%);
+            color: var(--atelier-wine-950) !important;
+            font-weight: 700;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
         }
 
         .nav-link.active .nav-dot {
-            background: var(--gold-500);
+            background: var(--atelier-wine-950);
         }
 
         .nav-dot {
             width: 5px;
             height: 5px;
             border-radius: 50%;
-            background: var(--champagne-500);
+            background: var(--atelier-gold-500);
             flex-shrink: 0;
+            opacity: 0.7;
             transition: all 0.2s ease;
         }
 
         .nav-level-3 {
-            padding-left: 20px;
-            font-size: 12.5px;
-            color: var(--chumbo-500);
+            padding-left: 26px;
+            font-size: 13px;
+            color: #a1a1aa;
         }
 
         .sidebar-manual-switcher {
-            padding: 9px 12px;
-            margin: 0 10px 8px 10px;
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid var(--border-hairline);
+            padding: 12px 16px;
+            margin: 0 14px 10px 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(197, 168, 128, 0.25);
             border-radius: var(--radius-sm);
             transition: all 0.2s ease;
         }
 
         .sidebar-manual-switcher:hover {
-            background: var(--wine-50);
-            border-color: var(--border-champagne);
+            background: rgba(197, 168, 128, 0.15);
+            border-color: var(--atelier-gold-500);
         }
 
         .manual-switcher-link {
@@ -356,22 +308,22 @@
             align-items: center;
             justify-content: space-between;
             text-decoration: none;
-            color: var(--wine-900);
-            font-size: 12px;
+            color: #ffffff;
+            font-size: 13px;
             font-weight: 600;
             letter-spacing: 0.02em;
         }
 
         .switcher-arrow {
-            color: var(--gold-500);
-            font-size: 13px;
+            color: var(--atelier-gold-500);
+            font-size: 14px;
             font-weight: 700;
         }
 
         .sidebar-footer-box {
-            padding: 14px 18px;
-            border-top: 1px solid var(--border-hairline);
-            background: rgba(255, 255, 255, 0.6);
+            padding: 16px 20px;
+            border-top: 1px solid rgba(197, 168, 128, 0.18);
+            background: rgba(0, 0, 0, 0.2);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -380,29 +332,29 @@
         .concierge-status {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 12px;
+            gap: 10px;
+            font-size: 12.5px;
             font-weight: 600;
-            color: var(--chumbo-700);
+            color: #ffffff;
         }
 
         .pulse-green {
-            width: 7px;
-            height: 7px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            background: var(--emerald-600);
-            box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.5);
+            background: #10b981;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
             animation: pulse-ring 2s infinite;
         }
 
         @keyframes pulse-ring {
-            0% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.6); }
-            70% { box-shadow: 0 0 0 6px rgba(5, 150, 105, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
 
         /* ==========================================================================
-           MAIN CONTENT AREA • FLUID EXPANDED CANVAS (1120px)
+           MAIN CONTENT AREA • FLUID EXPANDED CANVAS (1180px)
            ========================================================================== */
         .main-wrapper {
             margin-left: var(--sidebar-width);
@@ -410,26 +362,27 @@
             min-width: 0;
             display: flex;
             flex-direction: column;
+            background: var(--surface-bg);
         }
 
         /* Top Bar Apple Frosted Glass */
         .top-navbar {
-            height: 64px;
-            background: rgba(251, 251, 253, 0.88);
+            height: 68px;
+            background: rgba(253, 251, 249, 0.94);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-hairline);
+            border-bottom: 1px solid rgba(197, 168, 128, 0.2);
             position: sticky;
             top: 0;
             z-index: 90;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 36px;
+            padding: 0 40px;
         }
 
         .top-breadcrumb {
-            font-size: 13.5px;
+            font-size: 14px;
             color: var(--chumbo-500);
             display: flex;
             align-items: center;
@@ -437,26 +390,26 @@
         }
 
         .top-breadcrumb strong {
-            color: var(--chumbo-900);
-            font-weight: 600;
+            color: var(--atelier-wine-900);
+            font-weight: 700;
         }
 
         .top-actions {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .btn-pill {
             display: inline-flex;
             align-items: center;
-            padding: 7px 15px;
-            font-size: 12.5px;
+            padding: 8px 18px;
+            font-size: 13px;
             font-weight: 600;
             border-radius: var(--radius-pill);
             background: #ffffff;
-            border: 1px solid var(--border-hairline);
-            color: var(--chumbo-700);
+            border: 1px solid rgba(197, 168, 128, 0.35);
+            color: var(--chumbo-800);
             cursor: pointer;
             transition: all 0.2s ease;
             text-decoration: none;
@@ -464,20 +417,20 @@
         }
 
         .btn-pill:hover {
-            background: var(--wine-50);
-            color: var(--wine-900);
-            border-color: var(--border-champagne);
+            background: var(--atelier-wine-50);
+            color: var(--atelier-wine-900);
+            border-color: var(--atelier-gold-500);
         }
 
         .btn-pill-primary {
-            background: linear-gradient(135deg, var(--wine-900) 0%, var(--wine-800) 100%);
+            background: linear-gradient(135deg, var(--atelier-wine-900) 0%, var(--atelier-wine-800) 100%);
             color: #ffffff;
-            border-color: var(--wine-900);
-            box-shadow: 0 2px 8px rgba(49, 15, 14, 0.18);
+            border-color: var(--atelier-wine-900);
+            box-shadow: 0 4px 12px rgba(41, 13, 12, 0.25);
         }
 
         .btn-pill-primary:hover {
-            background: linear-gradient(135deg, var(--wine-800) 0%, var(--wine-700) 100%);
+            background: linear-gradient(135deg, var(--atelier-wine-800) 0%, var(--atelier-wine-700) 100%);
             color: #ffffff;
             transform: translateY(-1px);
         }
@@ -485,7 +438,7 @@
         /* Seletor de Tamanho de Fonte */
         .font-size-toggle {
             display: inline-flex;
-            border: 1px solid var(--border-hairline);
+            border: 1px solid rgba(197, 168, 128, 0.35);
             background: #ffffff;
             border-radius: var(--radius-pill);
             overflow: hidden;
@@ -494,8 +447,8 @@
         .font-btn {
             background: none;
             border: none;
-            padding: 6px 12px;
-            font-size: 12.5px;
+            padding: 6px 14px;
+            font-size: 13px;
             font-weight: 600;
             color: var(--chumbo-700);
             cursor: pointer;
@@ -503,133 +456,226 @@
         }
 
         .font-btn:hover {
-            background: var(--wine-50);
-            color: var(--wine-900);
+            background: var(--atelier-wine-50);
+            color: var(--atelier-wine-900);
         }
 
         .font-btn.active {
-            background: var(--wine-900);
+            background: var(--atelier-wine-900);
             color: #ffffff;
         }
 
-        /* Document Canvas Expandido para 1120px */
+        /* Document Canvas Expandido para 1180px */
         .document-canvas {
-            max-width: 1120px;
+            max-width: 1180px;
             margin: 0 auto;
-            padding: 40px 36px 120px 36px;
+            padding: 44px 40px 140px 40px;
             width: 100%;
         }
 
         /* ==========================================================================
-           TAB NAVIGATION BAR (OS 4 MÓDULOS EXECUTIVOS)
+           APPLE RELEASE NOTES SECTION (PADRÃO KEYNOTE BENTO CARDS)
            ========================================================================== */
-        .module-tabs-dock {
+        .apple-release-section {
+            background: linear-gradient(180deg, #ffffff 0%, var(--champagne-light) 100%);
+            border: 1px solid var(--champagne-border);
+            border-radius: var(--radius-xl);
+            padding: 38px 40px 44px 40px;
+            margin-bottom: 50px;
+            box-shadow: var(--shadow-card);
+            position: relative;
+        }
+
+        .apple-release-hero {
+            margin-bottom: 30px;
+            padding-bottom: 22px;
+            border-bottom: 1px solid rgba(197, 168, 128, 0.25);
+        }
+
+        .release-header-tag {
             display: flex;
             align-items: center;
-            gap: 8px;
-            background: rgba(49, 15, 14, 0.03);
-            padding: 6px;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border-hairline);
-            margin-bottom: 36px;
-            overflow-x: auto;
+            gap: 12px;
+            margin-bottom: 12px;
         }
 
-        .module-tab-btn {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 12px 18px;
-            border-radius: var(--radius-sm);
-            background: transparent;
-            border: none;
-            color: var(--chumbo-700);
-            font-size: 14.5px;
-            font-weight: 600;
-            font-family: var(--font-body);
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-            white-space: nowrap;
-        }
-
-        .module-tab-btn:hover {
-            background: rgba(255, 255, 255, 0.6);
-            color: var(--wine-900);
-        }
-
-        .module-tab-btn.active {
-            background: #ffffff;
-            color: var(--wine-900);
-            box-shadow: 0 4px 14px rgba(49, 15, 14, 0.08);
-            border: 1px solid var(--border-champagne);
-        }
-
-        .module-tab-btn .tab-badge {
-            font-size: 10px;
+        .release-badge-live {
+            font-size: 11px;
             font-weight: 700;
-            padding: 2px 7px;
+            background: var(--atelier-wine-900);
+            color: var(--atelier-gold-500);
+            padding: 4px 14px;
             border-radius: var(--radius-pill);
-            background: var(--wine-50);
-            color: var(--wine-900);
-            border: 1px solid var(--border-champagne);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
         }
 
-        .module-tab-btn.active .tab-badge {
-            background: var(--wine-900);
-            color: #ffffff;
+        .release-date {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--chumbo-500);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
         }
 
-        .tab-pane {
-            display: none;
-            animation: fadeInTab 0.25s ease-out;
+        .release-main-title {
+            font-family: var(--font-title);
+            font-size: 32px;
+            line-height: 1.15;
+            color: var(--atelier-wine-900);
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.01em;
         }
 
-        .tab-pane.active {
+        .release-main-subtitle {
+            font-size: 16.5px;
+            line-height: 1.65;
+            color: var(--chumbo-700);
+            max-width: 900px;
+        }
+
+        .apple-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .apple-directive-card {
+            background: #ffffff;
+            border: 1px solid rgba(197, 168, 128, 0.3);
+            border-radius: var(--radius-lg);
+            padding: 26px 26px 24px 26px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: var(--shadow-subtle);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .apple-directive-card:hover {
+            border-color: var(--atelier-wine-900);
+            box-shadow: 0 10px 28px rgba(41, 13, 12, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .apple-card-accent {
+            border-color: var(--atelier-gold-500);
+            background: linear-gradient(180deg, #ffffff 0%, #fdfbf7 100%);
+            box-shadow: 0 4px 18px rgba(197, 168, 128, 0.2);
+        }
+
+        .directive-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(197, 168, 128, 0.15);
+            padding-bottom: 10px;
+        }
+
+        .directive-pillar {
+            font-size: 10.5px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--atelier-wine-700);
+        }
+
+        .pillar-gold {
+            color: var(--atelier-gold-600);
+        }
+
+        .directive-num {
+            font-family: var(--font-title);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--atelier-wine-900);
+        }
+
+        .num-gold {
+            color: var(--atelier-gold-600);
+        }
+
+        .directive-card-title {
+            font-size: 18.5px;
+            font-weight: 700;
+            color: var(--chumbo-900);
+            line-height: 1.35;
+            letter-spacing: -0.01em;
+        }
+
+        .directive-card-body {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--chumbo-700);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .directive-quote-box {
+            background: var(--surface-bg);
+            border: 1px solid rgba(197, 168, 128, 0.25);
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--chumbo-800);
+            border-left: 3px solid var(--atelier-wine-700);
+        }
+
+        .quote-gold {
+            border-left-color: var(--atelier-gold-500);
+            background: #faf6f0;
+        }
+
+        .quote-action {
             display: block;
-        }
-
-        @keyframes fadeInTab {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--atelier-wine-900);
+            margin-bottom: 4px;
         }
 
         /* ==========================================================================
-           BENTO GRID • ACESSO RÁPIDO AOS 7 CENÁRIOS
+           COCKPIT BENTO GRID • ACESSO RÁPIDO
            ========================================================================== */
         .bento-dock {
-            background: linear-gradient(180deg, #ffffff 0%, var(--wine-50) 100%);
-            border: 1px solid var(--border-champagne);
+            background: linear-gradient(180deg, #ffffff 0%, var(--champagne-light) 100%);
+            border: 1px solid var(--champagne-border);
             border-radius: var(--radius-xl);
-            padding: 28px 28px 32px 28px;
-            margin-bottom: 44px;
-            box-shadow: var(--shadow-card);
+            padding: 34px 34px 38px 34px;
+            margin-bottom: 48px;
+            box-shadow: var(--shadow-elevated);
         }
 
         .bento-dock-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 22px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid var(--border-hairline);
+            margin-bottom: 24px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid rgba(197, 168, 128, 0.25);
         }
 
         .bento-badge {
             font-size: 11px;
             font-weight: 700;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: var(--wine-900);
-            background: rgba(49, 15, 14, 0.06);
-            padding: 3px 10px;
+            color: var(--atelier-wine-900);
+            background: rgba(197, 168, 128, 0.2);
+            padding: 4px 14px;
             border-radius: var(--radius-pill);
+            border: 1px solid rgba(197, 168, 128, 0.4);
         }
 
         .bento-hint {
-            font-size: 12.5px;
+            font-size: 13px;
             color: var(--chumbo-500);
+            font-style: italic;
         }
 
         .bento-grid {
@@ -640,9 +686,9 @@
 
         .bento-card {
             background: #ffffff;
-            border: 1px solid var(--border-hairline);
+            border: 1px solid rgba(197, 168, 128, 0.3);
             border-radius: var(--radius-md);
-            padding: 18px 16px;
+            padding: 20px 18px;
             text-decoration: none;
             display: flex;
             flex-direction: column;
@@ -652,15 +698,15 @@
         }
 
         .bento-card:hover {
-            border-color: var(--wine-900);
-            box-shadow: 0 8px 24px rgba(49, 15, 14, 0.1);
-            transform: translateY(-2px);
+            border-color: var(--atelier-wine-900);
+            box-shadow: 0 10px 28px rgba(41, 13, 12, 0.12);
+            transform: translateY(-3px);
         }
 
         .bento-card-highlight {
-            border-color: var(--gold-500);
-            background: linear-gradient(180deg, #ffffff 0%, #fdfbf7 100%);
-            box-shadow: 0 4px 16px rgba(197, 168, 128, 0.2);
+            border-color: var(--atelier-gold-500);
+            background: linear-gradient(180deg, #ffffff 0%, #faf6f0 100%);
+            box-shadow: 0 4px 18px rgba(197, 168, 128, 0.25);
         }
 
         .bento-card-top {
@@ -671,42 +717,42 @@
 
         .bento-num {
             font-family: var(--font-title);
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
-            color: var(--wine-900);
+            color: var(--atelier-wine-900);
         }
 
         .bento-num-gold {
-            color: var(--gold-600);
+            color: var(--atelier-gold-600);
         }
 
         .bento-tag {
-            font-size: 9.5px;
+            font-size: 10px;
             font-weight: 700;
             letter-spacing: 0.06em;
             text-transform: uppercase;
             color: var(--chumbo-500);
-            background: var(--apple-bg);
-            padding: 2px 7px;
+            background: var(--atelier-wine-50);
+            padding: 2px 8px;
             border-radius: var(--radius-pill);
             border: 1px solid var(--border-hairline);
         }
 
         .bento-tag-gold {
-            background: var(--wine-900);
+            background: var(--atelier-wine-900);
             color: #ffffff;
-            border-color: var(--wine-900);
+            border-color: var(--atelier-wine-900);
         }
 
         .bento-card-title {
-            font-size: 15px;
+            font-size: 15.5px;
             font-weight: 700;
             color: var(--chumbo-900);
             line-height: 1.25;
         }
 
         .bento-card-desc {
-            font-size: 12px;
+            font-size: 12.5px;
             color: var(--chumbo-500);
             line-height: 1.45;
         }
@@ -715,11 +761,11 @@
            HERO CARD • EDITORIAL MASTER
            ========================================================================== */
         .doc-hero-card {
-            background: linear-gradient(180deg, #ffffff 0%, var(--wine-50) 100%);
-            border: 1px solid var(--border-champagne);
+            background: linear-gradient(180deg, #ffffff 0%, var(--champagne-light) 100%);
+            border: 1px solid var(--champagne-border);
             border-radius: var(--radius-xl);
-            padding: 44px 40px;
-            margin-bottom: 40px;
+            padding: 48px 44px;
+            margin-bottom: 44px;
             box-shadow: var(--shadow-card);
             position: relative;
             overflow: hidden;
@@ -730,9 +776,9 @@
             position: absolute;
             top: 0;
             right: 0;
-            width: 240px;
-            height: 240px;
-            background: radial-gradient(circle, rgba(197, 168, 128, 0.15) 0%, rgba(255,255,255,0) 70%);
+            width: 260px;
+            height: 260px;
+            background: radial-gradient(circle, rgba(197, 168, 128, 0.2) 0%, rgba(255,255,255,0) 70%);
             pointer-events: none;
         }
 
@@ -740,42 +786,42 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
-            letter-spacing: 0.12em;
-            color: var(--gold-600);
+            letter-spacing: 0.14em;
+            color: var(--atelier-gold-600);
             text-transform: uppercase;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         .doc-hero-title {
             font-family: var(--font-title);
-            font-size: 42px;
-            line-height: 1.12;
-            color: var(--wine-900);
+            font-size: 46px;
+            line-height: 1.1;
+            color: var(--atelier-wine-900);
             font-weight: 700;
-            margin-bottom: 16px;
+            margin-bottom: 18px;
             letter-spacing: -0.01em;
         }
 
         .doc-hero-desc {
-            font-size: 17.5px;
+            font-size: 18.5px;
             line-height: 1.7;
             color: var(--chumbo-700);
-            margin-bottom: 28px;
+            margin-bottom: 30px;
             font-weight: 400;
-            max-width: 820px;
+            max-width: 860px;
         }
 
         .personas-dock {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid var(--border-hairline);
+            gap: 18px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid var(--champagne-border);
             border-radius: var(--radius-md);
-            padding: 16px 20px;
-            margin-bottom: 24px;
+            padding: 18px 22px;
+            margin-bottom: 26px;
         }
 
         .persona-item {
@@ -785,28 +831,28 @@
         }
 
         .persona-initials-badge {
-            width: 38px;
-            height: 38px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            background: var(--wine-900);
-            color: var(--gold-500);
+            background: var(--atelier-wine-900);
+            color: var(--atelier-gold-500);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
             flex-shrink: 0;
-            border: 1px solid rgba(197, 168, 128, 0.35);
+            border: 1px solid var(--champagne-border);
         }
 
         .persona-name {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             color: var(--chumbo-900);
         }
 
         .persona-role {
-            font-size: 12px;
+            font-size: 12.5px;
             color: var(--chumbo-500);
             line-height: 1.35;
         }
@@ -816,24 +862,24 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 10px;
-            padding-top: 18px;
-            border-top: 1px solid var(--border-hairline);
+            padding-top: 20px;
+            border-top: 1px solid rgba(197, 168, 128, 0.2);
         }
 
         .hero-pill-meta {
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid var(--border-hairline);
-            padding: 5px 14px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--champagne-border);
+            padding: 5px 16px;
             border-radius: var(--radius-pill);
-            font-size: 12px;
+            font-size: 12.5px;
             color: var(--chumbo-700);
             font-weight: 500;
         }
 
         .hero-pill-highlight {
-            background: var(--wine-900);
+            background: var(--atelier-wine-900);
             color: #ffffff;
-            border-color: var(--wine-900);
+            border-color: var(--atelier-wine-900);
             font-weight: 600;
         }
 
@@ -841,9 +887,9 @@
            EDITORIAL HEADINGS & DIVIDERS
            ========================================================================== */
         .section-title-wrap {
-            margin-top: 48px;
-            margin-bottom: 22px;
-            padding-top: 20px;
+            margin-top: 54px;
+            margin-bottom: 24px;
+            padding-top: 24px;
         }
 
         .section-pretitle {
@@ -854,70 +900,70 @@
         }
 
         .section-num-pill {
-            font-size: 11px;
+            font-size: 11.5px;
             font-weight: 700;
-            background: var(--wine-900);
-            color: var(--gold-500);
-            padding: 3px 10px;
+            background: var(--atelier-wine-900);
+            color: var(--atelier-gold-500);
+            padding: 3px 12px;
             border-radius: var(--radius-pill);
             letter-spacing: 0.05em;
         }
 
         .section-lead-label {
-            font-size: 11px;
+            font-size: 11.5px;
             font-weight: 700;
-            color: var(--chumbo-500);
+            color: var(--atelier-gold-600);
             letter-spacing: 0.1em;
             text-transform: uppercase;
         }
 
         .section-h2 {
             font-family: var(--font-title);
-            font-size: 34px;
+            font-size: 36px;
             line-height: 1.2;
-            color: var(--wine-900);
+            color: var(--atelier-wine-900);
             font-weight: 600;
             letter-spacing: -0.01em;
         }
 
         .section-h3 {
             font-family: var(--font-body);
-            font-size: 22px;
+            font-size: 23px;
             line-height: 1.35;
             color: var(--chumbo-900);
             font-weight: 600;
-            margin-top: 36px;
-            margin-bottom: 16px;
-        }
-
-        .scenario-header-wrap {
             margin-top: 40px;
             margin-bottom: 18px;
         }
 
+        .scenario-header-wrap {
+            margin-top: 44px;
+            margin-bottom: 20px;
+        }
+
         .scenario-badge-label {
             display: inline-block;
-            font-size: 11px;
+            font-size: 11.5px;
             font-weight: 700;
-            color: var(--gold-600);
+            color: var(--atelier-gold-600);
             letter-spacing: 0.08em;
             text-transform: uppercase;
             margin-bottom: 6px;
         }
 
         .section-h4 {
-            font-size: 17.5px;
+            font-size: 18.5px;
             font-weight: 600;
-            color: var(--wine-900);
-            margin-top: 26px;
-            margin-bottom: 12px;
+            color: var(--atelier-wine-900);
+            margin-top: 28px;
+            margin-bottom: 14px;
         }
 
         .section-h5 {
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 600;
             color: var(--chumbo-900);
-            margin-top: 18px;
+            margin-top: 20px;
             margin-bottom: 10px;
         }
 
@@ -925,23 +971,23 @@
             font-size: var(--base-font-size);
             line-height: var(--line-height-body);
             color: var(--chumbo-700);
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
 
         .editorial-divider {
             height: 1px;
-            background: linear-gradient(90deg, transparent, var(--border-champagne), transparent);
-            margin: 48px 0;
+            background: linear-gradient(90deg, transparent, var(--champagne-border), transparent);
+            margin: 54px 0;
         }
 
         /* ==========================================================================
-           LUXURY WHATSAPP SCRIPT CARDS (FONTES 17px/18px • LEITURA CONFORTÁVEL)
+           LUXURY WHATSAPP SCRIPT CARDS (FONTES 18px • LEITURA CONFORTÁVEL)
            ========================================================================== */
         .luxury-script-card {
             background: #ffffff;
-            border: 1px solid var(--border-champagne);
+            border: 1px solid var(--champagne-border);
             border-radius: var(--radius-lg);
-            margin: 28px 0 34px 0;
+            margin: 30px 0 36px 0;
             box-shadow: var(--shadow-card);
             overflow: hidden;
             transition: all 0.25s ease;
@@ -949,13 +995,13 @@
 
         .luxury-script-card:hover {
             box-shadow: var(--shadow-elevated);
-            border-color: var(--wine-700);
+            border-color: var(--atelier-gold-500);
         }
 
         .script-card-header {
-            background: var(--wine-50);
-            border-bottom: 1px solid var(--border-hairline);
-            padding: 14px 24px;
+            background: var(--champagne-light);
+            border-bottom: 1px solid rgba(197, 168, 128, 0.25);
+            padding: 16px 26px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -964,35 +1010,35 @@
         .script-badge-group {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .script-tag-clean {
-            font-size: 11px;
+            font-size: 11.5px;
             font-weight: 700;
-            background: var(--wine-900);
+            background: var(--atelier-wine-900);
             color: #ffffff;
-            padding: 4px 12px;
+            padding: 4px 14px;
             border-radius: var(--radius-pill);
             letter-spacing: 0.06em;
             text-transform: uppercase;
         }
 
         .script-channel-clean {
-            font-size: 11px;
+            font-size: 11.5px;
             font-weight: 600;
-            color: var(--gold-600);
+            color: var(--atelier-gold-600);
             letter-spacing: 0.05em;
             text-transform: uppercase;
         }
 
         .btn-copy-script {
             background: #ffffff;
-            border: 1px solid var(--border-champagne);
-            color: var(--wine-900);
-            font-size: 12.5px;
+            border: 1px solid var(--champagne-border);
+            color: var(--atelier-wine-900);
+            font-size: 13px;
             font-weight: 600;
-            padding: 6px 16px;
+            padding: 7px 18px;
             border-radius: var(--radius-pill);
             cursor: pointer;
             transition: all 0.2s ease;
@@ -1000,27 +1046,27 @@
         }
 
         .btn-copy-script:hover {
-            background: var(--wine-900);
+            background: var(--atelier-wine-900);
             color: #ffffff;
-            border-color: var(--wine-900);
+            border-color: var(--atelier-wine-900);
             transform: translateY(-1px);
         }
 
         .script-bubble-wrapper {
-            padding: 26px 26px 22px 26px;
-            background: var(--apple-bg);
+            padding: 28px 28px 24px 28px;
+            background: #fbf9f6;
         }
 
         .script-bubble {
             background: #ffffff;
-            border: 1px solid var(--border-hairline);
+            border: 1px solid rgba(197, 168, 128, 0.25);
             border-radius: var(--radius-md);
-            padding: 22px 24px;
+            padding: 24px 26px;
             font-size: calc(var(--base-font-size) + 0.5px);
             line-height: 1.75;
             color: var(--chumbo-900);
             box-shadow: var(--shadow-subtle);
-            border-left: 4px solid var(--wine-700);
+            border-left: 4px solid var(--atelier-wine-700);
         }
 
         .script-bubble p {
@@ -1032,13 +1078,13 @@
         }
 
         .script-card-footer {
-            padding: 12px 24px;
+            padding: 14px 26px;
             background: #ffffff;
-            border-top: 1px solid var(--border-hairline);
+            border-top: 1px solid rgba(197, 168, 128, 0.15);
         }
 
         .script-guide-text {
-            font-size: 12px;
+            font-size: 12.5px;
             color: var(--chumbo-500);
             font-style: italic;
         }
@@ -1047,33 +1093,33 @@
            BOOKING HUB (CENÁRIO 6 • DIRETRIZ DE 50% VIA PIX)
            ========================================================================== */
         .booking-hub-card {
-            background: linear-gradient(180deg, #ffffff 0%, var(--wine-50) 100%);
-            border: 1px solid var(--wine-800);
+            background: linear-gradient(180deg, #ffffff 0%, var(--champagne-light) 100%);
+            border: 1px solid var(--champagne-border);
             border-radius: var(--radius-xl);
-            padding: 38px 36px;
-            margin: 32px 0 44px 0;
+            padding: 40px 38px;
+            margin: 34px 0 46px 0;
             box-shadow: var(--shadow-elevated);
         }
 
         .booking-tag-row {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
+            gap: 12px;
+            margin-bottom: 14px;
         }
 
         .hub-badge-pill {
-            font-size: 11px;
+            font-size: 11.5px;
             font-weight: 700;
-            background: var(--wine-900);
-            color: var(--gold-500);
-            padding: 3px 12px;
+            background: var(--atelier-wine-900);
+            color: var(--atelier-gold-500);
+            padding: 4px 14px;
             border-radius: var(--radius-pill);
             letter-spacing: 0.05em;
         }
 
         .hub-badge-clean {
-            font-size: 11px;
+            font-size: 11.5px;
             font-weight: 600;
             color: var(--chumbo-500);
             letter-spacing: 0.05em;
@@ -1082,23 +1128,23 @@
 
         .booking-hub-title {
             font-family: var(--font-title);
-            font-size: 28px;
-            color: var(--wine-900);
+            font-size: 30px;
+            color: var(--atelier-wine-900);
             margin-bottom: 10px;
         }
 
         .booking-hub-subtitle {
-            font-size: 15.5px;
+            font-size: 16px;
             line-height: 1.65;
             color: var(--chumbo-700);
-            margin-bottom: 26px;
+            margin-bottom: 28px;
         }
 
         .booking-calculator-dock {
             background: #ffffff;
-            border: 1px solid var(--border-champagne);
+            border: 1px solid var(--champagne-border);
             border-radius: var(--radius-md);
-            padding: 22px 24px;
+            padding: 24px 26px;
             margin-bottom: 28px;
         }
 
@@ -1110,15 +1156,15 @@
         }
 
         .calc-label {
-            font-size: 11px;
+            font-size: 11.5px;
             font-weight: 700;
             letter-spacing: 0.08em;
-            color: var(--wine-900);
+            color: var(--atelier-wine-900);
             text-transform: uppercase;
         }
 
         .calc-hint {
-            font-size: 12px;
+            font-size: 12.5px;
             color: var(--chumbo-500);
         }
 
@@ -1130,10 +1176,10 @@
         }
 
         .calc-pill {
-            background: var(--apple-bg);
-            border: 1px solid var(--border-hairline);
+            background: var(--surface-bg);
+            border: 1px solid var(--champagne-border);
             border-radius: var(--radius-sm);
-            padding: 14px 16px;
+            padding: 16px 18px;
             text-align: left;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -1143,19 +1189,19 @@
         }
 
         .calc-pill:hover {
-            background: var(--wine-50);
-            border-color: var(--border-champagne);
+            background: #ffffff;
+            border-color: var(--atelier-wine-900);
         }
 
         .calc-pill.active {
-            background: var(--wine-900);
-            border-color: var(--wine-900);
+            background: var(--atelier-wine-900);
+            border-color: var(--atelier-wine-900);
             color: #ffffff;
-            box-shadow: 0 4px 12px rgba(49, 15, 14, 0.2);
+            box-shadow: 0 4px 14px rgba(41, 13, 12, 0.25);
         }
 
         .calc-pill.active .pill-category {
-            color: var(--gold-500);
+            color: var(--atelier-gold-500);
         }
 
         .calc-pill.active .pill-val {
@@ -1166,34 +1212,34 @@
             font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
-            color: var(--wine-900);
+            color: var(--atelier-wine-900);
         }
 
         .pill-val {
-            font-size: 14.5px;
+            font-size: 15px;
             font-weight: 600;
             color: var(--chumbo-900);
         }
 
         .calc-summary-panel {
-            padding: 14px 18px;
-            background: var(--wine-50);
+            padding: 16px 20px;
+            background: var(--champagne-light);
             border-radius: var(--radius-sm);
-            font-size: 14px;
+            font-size: 14.5px;
             color: var(--chumbo-700);
-            border: 1px solid var(--border-champagne);
+            border: 1px solid var(--champagne-border);
         }
 
         .highlight-wine {
-            color: var(--wine-700);
+            color: var(--atelier-wine-700);
             font-weight: 700;
         }
 
         .official-script-box {
             background: #ffffff;
-            border: 1px solid var(--border-champagne);
+            border: 1px solid var(--champagne-border);
             border-radius: var(--radius-md);
-            padding: 24px;
+            padding: 26px;
             margin-bottom: 24px;
         }
 
@@ -1207,48 +1253,48 @@
         .box-head-left {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .box-tag {
-            font-size: 11px;
+            font-size: 11.5px;
             font-weight: 700;
-            background: var(--wine-900);
+            background: var(--atelier-wine-900);
             color: #ffffff;
-            padding: 3px 10px;
+            padding: 4px 12px;
             border-radius: var(--radius-pill);
             letter-spacing: 0.05em;
         }
 
         .box-step {
-            font-size: 12.5px;
+            font-size: 13px;
             color: var(--chumbo-500);
             font-weight: 600;
         }
 
         .btn-copy-script-hub {
-            background: linear-gradient(135deg, var(--wine-900) 0%, var(--wine-800) 100%);
+            background: linear-gradient(135deg, var(--atelier-wine-900) 0%, var(--atelier-wine-800) 100%);
             color: #ffffff;
-            border: 1px solid var(--wine-900);
-            font-size: 12.5px;
+            border: 1px solid var(--atelier-wine-900);
+            font-size: 13px;
             font-weight: 600;
-            padding: 7px 18px;
+            padding: 8px 20px;
             border-radius: var(--radius-pill);
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
         .btn-copy-script-hub:hover {
-            background: linear-gradient(135deg, var(--wine-800) 0%, var(--wine-700) 100%);
+            background: linear-gradient(135deg, var(--atelier-wine-800) 0%, var(--atelier-wine-700) 100%);
             transform: translateY(-1px);
         }
 
         .script-bubble-official {
-            font-size: 16.5px;
+            font-size: 17px;
             line-height: 1.75;
             color: var(--chumbo-900);
-            border-left: 4px solid var(--gold-500);
-            padding-left: 18px;
+            border-left: 4px solid var(--atelier-gold-500);
+            padding-left: 20px;
         }
 
         .script-bubble-official p {
@@ -1262,15 +1308,15 @@
         .pix-instructions-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 20px;
+            gap: 18px;
+            margin-bottom: 22px;
         }
 
         .pix-box {
             background: #ffffff;
-            border: 1px solid var(--border-hairline);
+            border: 1px solid var(--champagne-border);
             border-radius: var(--radius-md);
-            padding: 18px 20px;
+            padding: 20px 22px;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -1278,8 +1324,8 @@
         }
 
         .pix-box.active-tier {
-            border-color: var(--wine-900);
-            box-shadow: 0 4px 14px rgba(49, 15, 14, 0.08);
+            border-color: var(--atelier-wine-900);
+            box-shadow: 0 4px 16px rgba(41, 13, 12, 0.1);
         }
 
         .pix-box-header {
@@ -1289,36 +1335,36 @@
         }
 
         .pix-tier-badge {
-            font-size: 10.5px;
+            font-size: 11px;
             font-weight: 700;
-            color: var(--wine-900);
+            color: var(--atelier-wine-900);
             letter-spacing: 0.05em;
         }
 
         .pix-badge-vip {
-            color: var(--gold-600);
+            color: var(--atelier-gold-600);
         }
 
         .btn-copy-mini-pix {
-            background: var(--apple-bg);
-            border: 1px solid var(--border-hairline);
+            background: var(--surface-bg);
+            border: 1px solid var(--champagne-border);
             color: var(--chumbo-700);
-            font-size: 11.5px;
+            font-size: 12px;
             font-weight: 600;
-            padding: 4px 12px;
+            padding: 5px 14px;
             border-radius: var(--radius-pill);
             cursor: pointer;
             transition: all 0.15s ease;
         }
 
         .btn-copy-mini-pix:hover {
-            background: var(--wine-900);
+            background: var(--atelier-wine-900);
             color: #ffffff;
-            border-color: var(--wine-900);
+            border-color: var(--atelier-wine-900);
         }
 
         .pix-message-text {
-            font-size: 14px;
+            font-size: 14.5px;
             line-height: 1.65;
             color: var(--chumbo-700);
             font-style: italic;
@@ -1326,28 +1372,28 @@
 
         .booking-hub-footer {
             padding-top: 18px;
-            border-top: 1px solid rgba(49, 15, 14, 0.1);
+            border-top: 1px solid rgba(197, 168, 128, 0.2);
         }
 
         .hub-footer-rule {
-            font-size: 13.5px;
+            font-size: 14px;
             color: var(--chumbo-700);
             line-height: 1.6;
         }
 
         /* ==========================================================================
-           CALLOUTS (SEM EMOJIS • MINIMALISMO NOBRE)
+           CALLOUTS EDITORIAL NOBRE
            ========================================================================== */
         .callout {
             border-radius: var(--radius-md);
-            padding: 24px 26px;
-            margin: 28px 0;
+            padding: 26px 28px;
+            margin: 30px 0;
             background: #ffffff;
             box-shadow: var(--shadow-subtle);
         }
 
         .callout-header-tag {
-            font-size: 10.5px;
+            font-size: 11px;
             font-weight: 700;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -1355,21 +1401,21 @@
         }
 
         .callout-important {
-            background: var(--wine-50);
-            border-left: 4px solid var(--wine-900);
+            background: var(--champagne-light);
+            border-left: 4px solid var(--atelier-wine-900);
         }
 
         .callout-important .callout-header-tag {
-            color: var(--wine-900);
+            color: var(--atelier-wine-900);
         }
 
         .callout-tip {
-            background: #fdfbf7;
-            border-left: 4px solid var(--gold-500);
+            background: #faf6f0;
+            border-left: 4px solid var(--atelier-gold-500);
         }
 
         .callout-tip .callout-header-tag {
-            color: var(--gold-600);
+            color: var(--atelier-gold-600);
         }
 
         .callout-warning {
@@ -1382,80 +1428,80 @@
         }
 
         .callout-content {
-            font-size: 15.5px;
+            font-size: 16px;
             line-height: 1.75;
             color: var(--chumbo-900);
         }
 
         .welcome-letter-card {
             background: #ffffff;
-            border: 1px solid var(--border-champagne);
+            border: 1px solid var(--champagne-border);
             border-radius: var(--radius-md);
-            padding: 24px 26px;
-            margin: 28px 0;
+            padding: 26px 28px;
+            margin: 30px 0;
             box-shadow: var(--shadow-subtle);
         }
 
         .welcome-letter-badge {
-            font-size: 11px;
+            font-size: 11.5px;
             font-weight: 700;
             letter-spacing: 0.08em;
             text-transform: uppercase;
-            color: var(--wine-900);
+            color: var(--atelier-wine-900);
             margin-bottom: 8px;
         }
 
         .welcome-letter-body {
-            font-size: 15.5px;
+            font-size: 16px;
             line-height: 1.75;
             color: var(--chumbo-700);
         }
 
         /* Lists */
         .luxury-list, .luxury-ol-list {
-            margin: 18px 0 24px 24px;
+            margin: 20px 0 26px 26px;
             color: var(--chumbo-700);
             font-size: var(--base-font-size);
             line-height: var(--line-height-body);
         }
 
         .luxury-list li, .luxury-ol-list li {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         /* Tables */
         .table-container {
-            margin: 28px 0;
+            margin: 30px 0;
             overflow-x: auto;
             background: #ffffff;
             border-radius: var(--radius-md);
-            border: 1px solid var(--border-hairline);
+            border: 1px solid var(--champagne-border);
             box-shadow: var(--shadow-subtle);
         }
 
         .luxury-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 14.5px;
+            font-size: 15px;
             text-align: left;
         }
 
         .luxury-table th {
-            background: var(--wine-50);
-            padding: 14px 18px;
+            background: var(--champagne-light);
+            padding: 16px 20px;
             font-weight: 700;
-            color: var(--wine-900);
-            font-size: 12px;
-            letter-spacing: 0.05em;
+            color: var(--atelier-wine-900);
+            font-size: 12.5px;
+            letter-spacing: 0.06em;
             text-transform: uppercase;
-            border-bottom: 1px solid var(--border-hairline);
+            border-bottom: 1px solid var(--champagne-border);
         }
 
         .luxury-table td {
-            padding: 14px 18px;
-            border-bottom: 1px solid var(--border-hairline);
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(197, 168, 128, 0.15);
             color: var(--chumbo-700);
-            line-height: 1.5;
+            line-height: 1.55;
         }
 
         .luxury-table tr:last-child td {
@@ -1463,39 +1509,39 @@
         }
 
         .table-row-vip {
-            background: rgba(197, 168, 128, 0.08);
+            background: rgba(197, 168, 128, 0.1);
             font-weight: 600;
         }
 
         /* Inline code & Code cards */
         .inline-code {
-            background: rgba(49, 15, 14, 0.05);
-            color: var(--wine-900);
-            padding: 2px 6px;
+            background: rgba(41, 13, 12, 0.06);
+            color: var(--atelier-wine-900);
+            padding: 2px 7px;
             border-radius: 4px;
-            font-size: 14px;
+            font-size: 14.5px;
             font-family: monospace;
         }
 
         .code-card {
-            background: #1d1d1f;
+            background: #18181b;
             border-radius: var(--radius-md);
-            margin: 24px 0;
+            margin: 26px 0;
             overflow: hidden;
             box-shadow: var(--shadow-elevated);
         }
 
         .code-header {
-            background: #2c2c2e;
-            padding: 10px 18px;
+            background: #27272a;
+            padding: 12px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .code-lang {
-            font-size: 11px;
-            color: #86868b;
+            font-size: 11.5px;
+            color: #a1a1aa;
             text-transform: uppercase;
             font-weight: 600;
             letter-spacing: 0.05em;
@@ -1505,9 +1551,9 @@
             background: rgba(255, 255, 255, 0.1);
             color: #ffffff;
             border: none;
-            padding: 4px 10px;
+            padding: 4px 12px;
             border-radius: 4px;
-            font-size: 11px;
+            font-size: 11.5px;
             cursor: pointer;
             transition: all 0.2s ease;
         }
@@ -1517,9 +1563,9 @@
         }
 
         .code-body {
-            padding: 18px 20px;
-            color: #f5f5f7;
-            font-size: 13.5px;
+            padding: 20px 22px;
+            color: #f4f4f5;
+            font-size: 14px;
             font-family: monospace;
             overflow-x: auto;
             line-height: 1.6;
@@ -1529,16 +1575,16 @@
         .doc-footer-signature {
             margin-top: 80px;
             padding-top: 40px;
-            border-top: 1px solid var(--border-hairline);
+            border-top: 1px solid var(--champagne-border);
             text-align: center;
-            font-size: 13.5px;
+            font-size: 14px;
             color: var(--chumbo-500);
             line-height: 1.8;
         }
 
         .doc-footer-signature strong {
-            color: var(--wine-900);
-            font-weight: 600;
+            color: var(--atelier-wine-900);
+            font-weight: 700;
         }
 
         /* Toast */
@@ -1546,12 +1592,12 @@
             position: fixed;
             bottom: 32px;
             right: 32px;
-            background: var(--chumbo-900);
+            background: var(--atelier-wine-900);
             color: #ffffff;
-            padding: 14px 22px;
+            padding: 14px 24px;
             border-radius: var(--radius-pill);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-            font-size: 13.5px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            font-size: 14px;
             font-weight: 500;
             display: flex;
             align-items: center;
@@ -1561,6 +1607,7 @@
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             pointer-events: none;
             z-index: 9999;
+            border: 1px solid var(--atelier-gold-500);
         }
 
         .toast.show {
@@ -1571,10 +1618,10 @@
         .mobile-menu-btn {
             display: none;
             background: none;
-            border: 1px solid var(--border-hairline);
+            border: 1px solid var(--champagne-border);
             padding: 6px 12px;
             border-radius: var(--radius-sm);
-            font-size: 12.5px;
+            font-size: 13px;
             font-weight: 600;
             color: var(--chumbo-700);
             cursor: pointer;
@@ -1584,7 +1631,6 @@
             .sidebar {
                 transform: translateX(-100%);
                 transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-                box-shadow: 10px 0 30px rgba(0,0,0,0.1);
             }
 
             .sidebar.mobile-open {
@@ -1597,6 +1643,10 @@
 
             .mobile-menu-btn {
                 display: block;
+            }
+
+            .apple-cards-grid {
+                grid-template-columns: 1fr;
             }
 
             .bento-grid {
@@ -1612,18 +1662,11 @@
             .bento-grid {
                 grid-template-columns: 1fr;
             }
-            .module-tabs-dock {
-                flex-direction: column;
-            }
-            .module-tab-btn {
-                width: 100%;
-                justify-content: flex-start;
-            }
         }
 
         /* Print Style */
         @media print {
-            .sidebar, .top-navbar, .btn-pill, .btn-copy-script, .btn-copy-script-hub, .btn-copy-mini-pix, .reading-progress-bar, .module-tabs-dock, .font-size-toggle {
+            .sidebar, .top-navbar, .btn-pill, .btn-copy-script, .btn-copy-script-hub, .btn-copy-mini-pix, .reading-progress-bar, .font-size-toggle {
                 display: none !important;
             }
             .main-wrapper {
@@ -1633,9 +1676,6 @@
                 max-width: 100% !important;
                 padding: 0 !important;
             }
-            .tab-pane {
-                display: block !important;
-            }
         }
     </style>
 </head>
@@ -1643,7 +1683,7 @@
     <div class="reading-progress-bar" id="progressBar"></div>
 
     <div class="app-layout">
-        <!-- Sidebar macOS Finder Style -->
+        <!-- Sidebar Maison Bordô -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-brand-box">
                 <div class="brand-seal-row">
@@ -1653,91 +1693,82 @@
                         <span class="brand-tagline">Cirurgia Plástica • Vila Madalena</span>
                     </div>
                 </div>
-                <h2 class="sidebar-doc-title">Playbook Comercial</h2>
+                <h2 class="sidebar-doc-title">Playbook Concierge</h2>
                 <div class="sidebar-live-pill">
                     <span class="dot"></span>
-                    <span>Concierge • Versão 1.3</span>
-                </div>
-            </div>
-
-            <!-- Fast Search Input -->
-            <div class="sidebar-search-box">
-                <div class="search-shell">
-                    <span class="search-icon-text">Buscar</span>
-                    <input type="text" id="searchInput" class="search-input" placeholder="Buscar roteiro ou objeção..." oninput="handleSearch(this.value)">
-                    <span class="search-key-badge">⌘K</span>
+                    <span>Versão 1.3 Oficial • 2026</span>
                 </div>
             </div>
 
             <nav class="sidebar-nav-scroll" id="sidebarNav">
-                <div class="nav-category-label">01. SCRIPTS WHATSAPP (USO DIÁRIO)</div>
-                <a href="#cenário-1-abordagem-inicial-lead-frio-do-tráfego" class="nav-link nav-level-2" onclick="switchTab('scripts')">
+                <div class="nav-category-label">01. SCRIPTS DIÁRIOS (WHATSAPP)</div>
+                <a href="#cenário-1-abordagem-inicial-lead-frio-do-tráfego" class="nav-link nav-level-2">
                     <span class="nav-dot"></span>
                     <span class="nav-text">Cenário 1 • Abordagem Inicial</span>
                 </a>
-                <a href="#cenário-2-qual-o-preço-antes-da-hora" class="nav-link nav-level-2" onclick="switchTab('scripts')">
+                <a href="#cenário-2-qual-o-preço-antes-da-hora" class="nav-link nav-level-2">
                     <span class="nav-dot"></span>
                     <span class="nav-text">Cenário 2 • Pedido de Preço</span>
                 </a>
-                <a href="#cenário-3-régua-de-resgate-de-abandono-lead-preencheu-o-site-mas-não-enviou-mensagem" class="nav-link nav-level-2" onclick="switchTab('scripts')">
+                <a href="#cenário-3-régua-de-resgate-de-abandono-lead-preencheu-o-site-mas-não-enviou-mensagem" class="nav-link nav-level-2">
                     <span class="nav-dot"></span>
                     <span class="nav-text">Cenário 3 • Régua de Resgate</span>
                 </a>
-                <a href="#cenário-4-paciente-insiste-em-só-quero-ter-uma-noção-de-valor-/-orçamento" class="nav-link nav-level-2" onclick="switchTab('scripts')">
+                <a href="#cenário-4-paciente-insiste-em-só-quero-ter-uma-noção-de-valor-/-orçamento" class="nav-link nav-level-2">
                     <span class="nav-dot"></span>
                     <span class="nav-text">Cenário 4 • Noção de Orçamento</span>
                 </a>
-                <a href="#cenário-5-objeção-de-agenda-ou-distância-estou-sem-agenda-/-sem-tempo-/-moro-longe" class="nav-link nav-level-2" onclick="switchTab('scripts')">
+                <a href="#cenário-5-objeção-de-agenda-ou-distância-estou-sem-agenda-/-sem-tempo-/-moro-longe" class="nav-link nav-level-2">
                     <span class="nav-dot"></span>
-                    <span class="nav-text">Cenário 5 • Sem Agenda / Distância</span>
+                    <span class="nav-text">Cenário 5 • Sem Tempo / Distância</span>
                 </a>
-                <a href="#cenário-6-o-agendamento-e-a-confirmação-de-exclusividade-taxa-de-reserva-de-agenda-—-50-—-diretriz-oficial---13/out/2026" class="nav-link nav-level-2" style="font-weight: 700; color: var(--wine-900);" onclick="switchTab('scripts')">
-                    <span class="nav-dot" style="background: var(--gold-600);"></span>
+                <a href="#cenário-6-o-agendamento-e-a-confirmação-de-exclusividade-taxa-de-reserva-de-agenda-—-50-—-diretriz-oficial---13/out/2026" class="nav-link nav-level-2" style="color: var(--atelier-gold-500); font-weight: 700;">
+                    <span class="nav-dot" style="background: var(--atelier-gold-500); opacity: 1;"></span>
                     <span class="nav-text">Cenário 6 • Reserva 50% Pix</span>
                 </a>
-                <a href="#cenário-7-quando-o-paciente-pede-o-endereço-/-localização-da-clínica-onde-fica-a-clínica" class="nav-link nav-level-2" onclick="switchTab('scripts')">
+                <a href="#cenário-7-quando-o-paciente-pede-o-endereço-/-localização-da-clínica-onde-fica-a-clínica" class="nav-link nav-level-2">
                     <span class="nav-dot"></span>
                     <span class="nav-text">Cenário 7 • Endereço &amp; Maps</span>
                 </a>
-                <a href="#mensagem-de-ausência-universal-oficial-configure-uma-única-vez-no-aplicativo" class="nav-link nav-level-2" onclick="switchTab('scripts')">
+                <a href="#mensagem-de-ausência-universal-oficial-configure-uma-única-vez-no-aplicativo" class="nav-link nav-level-2">
                     <span class="nav-dot"></span>
                     <span class="nav-text">Ausência Universal WhatsApp</span>
                 </a>
-                <a href="#respostas-rápidas-manuais-da-concierge-/atalhos" class="nav-link nav-level-2" onclick="switchTab('scripts')">
+                <a href="#respostas-rápidas-manuais-da-concierge-/atalhos" class="nav-link nav-level-2">
                     <span class="nav-dot"></span>
                     <span class="nav-text">Atalhos `/rapidos`</span>
                 </a>
 
                 <div class="nav-category-label">02. FUNDAMENTOS WHITE GLOVE</div>
-                <a href="#1-a-regra-de-ouro-tempo-de-resposta-sla-e-continuidade-no-whatsapp" class="nav-link nav-level-2" onclick="switchTab('fundamentos')">
+                <a href="#1-a-regra-de-ouro-tempo-de-resposta-sla-e-continuidade-no-whatsapp" class="nav-link nav-level-2">
                     <span class="nav-dot"></span>
                     <span class="nav-text">1. Regra de Ouro (SLA 15min)</span>
                 </a>
-                <a href="#2-a-postura-white-glove-boutique-de-luxo" class="nav-link nav-level-2" onclick="switchTab('fundamentos')">
+                <a href="#2-a-postura-white-glove-boutique-de-luxo" class="nav-link nav-level-2">
                     <span class="nav-dot"></span>
                     <span class="nav-text">2. Postura Boutique de Luxo</span>
                 </a>
 
                 <div class="nav-category-label">03. GOVERNANÇA OPERACIONAL</div>
-                <a href="#8-rotina-operacional-da-concierge-registro-de-consultas-e-cirurgias-na-planilha-oficial" class="nav-link nav-level-2" onclick="switchTab('planilha')">
+                <a href="#8-rotina-operacional-da-concierge-registro-de-consultas-e-cirurgias-na-planilha-oficial" class="nav-link nav-level-2">
                     <span class="nav-dot"></span>
                     <span class="nav-text">Planilha de Vendas Offline</span>
                 </a>
-                <a href="#como-preencher-a-planilha-coluna-por-coluna" class="nav-link nav-level-3" onclick="switchTab('planilha')">
+                <a href="#como-preencher-a-planilha-coluna-por-coluna" class="nav-link nav-level-3">
                     <span class="nav-dot"></span>
                     <span class="nav-text">Passo a Passo por Coluna</span>
                 </a>
 
                 <div class="nav-category-label">04. ESTUDO DE CASOS &amp; ROADMAP</div>
-                <a href="#5-feedback-e-análise-de-casos-reais-estudo-de-caso---outubro/2026" class="nav-link nav-level-2" onclick="switchTab('casos')">
+                <a href="#5-feedback-e-análise-de-casos-reais-estudo-de-caso---outubro/2026" class="nav-link nav-level-2">
                     <span class="nav-dot"></span>
                     <span class="nav-text">5. Análise de Casos Reais</span>
                 </a>
-                <a href="#6-próximos-passos-estratégia-de-conteúdo-e-evolução" class="nav-link nav-level-2" onclick="switchTab('casos')">
+                <a href="#6-próximos-passos-estratégia-de-conteúdo-e-evolução" class="nav-link nav-level-2">
                     <span class="nav-dot"></span>
                     <span class="nav-text">6. Posicionamento &amp; Blog</span>
                 </a>
-                <a href="#7-roadmap-de-automação-comercial-implementação-gradual" class="nav-link nav-level-2" onclick="switchTab('casos')">
+                <a href="#7-roadmap-de-automação-comercial-implementação-gradual" class="nav-link nav-level-2">
                     <span class="nav-dot"></span>
                     <span class="nav-text">7. Roadmap de Automação</span>
                 </a>
@@ -1755,11 +1786,11 @@
                     <span class="pulse-green"></span>
                     <span>Ana Paula • Ativa</span>
                 </div>
-                <span style="font-size: 11px; color: var(--chumbo-500);">Out/2026</span>
+                <span style="font-size: 11.5px; color: var(--atelier-gold-500);">Out/2026</span>
             </div>
         </aside>
 
-        <!-- Main Content Area Fluid 1120px -->
+        <!-- Main Content Area Fluid 1180px -->
         <main class="main-wrapper">
             <!-- Top Navbar -->
             <header class="top-navbar">
@@ -1773,7 +1804,6 @@
                 </div>
 
                 <div class="top-actions">
-                    <!-- Alternador de Tamanho de Fonte -->
                     <div class="font-size-toggle">
                         <button type="button" class="font-btn active" id="btnFontNormal" onclick="setFontSize('normal')">A</button>
                         <button type="button" class="font-btn" id="btnFontLarge" onclick="setFontSize('large')">A+</button>
@@ -1786,7 +1816,7 @@
                 </div>
             </header>
 
-            <!-- Document Canvas Fluid 1120px -->
+            <!-- Document Canvas Fluid 1180px -->
             <div class="document-canvas">
                 <!-- Hero Card Editorial -->
                 <div class="doc-hero-card">
@@ -1797,7 +1827,7 @@
                     </div>
                     <h1 class="doc-hero-title">Playbook Comercial Concierge</h1>
                     <p class="doc-hero-desc">
-                        Diretrizes de comunicação *White Glove*, condução de agendamentos e scripts de alta conversão para acolher pacientes qualificados na Clínica Dr. Mário Warde.
+                        Diretrizes de comunicação <em>White Glove</em>, condução de agendamentos e scripts de alta conversão para acolher pacientes qualificados na Clínica Dr. Mário Warde.
                     </p>
 
                     <div class="personas-dock">
@@ -1826,51 +1856,110 @@
                     </div>
                 </div>
 
+                <!-- Seção Apple Premium de Atualizações Recentes (Zero Paredes de Texto) -->
                 
-        <div class="callout callout-important" style="margin-bottom: 34px;">
-            <div class="callout-header-tag">NOVIDADES &amp; ATUALIZAÇÕES OBRIGATÓRIAS • VERSÃO 1.3</div>
-            <div class="callout-content">### Novidades & Atualizações Recentes — 19 de Outubro de 2026 (Versão 1.3)
-<strong>Atenção Ana Paula:</strong> Este documento foi atualizado com novas diretrizes comerciais obrigatórias aprovadas pelo Dr. Mário Warde a partir de hoje (19/10/2026):
-1. <strong>[NOVA REGRA DE OURO - Seção 1] Proibido Responder Apenas "Bom dia" (Continuidade Imediata):</strong> Quando o paciente responder <em>"Bom dia"</em> ou <em>"Boa tarde"</em>, <strong>jamais devolva apenas uma saudação solta</strong> esperando minutos para mandar a pergunta. Responda imediatamente na mesma mensagem já conduzindo a confirmação ou pergunta objetiva.
-2. <strong>[NOVA REGRA DE OURO - Seção 1 e Cenário 6] Proibido Cancelar Horário por Mensagem em Poucas Horas:</strong> Se o paciente já havia confirmado a consulta antes (ou respondeu <em>"Bom dia"</em> pela manhã e voltou ao trabalho), <strong>é expressamente proibido cancelar a vaga dele às 13h30 por mensagem</strong> (<em>"disponibilizarei o horário para outro paciente"</em>). No público executivo/empresarial de alta renda, cancelar um horário unilateralmente após apenas 3 horas de silêncio comercial gera quebra imediata de rapport (orgulho ferido). Antes de liberar qualquer vaga, aguarde até o fim da tarde (17h00) e faça uma ligação rápida e cordial.
-3. <strong>[Cenário 6] Roteiro Oficial de Agendamento (Reserva 50% via Pix) + Revisão de Datas:</strong> Toda confirmação de agendamento já nasce travada pelo sinal de 50% via Pix (Internet/Geral: Consulta R$ 350 / Reserva R$ 175 | Indicação Médica/VIP: Consulta R$ 850 / Reserva R$ 425 — 100% revertida em crédito cirúrgico). <strong>Atenção redobrada às datas e dias da semana</strong> antes de enviar opções de agenda para nunca digitar o mês errado.
-4. <strong>[Cenário 7 & Atalho <code class="inline-code">/endereco</code>] Endereço Completo por Escrito + Link do Google Maps Obrigatório:</strong> Sempre que o paciente perguntar <em>"Onde fica a clínica?"</em> ou confirmar consulta presencial, nunca envie uma frase curta e seca. Envie obrigatoriamente o <strong>endereço completo por escrito (com orientação de Valet no prédio) + o link clicável do Google Maps</strong>.</div>
+    <!-- Seção de Atualizações Recentes • Padrão Apple Keynote -->
+    <section class="apple-release-section" id="atualizacoes-v1-3">
+        <div class="apple-release-hero">
+            <div class="release-header-tag">
+                <span class="release-badge-live">VERSÃO 1.3 OFICIAL</span>
+                <span class="release-date">19 DE OUTUBRO DE 2026</span>
+            </div>
+            <h2 class="release-main-title">Diretrizes Comerciais Obrigatórias</h2>
+            <p class="release-main-subtitle">
+                Atualização homologada pelo Dr. Mário Warde para blindar a percepção de valor, eliminar ruídos operacionais e consolidar o padrão <em>White Glove</em> no atendimento aos pacientes.
+            </p>
         </div>
-        
 
-                <!-- Os 4 Módulos Executivos em Abas -->
-                <nav class="module-tabs-dock">
-                    <button type="button" class="module-tab-btn active" id="tabBtnScripts" onclick="switchTab('scripts')">
-                        <span>Central de Scripts &amp; Pix</span>
-                        <span class="tab-badge">7 Cenários</span>
-                    </button>
-                    <button type="button" class="module-tab-btn" id="tabBtnFundamentos" onclick="switchTab('fundamentos')">
-                        <span>Fundamentos &amp; White Glove</span>
-                        <span class="tab-badge">SLA &amp; Postura</span>
-                    </button>
-                    <button type="button" class="module-tab-btn" id="tabBtnPlanilha" onclick="switchTab('planilha')">
-                        <span>Planilha &amp; Governança</span>
-                        <span class="tab-badge">CAPI Offline</span>
-                    </button>
-                    <button type="button" class="module-tab-btn" id="tabBtnCasos" onclick="switchTab('casos')">
-                        <span>Estudos de Caso &amp; Roadmap</span>
-                        <span class="tab-badge">Evolução</span>
-                    </button>
-                </nav>
+        <div class="apple-cards-grid">
+            <!-- Card 1 -->
+            <article class="apple-directive-card">
+                <div class="directive-card-top">
+                    <span class="directive-pillar">SEÇÃO 1 • REGRA DE OURO</span>
+                    <span class="directive-num">01</span>
+                </div>
+                <h3 class="directive-card-title">Continuidade Imediata: Proibido "Bom dia" Solto</h3>
+                <div class="directive-card-body">
+                    <p>
+                        Quando o paciente responder <em>"Bom dia"</em> ou <em>"Boa tarde"</em>, <strong>jamais devolva apenas uma saudação solta</strong> aguardando minutos para digitar a pergunta.
+                    </p>
+                    <div class="directive-quote-box">
+                        <span class="quote-action">Conduta Padrão:</span>
+                        Responda na mesma mensagem com a saudação somada à pergunta ou confirmação objetiva. Quem acabou de responder está com o celular na mão naquele segundo.
+                    </div>
+                </div>
+            </article>
 
-                <!-- Conteúdo dos Módulos -->
-                <div class="tab-content-container">
-                    
-    <div class="tab-pane active" id="tab-scripts">
-        
-    <!-- Bento Grid de Acesso Rápido aos Scripts -->
+            <!-- Card 2 -->
+            <article class="apple-directive-card apple-card-accent">
+                <div class="directive-card-top">
+                    <span class="directive-pillar pillar-gold">SEÇÃO 1 &amp; CENÁRIO 6 • REGRA DE OURO</span>
+                    <span class="directive-num num-gold">02</span>
+                </div>
+                <h3 class="directive-card-title">Proibido Cancelar Horário às 13h30 por Mensagem</h3>
+                <div class="directive-card-body">
+                    <p>
+                        Se o paciente já havia confirmado previamente, <strong>é expressamente proibido cancelar a vaga dele no meio do expediente comercial</strong> (<em>"disponibilizarei o horário para outro paciente"</em>).
+                    </p>
+                    <div class="directive-quote-box quote-gold">
+                        <span class="quote-action">Conduta Padrão:</span>
+                        Empresários e executivos entram em reuniões. Jamais desmarque por mensagem após apenas 3 horas de silêncio. Aguarde até as 17h00 e faça uma ligação cordial de 30 segundos.
+                    </div>
+                </div>
+            </article>
+
+            <!-- Card 3 -->
+            <article class="apple-directive-card">
+                <div class="directive-card-top">
+                    <span class="directive-pillar">CENÁRIO 6 • AGENDA OFICIAL</span>
+                    <span class="directive-num">03</span>
+                </div>
+                <h3 class="directive-card-title">Reserva de 50% via Pix &amp; Rigor no Calendário</h3>
+                <div class="directive-card-body">
+                    <p>
+                        Toda confirmação de horário nasce travada pelo sinal de 50% via Pix (Internet: <strong>R$ 175</strong> | Linhagem VIP: <strong>R$ 425</strong>), com 100% de reversão no plano cirúrgico.
+                    </p>
+                    <div class="directive-quote-box">
+                        <span class="quote-action">Conduta Padrão:</span>
+                        Conferir o calendário e o dia da semana antes de enviar opções para nunca digitar o mês errado ou confundir a agenda.
+                    </div>
+                </div>
+            </article>
+
+            <!-- Card 4 -->
+            <article class="apple-directive-card">
+                <div class="directive-card-top">
+                    <span class="directive-pillar">CENÁRIO 7 &amp; ATALHO `/ENDERECO`</span>
+                    <span class="directive-num">04</span>
+                </div>
+                <h3 class="directive-card-title">Endereço Completo, Valet &amp; Link do Google Maps</h3>
+                <div class="directive-card-body">
+                    <p>
+                        Sempre que o paciente perguntar <em>"Onde fica a clínica?"</em> ou após agendamento presencial, nunca envie uma resposta curta sem pontuação.
+                    </p>
+                    <div class="directive-quote-box">
+                        <span class="quote-action">Conduta Padrão:</span>
+                        Envie os 3 elementos obrigatórios: Endereço completo por escrito + Orientação de Valet no prédio + Link direto do Google Maps para abrir no GPS/Waze.
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+    
+
+                <!-- Cockpit Bento Grid de Disparo Imediato -->
+                
+    <!-- Cockpit de Acesso Rápido aos Scripts -->
     <div class="bento-dock">
         <div class="bento-dock-header">
-            <span class="bento-badge">CENTRAL DE DISPARO RÁPIDO</span>
-            <span class="bento-hint">Clique para navegar instantaneamente até o script</span>
+            <div>
+                <span class="bento-badge">COCKPIT DE ATENDIMENTO CONCIERGE</span>
+                <h3 style="font-family: var(--font-title); font-size: 26px; color: var(--atelier-wine-900); margin-top: 6px;">Scripts e Condução Imediata</h3>
+            </div>
+            <span class="bento-hint">Clique para navegar diretamente ao script</span>
         </div>
         <div class="bento-grid">
-            <a href="#cenário-1-abordagem-inicial-lead-frio-do-tráfego" class="bento-card" onclick="switchTab('scripts')">
+            <a href="#cenário-1-abordagem-inicial-lead-frio-do-tráfego" class="bento-card">
                 <div class="bento-card-top">
                     <span class="bento-num">01</span>
                     <span class="bento-tag">PRIMEIRO CONTATO</span>
@@ -1879,7 +1968,7 @@
                 <div class="bento-card-desc">Lead frio vindo do anúncio • Investigação da dor sem postura de robô</div>
             </a>
 
-            <a href="#cenário-2-qual-o-preço-antes-da-hora" class="bento-card" onclick="switchTab('scripts')">
+            <a href="#cenário-2-qual-o-preço-antes-da-hora" class="bento-card">
                 <div class="bento-card-top">
                     <span class="bento-num">02</span>
                     <span class="bento-tag">PREÇO ANTECIPADO</span>
@@ -1888,7 +1977,7 @@
                 <div class="bento-card-desc">Contorno elegante sem falar valor de prateleira • Ancoragem da consulta</div>
             </a>
 
-            <a href="#cenário-3-régua-de-resgate-de-abandono-lead-preencheu-o-site-mas-não-enviou-mensagem" class="bento-card" onclick="switchTab('scripts')">
+            <a href="#cenário-3-régua-de-resgate-de-abandono-lead-preencheu-o-site-mas-não-enviou-mensagem" class="bento-card">
                 <div class="bento-card-top">
                     <span class="bento-num">03</span>
                     <span class="bento-tag">CADÊNCIA 3 TEMPOS</span>
@@ -1897,7 +1986,7 @@
                 <div class="bento-card-desc">Preencheu o site e travou • D+0, D+2 (artigo do blog) e D+7 (despedida)</div>
             </a>
 
-            <a href="#cenário-4-paciente-insiste-em-só-quero-ter-uma-noção-de-valor-/-orçamento" class="bento-card" onclick="switchTab('scripts')">
+            <a href="#cenário-4-paciente-insiste-em-só-quero-ter-uma-noção-de-valor-/-orçamento" class="bento-card">
                 <div class="bento-card-top">
                     <span class="bento-num">04</span>
                     <span class="bento-tag">INSISTÊNCIA DE VALOR</span>
@@ -1906,7 +1995,7 @@
                 <div class="bento-card-desc">Os 3 pilares de custo (tempo cirúrgico, tecnologias e hospitais de ponta)</div>
             </a>
 
-            <a href="#cenário-5-objeção-de-agenda-ou-distância-estou-sem-agenda-/-sem-tempo-/-moro-longe" class="bento-card" onclick="switchTab('scripts')">
+            <a href="#cenário-5-objeção-de-agenda-ou-distância-estou-sem-agenda-/-sem-tempo-/-moro-longe" class="bento-card">
                 <div class="bento-card-top">
                     <span class="bento-num">05</span>
                     <span class="bento-tag">AGENDA &amp; DISTÂNCIA</span>
@@ -1915,7 +2004,7 @@
                 <div class="bento-card-desc">Apresentação da Telemedicina VIP com a mesma autoridade e acolhimento</div>
             </a>
 
-            <a href="#cenário-6-o-agendamento-e-a-confirmação-de-exclusividade-taxa-de-reserva-de-agenda-—-50-—-diretriz-oficial---13/out/2026" class="bento-card bento-card-highlight" onclick="switchTab('scripts')">
+            <a href="#cenário-6-o-agendamento-e-a-confirmação-de-exclusividade-taxa-de-reserva-de-agenda-—-50-—-diretriz-oficial---13/out/2026" class="bento-card bento-card-highlight">
                 <div class="bento-card-top">
                     <span class="bento-num bento-num-gold">06</span>
                     <span class="bento-tag bento-tag-gold">REGRA INEGOCIÁVEL</span>
@@ -1924,7 +2013,7 @@
                 <div class="bento-card-desc">Internet R$ 175 | Linhagem R$ 425 • 100% revertida no orçamento cirúrgico</div>
             </a>
 
-            <a href="#cenário-7-quando-o-paciente-pede-o-endereço-/-localização-da-clínica-onde-fica-a-clínica" class="bento-card" onclick="switchTab('scripts')">
+            <a href="#cenário-7-quando-o-paciente-pede-o-endereço-/-localização-da-clínica-onde-fica-a-clínica" class="bento-card">
                 <div class="bento-card-top">
                     <span class="bento-num">07</span>
                     <span class="bento-tag">LOCALIZAÇÃO &amp; MAPS</span>
@@ -1933,9 +2022,9 @@
                 <div class="bento-card-desc">Endereço escrito + Metrô Vila Madalena + Serviço de Valet + Link Google Maps</div>
             </a>
 
-            <a href="#respostas-rápidas-manuais-da-concierge-/atalhos" class="bento-card" onclick="switchTab('scripts')">
+            <a href="#respostas-rápidas-manuais-da-concierge-/atalhos" class="bento-card">
                 <div class="bento-card-top">
-                    <span class="bento-num">⚡</span>
+                    <span class="bento-num">08</span>
                     <span class="bento-tag">TECLADO WHATSAPP</span>
                 </div>
                 <div class="bento-card-title">Atalhos `/rapidos`</div>
@@ -1944,7 +2033,9 @@
         </div>
     </div>
     
-        
+
+                <!-- Seção 3: Scripts de Abordagem -->
+                
                     <div class="section-title-wrap" id="3-scripts-de-abordagem-nível-aaa">
                         <div class="section-pretitle">
                             <span class="section-num-pill">03</span>
@@ -2441,8 +2532,11 @@ Localização no Google Maps: https://maps.google.com/?q=Rua+Jerico,255,Vila+Mad
             </div>
             
 <div class="editorial-divider"></div>
-        <div class="editorial-divider"></div>
-        
+
+                <div class="editorial-divider"></div>
+
+                <!-- Seção 4: WhatsApp Business -->
+                
                     <div class="section-title-wrap" id="4-configuração-do-whatsapp-business-mensagem-automática-de-ausência">
                         <div class="section-pretitle">
                             <span class="section-num-pill">04</span>
@@ -2556,11 +2650,11 @@ Localização no Google Maps: https://maps.google.com/?q=Rua+Jerico,255,Vila+Mad
             
 </ul>
 <div class="editorial-divider"></div>
-    </div>
-    
-                    
-    <div class="tab-pane" id="tab-fundamentos">
-        
+
+                <div class="editorial-divider"></div>
+
+                <!-- Seção 1: Regra de Ouro -->
+                
                     <div class="section-title-wrap" id="1-a-regra-de-ouro-tempo-de-resposta-sla-e-continuidade-no-whatsapp">
                         <div class="section-pretitle">
                             <span class="section-num-pill">01</span>
@@ -2582,8 +2676,11 @@ Localização no Google Maps: https://maps.google.com/?q=Rua+Jerico,255,Vila+Mad
 <li><strong>Plano de Ação para Final de Semana:</strong> Como a clínica não possui expediente aos finais de semana, é obrigatório manter a Mensagem Automática de Ausência ativada (ver template na Seção 4) para ancorar o lead imediatamente, até que a equipe assuma na segunda-feira.</li>
 </ul>
 <div class="editorial-divider"></div>
-        <div class="editorial-divider"></div>
-        
+
+                <div class="editorial-divider"></div>
+
+                <!-- Seção 2: Postura White Glove -->
+                
                     <div class="section-title-wrap" id="2-a-postura-white-glove-boutique-de-luxo">
                         <div class="section-pretitle">
                             <span class="section-num-pill">02</span>
@@ -2613,11 +2710,11 @@ Localização no Google Maps: https://maps.google.com/?q=Rua+Jerico,255,Vila+Mad
 <li>Demonstrar que o Dr. Mário faz "projetos personalizados" e não cirurgias de prateleira.</li>
 </ul>
 <div class="editorial-divider"></div>
-    </div>
-    
-                    
-    <div class="tab-pane" id="tab-planilha">
-        
+
+                <div class="editorial-divider"></div>
+
+                <!-- Seção 8: Planilha Offline -->
+                
                     <div class="section-title-wrap" id="8-rotina-operacional-da-concierge-registro-de-consultas-e-cirurgias-na-planilha-oficial">
                         <div class="section-pretitle">
                             <span class="section-num-pill">08</span>
@@ -2657,11 +2754,11 @@ Localização no Google Maps: https://maps.google.com/?q=Rua+Jerico,255,Vila+Mad
 <li><strong>Errou ou o paciente cancelou? Sem problema:</strong> Se houver necessidade de corrigir um valor, mudar uma data ou se o paciente desmarcar no dia seguinte, basta alterar ou apagar a linha normalmente.</li>
 <li><strong>O Gestor é quem valida:</strong> Todas as linhas passam pela conferência do gestor (que marca <code class="inline-code"> APROVADO</code> na Coluna I) antes de qualquer envio para o algoritmo de inteligência dos anúncios.</li>
 </ul>
-    </div>
-    
-                    
-    <div class="tab-pane" id="tab-casos">
-        
+
+                <div class="editorial-divider"></div>
+
+                <!-- Seção 5: Feedback Casos Reais -->
+                
                     <div class="section-title-wrap" id="5-feedback-e-análise-de-casos-reais-estudo-de-caso---outubro/2026">
                         <div class="section-pretitle">
                             <span class="section-num-pill">05</span>
@@ -2704,8 +2801,11 @@ Localização no Google Maps: https://maps.google.com/?q=Rua+Jerico,255,Vila+Mad
 <li><em>Correção aplicada (Cenário 6):</em> A cobrança passou a ser apresentada como <strong>"Taxa de Reserva de Agenda e Exclusividade (50% - R$ 175,00)"</strong>, justificada pela dedicação integral de tempo e pela garantia de privacidade (sem sobreposição de pacientes na clínica), com o benefício imediato de reversão em crédito cirúrgico caso a paciente decida operar com o Dr. Mário.</li>
 </ul>
 <div class="editorial-divider"></div>
-        <div class="editorial-divider"></div>
-        
+
+                <div class="editorial-divider"></div>
+
+                <!-- Seção 6: Próximos Passos -->
+                
                     <div class="section-title-wrap" id="6-próximos-passos-estratégia-de-conteúdo-e-evolução">
                         <div class="section-pretitle">
                             <span class="section-num-pill">06</span>
@@ -2769,8 +2869,11 @@ Localização no Google Maps: https://maps.google.com/?q=Rua+Jerico,255,Vila+Mad
 </ul>
 <p class="editorial-p"><em>(Consulte o documento completo com todas as copies e roteiros prontos para cópia e colagem em: <code class="inline-code">Plano<em>Divulgacao</em>Artigo<em>Primeira</em>Consulta.md</code>).</em></p>
 <div class="editorial-divider"></div>
-        <div class="editorial-divider"></div>
-        
+
+                <div class="editorial-divider"></div>
+
+                <!-- Seção 7: Roadmap Automação -->
+                
                     <div class="section-title-wrap" id="7-roadmap-de-automação-comercial-implementação-gradual">
                         <div class="section-pretitle">
                             <span class="section-num-pill">07</span>
@@ -2806,15 +2909,12 @@ Localização no Google Maps: https://maps.google.com/?q=Rua+Jerico,255,Vila+Mad
 <li><strong>Régua de Pós-Operatório:</strong> Automação de mensagens para acompanhamento de recuperação (Dias 1, 3, 7, 30 e 90).</li>
 </ul>
 <div class="editorial-divider"></div>
-    </div>
-    
-                </div>
 
                 <!-- Footer Signature -->
                 <footer class="doc-footer-signature">
                     <p><strong>Clínica Dr. Mário Warde</strong> • Cirurgia Plástica de Alta Precisão</p>
                     <p>Rua Jericó, 255 - Conjunto 81 — Vila Madalena, São Paulo - SP</p>
-                    <p style="margin-top: 10px; font-size: 11.5px; color: var(--chumbo-500);">Documento Canônico de Uso Interno Exclusivo • Versão 1.3 (Atualização 19/Out/2026)</p>
+                    <p style="margin-top: 10px; font-size: 12px; color: var(--chumbo-500);">Documento Canônico de Uso Interno Exclusivo • Versão 1.3 (Atualização 19/Out/2026)</p>
                 </footer>
             </div>
         </main>
@@ -2827,27 +2927,6 @@ Localização no Google Maps: https://maps.google.com/?q=Rua+Jerico,255,Vila+Mad
 
     <!-- Scripts de Interatividade -->
     <script>
-        // Tab Switcher
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.module-tab-btn').forEach(btn => btn.classList.remove('active'));
-
-            const targetPane = document.getElementById('tab-' + tabId);
-            if (targetPane) targetPane.classList.add('active');
-
-            if (tabId === 'scripts') {
-                document.getElementById('tabBtnScripts').classList.add('active');
-            } else if (tabId === 'fundamentos') {
-                document.getElementById('tabBtnFundamentos').classList.add('active');
-            } else if (tabId === 'planilha') {
-                document.getElementById('tabBtnPlanilha').classList.add('active');
-            } else if (tabId === 'casos') {
-                document.getElementById('tabBtnCasos').classList.add('active');
-            }
-
-            window.scrollTo({ top: 380, behavior: 'smooth' });
-        }
-
         // Font size control
         function setFontSize(size) {
             const btnNormal = document.getElementById('btnFontNormal');
@@ -2906,7 +2985,7 @@ Localização no Google Maps: https://maps.google.com/?q=Rua+Jerico,255,Vila+Mad
 
             navigator.clipboard.writeText(scriptText).then(() => {
                 const originalText = btn.innerHTML;
-                btn.innerHTML = '<span class="copy-label" style="color: var(--emerald-600); font-weight: 700;">Copiado!</span>';
+                btn.innerHTML = '<span class="copy-label" style="color: #059669; font-weight: 700;">Copiado!</span>';
                 showToast('Roteiro copiado com sucesso para o WhatsApp!');
                 setTimeout(() => {
                     btn.innerHTML = originalText;
@@ -2993,40 +3072,25 @@ Localização no Google Maps: https://maps.google.com/?q=Rua+Jerico,255,Vila+Mad
             }
         }
 
-        // Search in Sidebar
-        function handleSearch(query) {
-            const q = query.toLowerCase().trim();
-            const links = document.querySelectorAll('.nav-link');
-            const labels = document.querySelectorAll('.nav-category-label');
-
-            if (!q) {
-                links.forEach(l => l.style.display = 'flex');
-                labels.forEach(lb => lb.style.display = 'block');
-                return;
-            }
-
-            labels.forEach(lb => lb.style.display = 'none');
-            links.forEach(l => {
-                const text = l.innerText.toLowerCase();
-                if (text.includes(q)) {
-                    l.style.display = 'flex';
-                } else {
-                    l.style.display = 'none';
+        // Scroll spy
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    if (!id) return;
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        if (link.getAttribute('href') === '#' + id) {
+                            link.classList.add('active');
+                        } else {
+                            link.classList.remove('active');
+                        }
+                    });
                 }
             });
-        }
+        }, { rootMargin: '-15% 0px -75% 0px' });
 
-        // Keyboard navigation (Cmd+K / slash)
-        window.addEventListener('keydown', (e) => {
-            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-                e.preventDefault();
-                const input = document.getElementById('searchInput');
-                if (input) input.focus();
-            } else if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
-                e.preventDefault();
-                const input = document.getElementById('searchInput');
-                if (input) input.focus();
-            }
+        document.querySelectorAll('h2, h3, [id]').forEach(el => {
+            if (el.id) observer.observe(el);
         });
 
         // Mobile drawer toggle
