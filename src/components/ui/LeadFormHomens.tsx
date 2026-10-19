@@ -99,9 +99,11 @@ export function LeadFormHomens({ onClose }: { onClose?: () => void }) {
           };
           // 1. Evento padrão Lead (processado pelo Pixel de CA limpo 9168277426523951)
           win.fbq('track', 'Lead', sanitizedPayload, { eventID: leadEventId });
-          // 2. Evento customizado Contato_VIP (processado por ambos os pixels sem restrições)
+          // 2. Evento padrão Contact / Entrar em contato (100% nativo no Gerenciador da Meta, sem trava de saúde)
+          win.fbq('track', 'Contact', sanitizedPayload, { eventID: leadEventId });
+          // 3. Evento customizado Contato_VIP (processado por ambos os pixels sem restrições)
           win.fbq('trackCustom', 'Contato_VIP', sanitizedPayload, { eventID: leadEventId });
-          console.log("🔥 EVENTOS 'Lead' e 'Contato_VIP' MASCULINO DISPARADOS VIA FBQ CLIENT-SIDE COM SUCESSO!", leadEventId);
+          console.log("🔥 EVENTOS 'Lead', 'Contact' e 'Contato_VIP' MASCULINO DISPARADOS VIA FBQ CLIENT-SIDE COM SUCESSO!", leadEventId);
         }
       }
 

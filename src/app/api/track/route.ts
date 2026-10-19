@@ -118,12 +118,23 @@ export async function POST(request: Request) {
           custom_data: finalCustomData
         };
 
+        const contactEvent: Record<string, unknown> = {
+          event_name: 'Contact',
+          event_time: eventTime,
+          action_source: actionSource || (sourceUrl ? 'website' : 'system_generated'),
+          event_source_url: sourceUrl || 'https://drmariowarde.com/',
+          event_id: finalEventId,
+          user_data: userData,
+          custom_data: finalCustomData
+        };
+
         if (resolvedTestCode) {
           leadEvent.test_event_code = resolvedTestCode;
           vipEvent.test_event_code = resolvedTestCode;
+          contactEvent.test_event_code = resolvedTestCode;
         }
 
-        eventsToSend.push(leadEvent, vipEvent);
+        eventsToSend.push(leadEvent, vipEvent, contactEvent);
       } else {
         const singleEvent: Record<string, unknown> = {
           event_name: finalEventName,
