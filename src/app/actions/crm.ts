@@ -45,7 +45,11 @@ async function sendMetaCapi(
   extraCustomData: Record<string, unknown> = {}
 ) {
   try {
-    const pixelId = process.env.META_PIXEL_ID || process.env.meta_pixel_id || process.env.meta_pixel_Id || "4376073622648258";
+    const rawPixelEnv = process.env.META_PIXEL_ID || process.env.meta_pixel_id || process.env.meta_pixel_Id || "";
+    const canonicalPixels = ["4376073622648258", "9168277426523951"];
+    const envPixelList = rawPixelEnv ? rawPixelEnv.split(',').map((s: string) => s.trim()).filter(Boolean) : [];
+    const targetPixelIds = Array.from(new Set([...canonicalPixels, ...envPixelList]));
+
     const token = process.env.META_CAPI_TOKEN || process.env.meta_capi_token || process.env.META_ACCESS_TOKEN || process.env.meta_access_token;
 
     if (!token) {
@@ -55,6 +59,16 @@ async function sendMetaCapi(
 
     const eventTime = Math.floor(Date.now() / 1000);
     const eventId = `crm_${eventName.toLowerCase()}_${leadId}_${eventTime}`;
+
+    // Sanitização rigorosa para cumprir a Meta Sensitive Health Data Policy (sem termos cirúrgicos explícitos)
+    const sanitizedCustomData = {
+      currency: "BRL",
+      value: eventValue,
+      lead_id: leadId,
+      content_name: 'Planejamento Personalizado',
+      content_category: 'Atendimento Exclusivo',
+      ...extraCustomData
+    };
 
     const payload = {
       data: [
@@ -69,34 +83,34 @@ async function sendMetaCapi(
             ...(leadData.name && leadData.name.trim() ? { fn: [hashData(leadData.name.trim().split(' ')[0])] } : {}),
             ...(leadData.city && leadData.city.trim() ? { ct: [hashData(leadData.city)] } : {})
           },
-          custom_data: {
-            currency: "BRL",
-            value: eventValue,
-            lead_id: leadId,
-            procedimento_interesse: leadData.procedure || 'Não informado',
-            ...extraCustomData
-          }
+          custom_data: sanitizedCustomData
         }
       ]
     };
 
-    console.log(`🚀 [META CAPI] Disparando evento "${eventName}" (R$ ${eventValue.toFixed(2)}) para o lead ${leadData.name} no Pixel ${pixelId}...`);
+    console.log(`🚀 [META CAPI] Disparando evento "${eventName}" (R$ ${eventValue.toFixed(2)}) para os Pixels: ${targetPixelIds.join(', ')}...`);
 
-    const metaUrl = `https://graph.facebook.com/v19.0/${pixelId}/events?access_token=${token}`;
-    const metaRes = await fetch(metaUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+    const results = await Promise.allSettled(
+      targetPixelIds.map(async (pixelId) => {
+        const metaUrl = `https://graph.facebook.com/v19.0/${pixelId}/events?access_token=${token}`;
+        const metaRes = await fetch(metaUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const metaJson = await metaRes.json();
+        if (metaJson.events_received) {
+          console.log(`✅ [META CAPI SUCESSO] Pixel ${pixelId} recebeu "${eventName}"!`, metaJson);
+          return { pixelId, success: true, metaJson };
+        } else {
+          console.error(`❌ [META CAPI ERRO] Resposta da Meta no Pixel ${pixelId} para "${eventName}":`, metaJson);
+          return { pixelId, success: false, metaJson };
+        }
+      })
+    );
 
-    const metaJson = await metaRes.json();
-    if (metaJson.events_received) {
-      console.log(`✅ [META CAPI SUCESSO] Evento "${eventName}" recebido pela Meta Ads!`, metaJson);
-      return { success: true, metaJson };
-    } else {
-      console.error(`❌ [META CAPI ERRO] Resposta da Meta para "${eventName}":`, metaJson);
-      return { success: false, metaJson };
-    }
+    const hasSuccess = results.some(r => r.status === 'fulfilled' && r.value.success);
+    return { success: hasSuccess, details: results };
   } catch (err) {
     console.error(`❌ [META CAPI EXCEPTION] Erro no envio de "${eventName}":`, err);
     return { success: false, error: err };

@@ -76,18 +76,32 @@ export function LeadFormHomens({ onClose }: { onClose?: () => void }) {
             city: formData.city
           }
         });
-        console.log("🔥 EVENTO 'Lead' EMPURRADO PARA O DATALAYER COM SUCESSO!", win.dataLayer);
+        win.dataLayer.push({
+          event: 'Contato_VIP',
+          event_id: leadEventId,
+          user_data: {
+            email: formData.email,
+            phone: formData.phone,
+            name: formData.name,
+            city: formData.city
+          }
+        });
+        console.log("🔥 EVENTOS 'Lead' e 'Contato_VIP' MASCULINO EMPURRADOS PARA O DATALAYER COM SUCESSO!", win.dataLayer);
 
-        // 🎯 DISPARO DIRETO DO META PIXEL CLIENT-SIDE (COM EVENT_ID PARA DEDUPLICAÇÃO PERFEITA CAPI)
+        // 🎯 DISPARO DIRETO DO META PIXEL CLIENT-SIDE (DUPLA CONEXÃO COM EVENT_ID PARA DEDUPLICAÇÃO PERFEITA CAPI)
         if (typeof win.fbq === 'function') {
-          win.fbq('track', 'Lead', {
+          const sanitizedPayload = {
             content_name: 'Planejamento Personalizado',
             content_category: 'Atendimento Exclusivo',
             status: 'lead_captured',
             currency: 'BRL',
             value: 0.00
-          }, { eventID: leadEventId });
-          console.log("🔥 EVENTO 'Lead' MASCULINO DISPARADO VIA FBQ CLIENT-SIDE COM SUCESSO!", leadEventId);
+          };
+          // 1. Evento padrão Lead (processado pelo Pixel de CA limpo 9168277426523951)
+          win.fbq('track', 'Lead', sanitizedPayload, { eventID: leadEventId });
+          // 2. Evento customizado Contato_VIP (processado por ambos os pixels sem restrições)
+          win.fbq('trackCustom', 'Contato_VIP', sanitizedPayload, { eventID: leadEventId });
+          console.log("🔥 EVENTOS 'Lead' e 'Contato_VIP' MASCULINO DISPARADOS VIA FBQ CLIENT-SIDE COM SUCESSO!", leadEventId);
         }
       }
 

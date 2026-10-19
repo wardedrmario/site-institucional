@@ -38,8 +38,15 @@ export async function POST(request: Request) {
     const fbp = body.fbp || (fbpMatch ? fbpMatch[1] : undefined);
     const fbc = body.fbc || (fbcMatch ? fbcMatch[1] : undefined);
 
-    const metaPixelId = process.env.META_PIXEL_ID || process.env.meta_pixel_id || process.env.meta_pixel_Id || "4376073622648258";
+    const rawPixelEnv = process.env.META_PIXEL_ID || process.env.meta_pixel_id || process.env.meta_pixel_Id || "";
     const metaAccessToken = process.env.META_CAPI_TOKEN || process.env.meta_capi_token || process.env.META_ACCESS_TOKEN || process.env.meta_access_token;
+
+    // Lista canônica de Pixels para envio simultâneo (Dupla Conexão):
+    // 1. Dataset Primário (MD - Mario Warde): 4376073622648258
+    // 2. Pixel Oficial Limpo (Pixel de CA - Mario Warde): 9168277426523951
+    const canonicalPixels = ["4376073622648258", "9168277426523951"];
+    const envPixelList = rawPixelEnv ? rawPixelEnv.split(',').map((s: string) => s.trim()).filter(Boolean) : [];
+    const targetPixelIds = Array.from(new Set([...canonicalPixels, ...envPixelList]));
 
     // Se for apenas ping de teste de infraestrutura/conexão, não envia para o Pixel em produção para não poluir o Gerenciador
     if (finalEventName.toLowerCase().includes('ping') || finalEventName.toLowerCase().includes('teste')) {
@@ -51,7 +58,7 @@ export async function POST(request: Request) {
       });
     }
 
-    if (metaPixelId && metaAccessToken) {
+    if (metaAccessToken && targetPixelIds.length > 0) {
       const userData: Record<string, unknown> = {
         client_ip_address: clientIp,
         client_user_agent: userAgent,
@@ -61,16 +68,6 @@ export async function POST(request: Request) {
       if (hashedFn) userData.fn = [hashedFn];
       if (fbp) userData.fbp = fbp;
       if (fbc) userData.fbc = fbc;
-
-      const eventData: Record<string, unknown> = {
-        event_name: finalEventName,
-        event_time: eventTime,
-        action_source: actionSource || (sourceUrl ? 'website' : 'system_generated'),
-        event_source_url: sourceUrl || 'https://drmariowarde.com/',
-        event_id: finalEventId,
-        user_data: userData,
-        ...(customData ? { custom_data: customData } : {})
-      };
 
       // Injeção do código de teste para depuração no painel do Meta
       let resolvedTestCode = testCode;
@@ -86,25 +83,93 @@ export async function POST(request: Request) {
           resolvedTestCode = reqUrl.searchParams.get('test_event_code') || reqUrl.searchParams.get('test_code') || undefined;
         } catch {}
       }
-      if (resolvedTestCode) {
-        eventData.test_event_code = resolvedTestCode;
+
+      // Parâmetros de custom_data sanitizados contra a política de dados de saúde sensíveis da Meta
+      const defaultSanitizedCustomData = {
+        content_name: 'Planejamento Personalizado',
+        content_category: 'Atendimento Exclusivo',
+        status: 'lead_captured',
+        currency: 'BRL',
+        value: 0.00
+      };
+      const finalCustomData = customData ? { ...defaultSanitizedCustomData, ...customData } : defaultSanitizedCustomData;
+
+      // Se o evento for Lead, preparamos tanto 'Lead' (computado com 100% no Pixel limpo)
+      // quanto 'Contato_VIP' (custom event 100% desbloqueado e imune a restrições em ambos os Pixels)
+      const eventsToSend: Array<Record<string, unknown>> = [];
+
+      if (finalEventName === 'Lead') {
+        const leadEvent: Record<string, unknown> = {
+          event_name: 'Lead',
+          event_time: eventTime,
+          action_source: actionSource || (sourceUrl ? 'website' : 'system_generated'),
+          event_source_url: sourceUrl || 'https://drmariowarde.com/',
+          event_id: finalEventId,
+          user_data: userData,
+          custom_data: finalCustomData
+        };
+        const vipEvent: Record<string, unknown> = {
+          event_name: 'Contato_VIP',
+          event_time: eventTime,
+          action_source: actionSource || (sourceUrl ? 'website' : 'system_generated'),
+          event_source_url: sourceUrl || 'https://drmariowarde.com/',
+          event_id: finalEventId,
+          user_data: userData,
+          custom_data: finalCustomData
+        };
+
+        if (resolvedTestCode) {
+          leadEvent.test_event_code = resolvedTestCode;
+          vipEvent.test_event_code = resolvedTestCode;
+        }
+
+        eventsToSend.push(leadEvent, vipEvent);
+      } else {
+        const singleEvent: Record<string, unknown> = {
+          event_name: finalEventName,
+          event_time: eventTime,
+          action_source: actionSource || (sourceUrl ? 'website' : 'system_generated'),
+          event_source_url: sourceUrl || 'https://drmariowarde.com/',
+          event_id: finalEventId,
+          user_data: userData,
+          custom_data: finalCustomData
+        };
+        if (resolvedTestCode) {
+          singleEvent.test_event_code = resolvedTestCode;
+        }
+        eventsToSend.push(singleEvent);
       }
 
-      const metaPayload = { data: [eventData] };
-      const metaUrl = `https://graph.facebook.com/v19.0/${metaPixelId}/events?access_token=${metaAccessToken}`;
-      
-      const metaResponse = await fetch(metaUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(metaPayload)
+      // Disparo simultâneo para todos os Pixels via Meta Graph API CAPI
+      const metaPayload = { data: eventsToSend };
+
+      const capiResults = await Promise.allSettled(
+        targetPixelIds.map(async (pixelId) => {
+          const metaUrl = `https://graph.facebook.com/v19.0/${pixelId}/events?access_token=${metaAccessToken}`;
+          const metaResponse = await fetch(metaUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(metaPayload)
+          });
+          const metaResult = await metaResponse.json();
+          if (!metaResponse.ok || metaResult.error) {
+            console.error(`❌ [META CAPI ERRO] Falha no Pixel ${pixelId} (${finalEventName}):`, JSON.stringify(metaResult));
+            return { pixelId, success: false, result: metaResult };
+          } else {
+            console.log(`✅ [META CAPI SUCESSO] Pixel ${pixelId} recebeu (${finalEventName} + Contato_VIP):`, JSON.stringify(metaResult));
+            return { pixelId, success: true, result: metaResult };
+          }
+        })
+      );
+
+      return NextResponse.json({ 
+        success: true, 
+        eventId: finalEventId, 
+        eventName: finalEventName, 
+        pixelsSent: targetPixelIds,
+        results: capiResults.map(r => r.status === 'fulfilled' ? r.value : { error: r.reason }),
+        message: 'Evento CAPI processado com dupla conexão.' 
       });
-      
-      const metaResult = await metaResponse.json();
-      if (!metaResponse.ok || metaResult.error) {
-        console.error(`❌ [META CAPI ERRO] Falha no envio de ${finalEventName}:`, JSON.stringify(metaResult));
-      } else {
-        console.log(`✅ [META CAPI SUCESSO] ${finalEventName} enviado com sucesso:`, JSON.stringify(metaResult));
-      }
     } else {
       console.warn(`⚠️ [META CAPI AVISO] META_ACCESS_TOKEN ausente na Vercel! Evento ${finalEventName} ignorado no servidor.`);
     }

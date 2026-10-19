@@ -65,7 +65,7 @@ export default function RootLayout({
         <Script id="gtm-server-side" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: `
           !function(){"use strict";function l(e){for(var t=e,r=0,n=document.cookie.split(";");r<n.length;r++){var o=n[r].split("=");if(o[0].trim()===t)return o[1]}}function s(e){return localStorage.getItem(e)}function u(e){return window[e]}function A(e,t){e=document.querySelector(e);return t?null==e?void 0:e.getAttribute(t):null==e?void 0:e.textContent}var e=window,t=document,r="script",n="dataLayer",o="https://clinica.drmariowarde.com",a="",i="62apljtynx",c="6wk6ake0=EQpEMz4hXScuOi0%2BPj5HRw5TS1pbShQPRQoLGQseGQ4PDwsQD0ITDhU%3D",g="cookie",v="_ga",E="",d=!1;try{var d=!!g&&(m=navigator.userAgent,!!(m=new RegExp("Version/([0-9._]+)(.*Mobile)?.*Safari.*").exec(m)))&&16.4<=parseFloat(m[1]),f="stapeUserId"===g,I=d&&!f?function(e,t,r){void 0===t&&(t="");var n={cookie:l,localStorage:s,jsVariable:u,cssSelector:A},t=Array.isArray(t)?t:[t];if(e&&n[e])for(var o=n[e],a=0,i=t;a<i.length;a++){var c=i[a],c=r?o(c,r):o(c);if(c)return c}else console.warn("invalid uid source",e)}(g,v,E):void 0;d=d&&(!!I||f)}catch(e){console.error(e)}var m=e,g=(m[n]=m[n]||[],m[n].push({"gtm.start":(new Date).getTime(),event:"gtm.js"}),t.getElementsByTagName(r)[0]),v=I?"&bi="+encodeURIComponent(I):"",E=t.createElement(r),f=(d&&(i=8<i.length?i.replace(/([a-z]{8}$)/,"kp$1"):"kp"+i),!d&&a?a:o);E.async=!0,E.src=f+"/"+i+".js?"+c+v,null!=(e=g.parentNode)&&e.insertBefore(E,g)}();
         `}} />
-        {/* Meta Pixel Base Code (Pixel ID: 4376073622648258) */}
+        {/* Meta Pixel Base Code (Dupla Conexão: 4376073622648258 e 9168277426523951) */}
         <Script id="meta-pixel-init" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: `
           !function(f,b,e,v,n,t,s)
           {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -75,7 +75,8 @@ export default function RootLayout({
           t.src=v;s=b.getElementsByTagName(e)[0];
           s.parentNode.insertBefore(t,s)}(window, document,'script',
           'https://connect.facebook.net/en_US/fbevents.js');
-          fbq('init', '4376073622648258');
+          fbq('init', '4376073622648258'); // MD - Mario Warde (Dataset Primário)
+          fbq('init', '9168277426523951'); // Pixel de CA - Mario Warde (OFICIAL LIMPO)
           fbq('track', 'PageView');
         `}} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
