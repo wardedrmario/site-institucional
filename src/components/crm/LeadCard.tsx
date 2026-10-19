@@ -140,11 +140,11 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
     });
   };
 
-  // Configuração visual do Score com tipografia confortável
+  // Configuração visual do Score — Padrão Quiet Luxury (Pontos coloridos sutis, sem emojis)
   const scoreConfig = {
-    HOT: { color: 'text-red-700 font-bold', bg: 'bg-red-50', border: 'border-red-200', icon: '🔥' },
-    WARM: { color: 'text-amber-800 font-semibold', bg: 'bg-amber-50', border: 'border-amber-200', icon: '⚡' },
-    COLD: { color: 'text-slate-600 font-medium', bg: 'bg-slate-100', border: 'border-slate-200', icon: '❄️' },
+    HOT: { color: 'text-red-700 font-bold', bg: 'bg-red-50', border: 'border-red-200', dot: 'bg-red-600' },
+    WARM: { color: 'text-amber-800 font-semibold', bg: 'bg-amber-50', border: 'border-amber-200', dot: 'bg-amber-600' },
+    COLD: { color: 'text-slate-600 font-medium', bg: 'bg-slate-100', border: 'border-slate-200', dot: 'bg-slate-400' },
   };
 
   const currentConfig = scoreConfig[lead.scoreLabel];
@@ -175,9 +175,9 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
       {/* Linha Superior: Score + Origem + Data + Menu Rápido "Mover" */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5 flex-wrap">
-          {/* Badge Score */}
-          <div className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs ${currentConfig.bg} ${currentConfig.color} ${currentConfig.border} border`}>
-            <span>{currentConfig.icon}</span>
+          {/* Badge Score com ponto colorido sutil */}
+          <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs ${currentConfig.bg} ${currentConfig.color} ${currentConfig.border} border`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${currentConfig.dot}`}></span>
             <span>{lead.score} pts</span>
           </div>
 
@@ -201,11 +201,13 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
           <button
             type="button"
             onClick={() => setIsMoveOpen(!isMoveOpen)}
-            className="text-xs font-semibold text-slate-700 hover:text-[#310f0e] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg px-2 py-1 flex items-center gap-1 transition-all"
+            className="text-xs font-semibold text-slate-700 hover:text-[#310f0e] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg px-2.5 py-1 flex items-center gap-1 transition-all"
             title="Mover lead para outra coluna sem precisar arrastar"
           >
             <span>Mover</span>
-            <span className="text-[10px]">▾</span>
+            <svg className="w-3 h-3 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
           </button>
 
           {isMoveOpen && (
@@ -283,12 +285,14 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
       >
         {!isEditingFup ? (
           <div className="flex justify-between items-center text-xs">
-            <div className="flex items-center gap-1.5 font-medium">
-              <span className="text-sm">⏰</span>
+            <div className="flex items-center gap-2 font-medium">
+              <svg className="w-3.5 h-3.5 text-slate-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
               {lead.followupDate ? (
                 <span className={fupStatus === 'late' ? 'text-red-700 font-bold' : fupStatus === 'today' ? 'text-amber-800 font-bold' : 'text-slate-700'}>
-                  {fupStatus === 'late' && '⚠️ Atrasado: '}
-                  {fupStatus === 'today' && '🔔 Hoje: '}
+                  {fupStatus === 'late' && 'Atrasado: '}
+                  {fupStatus === 'today' && 'Hoje: '}
                   Retorno em {new Date(lead.followupDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}
                 </span>
               ) : (
@@ -308,9 +312,11 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
               <button 
                 type="button" 
                 onClick={() => setIsEditingFup(false)}
-                className="text-slate-400 hover:text-slate-600"
+                className="text-slate-400 hover:text-slate-600 p-0.5"
               >
-                ✕
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
             <input 
@@ -367,15 +373,17 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
         <button
           type="button"
           onClick={() => setIsDetailsExpanded(!isDetailsExpanded)}
-          className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1 ${
+          className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1.5 ${
             isDetailsExpanded 
               ? 'bg-[#310f0e] text-white border-[#310f0e]' 
               : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
           }`}
           title="Ver ou ocultar detalhes financeiros e scripts de atendimento"
         >
-          <span>{isDetailsExpanded ? 'Recolher' : 'Scripts & Valores'}</span>
-          <span className="text-[10px]">{isDetailsExpanded ? '▴' : '▾'}</span>
+          <span>{isDetailsExpanded ? 'Recolher' : 'Scripts e Valores'}</span>
+          <svg className={`w-3 h-3 transition-transform ${isDetailsExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
         </button>
       </div>
 
@@ -388,8 +396,8 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
           {/* Seletor de Categoria e Origem de Consulta */}
           <div className="bg-[#f8fafc] rounded-xl p-3 border border-slate-200/80 flex flex-col gap-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                <span>🏷️</span> Origem & Matriz de Valor
+              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                Origem e Matriz de Valor
               </span>
               {isPendingCategory && <span className="text-[11px] text-slate-400">Salvando...</span>}
             </div>
@@ -405,7 +413,7 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
                 }`}
                 title="Internet (Meta Ads / Orgânico) - R$ 350 total (50% Pix: R$ 175)"
               >
-                🌐 Internet (R$ 350)
+                Internet (R$ 350)
               </button>
               <button
                 type="button"
@@ -417,7 +425,7 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
                 }`}
                 title="Indicação de Pacientes - R$ 350 total (50% Pix: R$ 175)"
               >
-                👥 Indicação (R$ 350)
+                Indicação (R$ 350)
               </button>
               <button
                 type="button"
@@ -429,21 +437,21 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
                 }`}
                 title="Indicação Médica ou Linhagem VIP (R$ 850 total | 50% Pix: R$ 425)"
               >
-                🩺 Médica/VIP (R$ 850)
+                Médica / VIP (R$ 850)
               </button>
             </div>
 
             {/* Badges de Confirmação Financeira por Etapa */}
             {lead.status === 'consulta' && (
               <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-2 text-xs flex items-center justify-between text-emerald-900 font-semibold">
-                <span>🟢 Sinal 50% Pix: <strong>R$ {category === 'indicacao_medica' ? '425,00' : '175,00'}</strong></span>
+                <span>Sinal 50% Pix: <strong>R$ {category === 'indicacao_medica' ? '425,00' : '175,00'}</strong></span>
                 <span className="text-emerald-700 font-normal">Saldo na recepção: R$ {category === 'indicacao_medica' ? '425,00' : '175,00'}</span>
               </div>
             )}
 
             {lead.status === 'consulta_realizada' && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 text-xs flex items-center justify-between text-blue-900 font-semibold">
-                <span>✅ Consulta Quitada: <strong>R$ {category === 'indicacao_medica' ? '850,00' : '350,00'}</strong></span>
+                <span>Consulta Quitada: <strong>R$ {category === 'indicacao_medica' ? '850,00' : '350,00'}</strong></span>
                 <span className="text-blue-700 font-normal">Crédito 100% no plano cirúrgico</span>
               </div>
             )}
@@ -455,26 +463,25 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
               className="flex items-center justify-center gap-2 w-full py-2 px-3 bg-white hover:bg-slate-50 text-slate-800 rounded-lg border border-slate-300 text-xs font-semibold transition-all hover:border-slate-400 cursor-pointer shadow-2xs"
               title="Copiar texto formal com dedicação de tempo, privacidade e crédito cirúrgico"
             >
-              <span>{copiedScript ? '✓' : '📋'}</span>
-              <span>{copiedScript ? 'Script de 50% Pix Copiado!' : 'Copiar Texto Dr. Mário (Regra 50% Pix)'}</span>
+              <span>{copiedScript ? 'Texto Copiado' : 'Copiar Texto Dr. Mário (Regra 50% Pix)'}</span>
             </button>
           </div>
 
           {/* Script Concierge & Mensagem WhatsApp */}
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs uppercase tracking-wider text-slate-700 font-bold flex items-center gap-1">
-                  💬 Mensagem de WhatsApp
+              <div className="flex items-center gap-2">
+                <span className="text-xs uppercase tracking-wider text-slate-700 font-bold">
+                  Mensagem de WhatsApp
                 </span>
                 <button 
                   type="button"
                   onClick={handleGenerateAi} 
                   disabled={isPending}
-                  className="hover:bg-slate-100 p-1 rounded-md text-xs text-purple-700 font-semibold transition-colors disabled:opacity-50 cursor-pointer"
-                  title="Gerar/Atualizar sugestão com IA Concierge"
+                  className="hover:bg-slate-100 px-2 py-0.5 rounded-md text-xs text-purple-700 font-semibold transition-colors disabled:opacity-50 cursor-pointer border border-purple-200"
+                  title="Gerar ou atualizar sugestão com inteligência artificial"
                 >
-                  ✨ IA
+                  Sugerir IA
                 </button>
                 <button 
                   type="button"
@@ -482,10 +489,10 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
                     setActionDraft(localNextAction);
                     setIsEditingAction(!isEditingAction);
                   }}
-                  className="hover:bg-slate-100 p-1 rounded-md text-xs text-slate-600 hover:text-black transition-colors cursor-pointer"
+                  className="hover:bg-slate-100 px-2 py-0.5 rounded-md text-xs text-slate-600 hover:text-black transition-colors cursor-pointer border border-slate-200"
                   title="Editar texto da mensagem"
                 >
-                  ✏️ Editar
+                  Editar
                 </button>
               </div>
 
@@ -493,10 +500,9 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
                 <button
                   type="button"
                   onClick={handleCopyAction}
-                  className="text-xs text-slate-700 hover:text-black bg-slate-100 hover:bg-slate-200 px-2 py-1 rounded-md transition-all font-semibold flex items-center gap-1"
+                  className="text-xs text-slate-700 hover:text-black bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md transition-all font-semibold"
                 >
-                  <span>{copiedAction ? '✓' : '📋'}</span>
-                  <span>{copiedAction ? 'Copiado' : 'Copiar'}</span>
+                  {copiedAction ? 'Copiado' : 'Copiar'}
                 </button>
               )}
             </div>
@@ -537,7 +543,7 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
                     {localNextAction}
                   </p>
                 ) : (
-                  <span className="text-slate-400 italic">Nenhum script configurado. Clique em ✏️ para digitar ou ✨ para IA.</span>
+                  <span className="text-slate-400 italic">Nenhum script configurado. Clique em Editar para redigir ou Sugerir IA.</span>
                 )}
               </div>
             )}

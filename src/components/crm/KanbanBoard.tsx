@@ -7,21 +7,21 @@ import { updateLeadStatus } from '@/app/actions/crm';
 const COLUMNS = [
   { id: 'triagem', title: 'Triagem / Descoberta', segment: 'ENTRADA' },
   { id: 'qualificacao', title: 'Qualificação Concierge', segment: 'ENTRADA' },
-  { id: 'consulta', title: '📅 Agendado (Sinal 50% Pago)', segment: 'CONSULTAS' },
-  { id: 'consulta_realizada', title: '✅ Consulta Realizada (Presencial)', segment: 'CONSULTAS' },
+  { id: 'consulta', title: 'Agendado (Sinal 50% Pago)', segment: 'CONSULTAS' },
+  { id: 'consulta_realizada', title: 'Consulta Realizada (Presencial)', segment: 'CONSULTAS' },
   { id: 'pos_consulta', title: 'Pós-Consulta (Decisão)', segment: 'CONSULTAS' },
-  { id: 'deposito', title: '💎 Cirurgia Fechada (Depósito)', segment: 'CIRURGIAS' },
+  { id: 'deposito', title: 'Cirurgia Fechada (Depósito)', segment: 'CIRURGIAS' },
   { id: 'pre_op', title: 'Pré-operatório', segment: 'CIRURGIAS' },
   { id: 'pos_op', title: 'Pós-operatório / Recorrência', segment: 'CIRURGIAS' },
-  { id: 'arquivado', title: '🥶 Arquivado / Não Converteu', segment: 'ARQUIVADOS' },
+  { id: 'arquivado', title: 'Arquivado / Não Converteu', segment: 'ARQUIVADOS' },
 ];
 
 const SEGMENTS = [
   { id: 'ALL', label: 'Todas as Fases', badge: '9' },
-  { id: 'ENTRADA', label: '🎯 Entrada & Triagem', badge: '2' },
-  { id: 'CONSULTAS', label: '📅 Consultas & Decisão', badge: '3' },
-  { id: 'CIRURGIAS', label: '💎 Cirurgias & Pós', badge: '3' },
-  { id: 'ARQUIVADOS', label: '🥶 Arquivados', badge: '1' },
+  { id: 'ENTRADA', label: 'Entrada & Triagem', badge: '2' },
+  { id: 'CONSULTAS', label: 'Consultas & Decisão', badge: '3' },
+  { id: 'CIRURGIAS', label: 'Cirurgias & Pós', badge: '3' },
+  { id: 'ARQUIVADOS', label: 'Arquivados', badge: '1' },
 ];
 
 export interface DbLead {
@@ -389,7 +389,9 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
               className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 transition-all cursor-pointer shadow-2xs border border-slate-200 hover:border-slate-300 flex items-center gap-1 text-xs font-semibold"
               title="Rolar para as colunas anteriores à esquerda"
             >
-              <span>←</span>
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
               <span className="hidden sm:inline">Anterior</span>
             </button>
             <button
@@ -399,7 +401,9 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
               title="Rolar para as próximas colunas à direita"
             >
               <span className="hidden sm:inline">Próxima</span>
-              <span>→</span>
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
             </button>
           </div>
         </div>
@@ -425,13 +429,16 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
                 type="button"
                 onClick={() => setSearchQuery('')}
                 className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer"
+                title="Limpar busca"
               >
-                ✕
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             )}
           </div>
 
-          {/* Filtros de Temperatura e Retorno */}
+          {/* Filtros de Temperatura e Retorno (Sem Emojis) */}
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mr-1 hidden sm:inline">Filtro:</span>
             
@@ -450,39 +457,39 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
             <button
               type="button"
               onClick={() => setThermalFilter('HOT')}
-              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 cursor-pointer ${
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
                 thermalFilter === 'HOT'
                   ? 'bg-red-700 text-white shadow-xs'
                   : 'bg-red-50 text-red-700 hover:bg-red-100 border border-red-200'
               }`}
             >
-              <span>🔥</span>
-              <span>Leads HOT</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+              <span>Leads Quentes</span>
             </button>
 
             <button
               type="button"
               onClick={() => setThermalFilter('TODAY')}
-              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 cursor-pointer ${
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
                 thermalFilter === 'TODAY'
                   ? 'bg-amber-600 text-white shadow-xs'
                   : 'bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-200'
               }`}
             >
-              <span>🔔</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
               <span>Retorno Hoje</span>
             </button>
 
             <button
               type="button"
               onClick={() => setThermalFilter('LATE')}
-              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 cursor-pointer ${
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
                 thermalFilter === 'LATE'
                   ? 'bg-red-800 text-white shadow-xs'
                   : 'bg-red-50 text-red-800 hover:bg-red-100 border border-red-300'
               }`}
             >
-              <span>⚠️</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-red-600"></span>
               <span>Atrasados</span>
             </button>
 
@@ -552,7 +559,11 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
             >
               {isCollapsed ? (
                 <div className="flex flex-col items-center justify-start h-full w-full py-4 relative">
-                  <span className="text-xl">🥶</span>
+                  <div className="w-7 h-7 rounded-full bg-slate-200/80 flex items-center justify-center text-slate-600">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                    </svg>
+                  </div>
                   <span className="bg-black/10 text-black/70 text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full mt-3">
                     {leads.length}
                   </span>
