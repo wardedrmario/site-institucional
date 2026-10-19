@@ -128,12 +128,6 @@ export async function POST(request: Request) {
           custom_data: finalCustomData
         };
 
-        if (resolvedTestCode) {
-          leadEvent.test_event_code = resolvedTestCode;
-          vipEvent.test_event_code = resolvedTestCode;
-          contactEvent.test_event_code = resolvedTestCode;
-        }
-
         eventsToSend.push(leadEvent, vipEvent, contactEvent);
       } else {
         const singleEvent: Record<string, unknown> = {
@@ -145,14 +139,15 @@ export async function POST(request: Request) {
           user_data: userData,
           custom_data: finalCustomData
         };
-        if (resolvedTestCode) {
-          singleEvent.test_event_code = resolvedTestCode;
-        }
         eventsToSend.push(singleEvent);
       }
 
       // Disparo simultâneo para todos os Pixels via Meta Graph API CAPI
-      const metaPayload = { data: eventsToSend };
+      // IMPORTANTE: Na Graph API da Meta, test_event_code DEVE ficar na raiz do payload (ao lado de data), e não dentro do evento!
+      const metaPayload: Record<string, unknown> = { data: eventsToSend };
+      if (resolvedTestCode) {
+        metaPayload.test_event_code = resolvedTestCode;
+      }
 
       const capiResults = await Promise.allSettled(
         targetPixelIds.map(async (pixelId) => {
