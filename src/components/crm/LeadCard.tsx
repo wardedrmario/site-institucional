@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useTransition } from 'react';
+import React, { useState, useTransition, useRef, useEffect } from 'react';
 import { generateAiForLead, updateLeadFollowup, updateLeadConsultationCategory, updateLeadAction } from '@/app/actions/crm';
 
 type LeadScore = 'HOT' | 'WARM' | 'COLD';
@@ -25,20 +25,33 @@ export interface Lead {
   consultationCategory?: ConsultationCategory;
 }
 
-interface LeadCardProps {
-  lead: Lead;
+interface ColumnOption {
+  id: string;
+  title: string;
 }
 
-export default function LeadCard({ lead }: LeadCardProps) {
+interface LeadCardProps {
+  lead: Lead;
+  onMoveToColumn?: (leadId: string, toColumnId: string) => void;
+  columnsList?: ColumnOption[];
+}
+
+export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: LeadCardProps) {
   const [isPending, startTransition] = useTransition();
   const [localNextAction, setLocalNextAction] = useState(lead.nextAction);
+
+  // Expansão de detalhes (Progressive Disclosure para economizar espaço vertical)
+  const [isDetailsExpanded, setIsDetailsExpanded] = useState(false);
+
+  // Menu Rápido "Mover para..."
+  const [isMoveOpen, setIsMoveOpen] = useState(false);
+  const moveMenuRef = useRef<HTMLDivElement>(null);
 
   // Script / Next Action states
   const [isEditingAction, setIsEditingAction] = useState(false);
   const [actionDraft, setActionDraft] = useState(lead.nextAction || '');
   const [isPendingAction, startActionTransition] = useTransition();
   const [copiedAction, setCopiedAction] = useState(false);
-  const [isExpandedAction, setIsExpandedAction] = useState(false);
 
   // Category and Financial states
   const [category, setCategory] = useState<ConsultationCategory>(
@@ -52,6 +65,21 @@ export default function LeadCard({ lead }: LeadCardProps) {
   const [fupDate, setFupDate] = useState(lead.followupDate ? new Date(lead.followupDate).toISOString().split('T')[0] : '');
   const [fupNote, setFupNote] = useState(lead.followupNote || '');
   const [isPendingFup, startFupTransition] = useTransition();
+
+  // Fecha menu de mover ao clicar fora
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (moveMenuRef.current && !moveMenuRef.current.contains(event.target as Node)) {
+        setIsMoveOpen(false);
+      }
+    }
+    if (isMoveOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMoveOpen]);
 
   const handleSaveAction = () => {
     startActionTransition(async () => {
@@ -97,6 +125,7 @@ export default function LeadCard({ lead }: LeadCardProps) {
       });
       if (res?.success && res.suggestion) {
         setLocalNextAction(res.suggestion);
+        setIsDetailsExpanded(true);
       }
     });
   };
@@ -111,11 +140,11 @@ export default function LeadCard({ lead }: LeadCardProps) {
     });
   };
 
-  // Configuração visual baseada no Score
+  // Configuração visual do Score com tipografia confortável
   const scoreConfig = {
-    HOT: { color: 'text-red-600', bg: 'bg-red-50', border: 'border-red-100', icon: '🔴' },
-    WARM: { color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-100', icon: '🟡' },
-    COLD: { color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-100', icon: '🔵' },
+    HOT: { color: 'text-red-700 font-bold', bg: 'bg-red-50', border: 'border-red-200', icon: '🔥' },
+    WARM: { color: 'text-amber-800 font-semibold', bg: 'bg-amber-50', border: 'border-amber-200', icon: '⚡' },
+    COLD: { color: 'text-slate-600 font-medium', bg: 'bg-slate-100', border: 'border-slate-200', icon: '❄️' },
   };
 
   const currentConfig = scoreConfig[lead.scoreLabel];
@@ -123,7 +152,7 @@ export default function LeadCard({ lead }: LeadCardProps) {
   const encodedMessage = encodeURIComponent(localNextAction || '');
   const whatsLink = `https://wa.me/${cleanPhone.length <= 11 ? '55'+cleanPhone : cleanPhone}?text=${encodedMessage}`;
 
-  // Logica de Alerta de Follow-Up
+  // Lógica de Alerta de Follow-Up
   let fupStatus = 'none';
   if (lead.followupDate) {
     const today = new Date();
@@ -135,167 +164,182 @@ export default function LeadCard({ lead }: LeadCardProps) {
     else fupStatus = 'future';
   }
 
-  const borderClass = fupStatus === 'late' ? 'border-red-500 ring-2 ring-red-200' :
-                      fupStatus === 'today' ? 'border-orange-500 ring-2 ring-orange-200' :
-                      'border-black/5';
+  const borderClass = fupStatus === 'late' ? 'border-red-400 ring-2 ring-red-100 shadow-sm' :
+                      fupStatus === 'today' ? 'border-amber-400 ring-2 ring-amber-100 shadow-sm' :
+                      'border-black/5 hover:border-[#310f0e]/30';
 
   return (
-    <div className={`bg-white rounded-2xl border shadow-sm p-4 hover:shadow-md transition-shadow cursor-grab active:cursor-grabbing mb-3 group flex flex-col gap-3 relative overflow-hidden ${borderClass}`}>
-      {/* Top Header: Score & Source & Tag */}
-      <div className="flex items-center justify-between mb-1">
-        <div className="flex items-center gap-2">
-          <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold ${currentConfig.bg} ${currentConfig.color} ${currentConfig.border} border`}>
+    <div 
+      className={`bg-white rounded-2xl border p-4 hover:shadow-lg transition-all duration-200 cursor-grab active:cursor-grabbing mb-3 group flex flex-col gap-3 relative select-none ${borderClass}`}
+    >
+      {/* Linha Superior: Score + Origem + Data + Menu Rápido "Mover" */}
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-1.5 flex-wrap">
+          {/* Badge Score */}
+          <div className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs ${currentConfig.bg} ${currentConfig.color} ${currentConfig.border} border`}>
             <span>{currentConfig.icon}</span>
             <span>{lead.score} pts</span>
           </div>
-          <span className="text-[9px] font-medium text-black/40 bg-black/5 px-1.5 py-0.5 rounded-md uppercase tracking-wider max-w-[70px] truncate" title={lead.source}>
+
+          {/* Origem */}
+          <span 
+            className="text-[11px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md uppercase tracking-wider max-w-[90px] truncate" 
+            title={lead.source}
+          >
             {lead.source}
           </span>
+
           {lead.isClinical && (
-            <span className="text-[9px] font-bold text-indigo-700 bg-indigo-100 px-1.5 py-0.5 rounded-full border border-indigo-200 uppercase tracking-wider">
+            <span className="text-[11px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200 uppercase tracking-wider">
               Clínico
             </span>
           )}
         </div>
-        <span className="text-[10px] text-[#86868b] font-medium tracking-tight">
-          {new Date(lead.createdAt).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
-        </span>
+
+        {/* Menu Rápido "Mover de Fase" (1 Clique) */}
+        <div className="relative" ref={moveMenuRef} onMouseDown={(e) => e.stopPropagation()}>
+          <button
+            type="button"
+            onClick={() => setIsMoveOpen(!isMoveOpen)}
+            className="text-xs font-semibold text-slate-700 hover:text-[#310f0e] bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg px-2 py-1 flex items-center gap-1 transition-all"
+            title="Mover lead para outra coluna sem precisar arrastar"
+          >
+            <span>Mover</span>
+            <span className="text-[10px]">▾</span>
+          </button>
+
+          {isMoveOpen && (
+            <div className="absolute right-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 text-left animate-in fade-in zoom-in-95 duration-150">
+              <div className="px-3 py-1 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+                Mover para etapa:
+              </div>
+              <div className="max-h-60 overflow-y-auto crm-scrollbar">
+                {columnsList.map((col) => {
+                  const isCurrent = (lead.status || 'triagem') === col.id;
+                  return (
+                    <button
+                      key={col.id}
+                      type="button"
+                      disabled={isCurrent}
+                      onClick={() => {
+                        setIsMoveOpen(false);
+                        if (onMoveToColumn) {
+                          onMoveToColumn(lead.id, col.id);
+                        }
+                      }}
+                      className={`w-full text-left px-3 py-2 text-xs font-medium transition-colors flex items-center justify-between ${
+                        isCurrent 
+                          ? 'bg-slate-50 text-slate-400 cursor-default' 
+                          : 'text-slate-800 hover:bg-[#310f0e]/5 hover:text-[#310f0e] cursor-pointer'
+                      }`}
+                    >
+                      <span className="truncate">{col.title}</span>
+                      {isCurrent && <span className="text-[10px] text-slate-400 font-bold">Atual</span>}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Main Info */}
+      {/* Dados Principais do Paciente (Tipografia ampliada e legível) */}
       <div>
-        <h3 className="font-semibold text-[#1d1d1f] text-base">{lead.name}</h3>
-        <p className="text-xs text-[#86868b] mt-0.5">{lead.phone}</p>
+        <h3 className="font-semibold text-[#1d1d1f] text-[15px] sm:text-base leading-snug">
+          {lead.name}
+        </h3>
+        <div className="flex items-center justify-between mt-0.5">
+          <p className="text-[13px] text-slate-600 font-medium">
+            {lead.phone}
+          </p>
+          <span className="text-xs text-slate-500 font-normal">
+            {new Date(lead.createdAt).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+          </span>
+        </div>
       </div>
 
-      {/* Procedure & Timeframe */}
-      <div className="flex flex-col gap-1 mt-1">
-        <div className="flex items-center gap-2 text-xs text-[#1d1d1f]">
-          <svg className="w-3.5 h-3.5 text-black/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      {/* Procedimento de Interesse e Previsão */}
+      <div className="flex flex-col gap-1.5 bg-[#fbfbfd] p-2.5 rounded-xl border border-slate-100">
+        <div className="flex items-center gap-2 text-[14px] text-[#1d1d1f]">
+          <svg className="w-4 h-4 text-[#310f0e] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
           </svg>
-          <span className="font-medium">{lead.procedure}</span>
+          <span className="font-semibold tracking-tight truncate">{lead.procedure}</span>
         </div>
-        <div className="flex items-center gap-2 text-xs text-[#86868b]">
-          <svg className="w-3.5 h-3.5 text-black/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="flex items-center gap-2 text-[13px] text-slate-600">
+          <svg className="w-4 h-4 text-slate-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <span>{lead.timeframe}</span>
         </div>
       </div>
 
-      {/* Consultation Category & Financial Badges */}
-      <div className="bg-[#f8fafc] rounded-xl p-2.5 border border-slate-100 flex flex-col gap-2">
-        <div className="flex items-center justify-between">
-          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-            <span>🏷️</span> Origem & Valor
-          </span>
-          {isPendingCategory && <span className="text-[9px] text-slate-400">Salvando...</span>}
-        </div>
-
-        {/* Category selector pills */}
-        <div className="grid grid-cols-3 gap-1">
-          <button
-            type="button"
-            onClick={() => handleCategoryChange('internet')}
-            className={`text-[10px] py-1 px-1.5 rounded-lg font-semibold transition-all text-center truncate ${
-              category === 'internet'
-                ? 'bg-slate-900 text-white shadow-xs'
-                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
-            }`}
-            title="Internet (Meta Ads / Orgânico) - R$ 350 total (50% Pix: R$ 175)"
-          >
-            🌐 Internet
-          </button>
-          <button
-            type="button"
-            onClick={() => handleCategoryChange('indicacao')}
-            className={`text-[10px] py-1 px-1.5 rounded-lg font-semibold transition-all text-center truncate ${
-              category === 'indicacao'
-                ? 'bg-slate-900 text-white shadow-xs'
-                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
-            }`}
-            title="Indicação de Pacientes - R$ 350 total (50% Pix: R$ 175)"
-          >
-            👥 Indicação
-          </button>
-          <button
-            type="button"
-            onClick={() => handleCategoryChange('indicacao_medica')}
-            className={`text-[10px] py-1 px-1.5 rounded-lg font-semibold transition-all text-center truncate ${
-              category === 'indicacao_medica'
-                ? 'bg-amber-600 text-white shadow-xs'
-                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
-            }`}
-            title="Indicação Médica ou Linhagem VIP (R$ 850 total | 50% Pix: R$ 425)"
-          >
-            🩺 Médica/VIP
-          </button>
-        </div>
-
-        {/* Financial Badge depending on Status */}
-        {lead.status === 'consulta' && (
-          <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-1.5 text-[10px] flex items-center justify-between text-emerald-800 font-medium">
-            <span>🟢 Sinal 50% Pix: <strong>R$ {category === 'indicacao_medica' ? '425' : '175'}</strong></span>
-            <span className="text-emerald-700">Saldo: R$ {category === 'indicacao_medica' ? '425' : '175'}</span>
-          </div>
-        )}
-
-        {lead.status === 'consulta_realizada' && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-1.5 text-[10px] flex items-center justify-between text-blue-800 font-medium">
-            <span>✅ Consulta: <strong>R$ {category === 'indicacao_medica' ? '850' : '350'}</strong></span>
-            <span className="text-blue-700">Crédito: 100%</span>
-          </div>
-        )}
-
-        {/* Script Dr. Mário Copy Button */}
-        <button
-          type="button"
-          onClick={handleCopyDrMarioScript}
-          className="flex items-center justify-center gap-1.5 w-full py-1.5 px-2 bg-white hover:bg-slate-50 text-slate-800 rounded-lg border border-slate-200 text-[10px] font-semibold transition-all hover:border-slate-300"
-          title="Copiar texto formal com dedicação de tempo, privacidade e crédito cirúrgico"
-        >
-          <span>{copiedScript ? '✓' : '📋'}</span>
-          <span>{copiedScript ? 'Script Dr. Mário Copiado!' : 'Copiar Texto Dr. Mário (50% Pix)'}</span>
-        </button>
-      </div>
-
-      {/* Follow Up Section */}
-      <div className="bg-slate-50 rounded-lg p-2 border border-slate-100">
+      {/* Alerta de Follow-Up Rápido (Compacto e Escaneável) */}
+      <div 
+        className="bg-slate-50 rounded-xl p-2.5 border border-slate-100 cursor-pointer hover:bg-slate-100/70 transition-colors"
+        onClick={() => setIsEditingFup(!isEditingFup)}
+        onMouseDown={(e) => e.stopPropagation()}
+      >
         {!isEditingFup ? (
-          <div className="flex justify-between items-center cursor-pointer" onClick={() => setIsEditingFup(true)}>
-            <div className="flex items-center gap-1.5 text-xs">
+          <div className="flex justify-between items-center text-xs">
+            <div className="flex items-center gap-1.5 font-medium">
               <span className="text-sm">⏰</span>
               {lead.followupDate ? (
-                <span className={`font-medium ${fupStatus === 'late' ? 'text-red-600' : fupStatus === 'today' ? 'text-orange-600' : 'text-slate-600'}`}>
-                  Retorno: {new Date(lead.followupDate).toLocaleDateString('pt-BR', {timeZone: 'UTC'})}
+                <span className={fupStatus === 'late' ? 'text-red-700 font-bold' : fupStatus === 'today' ? 'text-amber-800 font-bold' : 'text-slate-700'}>
+                  {fupStatus === 'late' && '⚠️ Atrasado: '}
+                  {fupStatus === 'today' && '🔔 Hoje: '}
+                  Retorno em {new Date(lead.followupDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}
                 </span>
               ) : (
-                <span className="text-slate-400 font-medium hover:text-slate-600 transition-colors">Agendar retorno...</span>
+                <span className="text-slate-500 hover:text-slate-800 font-medium">+ Agendar data de retorno</span>
               )}
             </div>
             {lead.followupNote && (
-              <span className="text-[10px] text-slate-500 truncate max-w-[120px]">- {lead.followupNote}</span>
+              <span className="text-xs text-slate-500 truncate max-w-[120px] font-normal" title={lead.followupNote}>
+                {lead.followupNote}
+              </span>
             )}
           </div>
         ) : (
-          <div className="flex flex-col gap-2 cursor-auto">
+          <div className="flex flex-col gap-2 cursor-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between text-xs font-semibold text-slate-700">
+              <span>Definir Retorno</span>
+              <button 
+                type="button" 
+                onClick={() => setIsEditingFup(false)}
+                className="text-slate-400 hover:text-slate-600"
+              >
+                ✕
+              </button>
+            </div>
             <input 
               type="date" 
               value={fupDate}
               onChange={(e) => setFupDate(e.target.value)}
-              className="text-xs p-1 border rounded w-full bg-white"
+              className="text-xs p-1.5 border border-slate-200 rounded-lg w-full bg-white text-slate-800"
             />
             <input 
               type="text" 
-              placeholder="Motivo (Ex: Confirmar exames)" 
+              placeholder="Motivo (Ex: Confirmar exames / Enviar Pix)" 
               value={fupNote}
               onChange={(e) => setFupNote(e.target.value)}
-              className="text-xs p-1 border rounded w-full bg-white"
+              className="text-xs p-1.5 border border-slate-200 rounded-lg w-full bg-white text-slate-800"
             />
-            <div className="flex gap-2 justify-end">
-              <button onClick={() => setIsEditingFup(false)} className="text-[10px] text-slate-500 hover:text-slate-800">Cancelar</button>
-              <button onClick={handleSaveFup} disabled={isPendingFup} className="text-[10px] bg-black text-white px-2 py-1 rounded font-medium disabled:opacity-50">
+            <div className="flex gap-2 justify-end pt-1">
+              <button 
+                type="button" 
+                onClick={() => setIsEditingFup(false)} 
+                className="text-xs text-slate-500 hover:text-slate-800 px-2 py-1"
+              >
+                Cancelar
+              </button>
+              <button 
+                type="button" 
+                onClick={handleSaveFup} 
+                disabled={isPendingFup} 
+                className="text-xs bg-[#310f0e] text-white px-3 py-1 rounded-lg font-medium disabled:opacity-50"
+              >
                 {isPendingFup ? 'Salvando...' : 'Salvar'}
               </button>
             </div>
@@ -303,110 +347,203 @@ export default function LeadCard({ lead }: LeadCardProps) {
         )}
       </div>
 
-      {/* Next Action & WhatsApp */}
-      <div className="mt-1 pt-2 border-t border-black/5 flex flex-col gap-2">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <span className="text-[9px] uppercase tracking-wider text-black/50 font-bold flex items-center gap-1">
-              💬 Script Whats / Ação
-            </span>
-            <button 
-              onClick={handleGenerateAi} 
-              disabled={isPending}
-              className="hover:bg-black/5 p-1 rounded transition-colors disabled:opacity-50 cursor-pointer text-xs"
-              title="Gerar/Atualizar sugestão com IA"
-            >
-              ✨
-            </button>
-            <button 
-              onClick={() => {
-                setActionDraft(localNextAction);
-                setIsEditingAction(!isEditingAction);
-              }}
-              className="hover:bg-black/5 p-1 rounded transition-colors text-xs text-slate-500 hover:text-black cursor-pointer"
-              title="Editar mensagem do WhatsApp"
-            >
-              ✏️
-            </button>
-          </div>
-          
-          <div className="flex items-center gap-1.5">
-            {localNextAction && localNextAction !== '-' && (
+      {/* Botões de Ação Imediata (WhatsApp + Toggle de Detalhes) */}
+      <div className="flex items-center gap-2 pt-1" onMouseDown={(e) => e.stopPropagation()}>
+        {/* Botão Principal: WhatsApp Direto */}
+        <a 
+          href={whatsLink} 
+          target="_blank" 
+          rel="noreferrer"
+          className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 px-3 rounded-xl text-xs sm:text-[13px] font-semibold flex items-center justify-center gap-2 shadow-xs transition-all hover:shadow cursor-pointer"
+          title="Abrir WhatsApp Web com mensagem pronta"
+        >
+          <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+          </svg>
+          <span>WhatsApp</span>
+        </a>
+
+        {/* Botão de Revelação de Detalhes (Scripts / Financeiro) */}
+        <button
+          type="button"
+          onClick={() => setIsDetailsExpanded(!isDetailsExpanded)}
+          className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1 ${
+            isDetailsExpanded 
+              ? 'bg-[#310f0e] text-white border-[#310f0e]' 
+              : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
+          }`}
+          title="Ver ou ocultar detalhes financeiros e scripts de atendimento"
+        >
+          <span>{isDetailsExpanded ? 'Recolher' : 'Scripts & Valores'}</span>
+          <span className="text-[10px]">{isDetailsExpanded ? '▴' : '▾'}</span>
+        </button>
+      </div>
+
+      {/* ÁREA EXPANSÍVEL: FINANCEIRO, REGRAS DE 50% PIX E SCRIPT IA */}
+      {isDetailsExpanded && (
+        <div 
+          className="flex flex-col gap-3 pt-2 border-t border-slate-100 animate-in fade-in duration-200"
+          onMouseDown={(e) => e.stopPropagation()}
+        >
+          {/* Seletor de Categoria e Origem de Consulta */}
+          <div className="bg-[#f8fafc] rounded-xl p-3 border border-slate-200/80 flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                <span>🏷️</span> Origem & Matriz de Valor
+              </span>
+              {isPendingCategory && <span className="text-[11px] text-slate-400">Salvando...</span>}
+            </div>
+
+            <div className="grid grid-cols-3 gap-1.5">
               <button
                 type="button"
-                onClick={handleCopyAction}
-                className="text-[10px] text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-1.5 py-0.5 rounded transition-all font-medium"
-                title="Copiar texto da mensagem"
+                onClick={() => handleCategoryChange('internet')}
+                className={`text-xs py-1.5 px-2 rounded-lg font-semibold transition-all text-center truncate ${
+                  category === 'internet'
+                    ? 'bg-slate-900 text-white shadow-xs'
+                    : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+                }`}
+                title="Internet (Meta Ads / Orgânico) - R$ 350 total (50% Pix: R$ 175)"
               >
-                {copiedAction ? '✓ Copiado' : '📋 Copiar'}
+                🌐 Internet (R$ 350)
               </button>
-            )}
-            <a 
-              href={whatsLink} 
-              target="_blank" 
-              rel="noreferrer"
-              className="w-7 h-7 rounded-full bg-green-50 flex items-center justify-center hover:bg-green-100 transition-colors shadow-xs"
-              title="Abrir no WhatsApp com a mensagem pronta"
-            >
-              <svg className="w-3.5 h-3.5 text-green-600" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-              </svg>
-            </a>
-          </div>
-        </div>
-
-        {isEditingAction ? (
-          <div className="flex flex-col gap-1.5 bg-slate-50 p-2 rounded-xl border border-slate-200">
-            <textarea
-              rows={4}
-              value={actionDraft}
-              onChange={(e) => setActionDraft(e.target.value)}
-              className="text-xs p-2 border border-slate-200 rounded-lg w-full bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-black"
-              placeholder="Digite ou cole o script de WhatsApp para este paciente..."
-            />
-            <div className="flex gap-2 justify-end">
-              <button 
-                type="button" 
-                onClick={() => setIsEditingAction(false)} 
-                className="text-[11px] text-slate-500 hover:text-slate-800"
+              <button
+                type="button"
+                onClick={() => handleCategoryChange('indicacao')}
+                className={`text-xs py-1.5 px-2 rounded-lg font-semibold transition-all text-center truncate ${
+                  category === 'indicacao'
+                    ? 'bg-slate-900 text-white shadow-xs'
+                    : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+                }`}
+                title="Indicação de Pacientes - R$ 350 total (50% Pix: R$ 175)"
               >
-                Cancelar
+                👥 Indicação (R$ 350)
               </button>
-              <button 
-                type="button" 
-                onClick={handleSaveAction} 
-                disabled={isPendingAction} 
-                className="text-[11px] bg-slate-900 text-white px-2.5 py-1 rounded-md font-medium disabled:opacity-50"
+              <button
+                type="button"
+                onClick={() => handleCategoryChange('indicacao_medica')}
+                className={`text-xs py-1.5 px-2 rounded-lg font-semibold transition-all text-center truncate ${
+                  category === 'indicacao_medica'
+                    ? 'bg-[#310f0e] text-white shadow-xs'
+                    : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+                }`}
+                title="Indicação Médica ou Linhagem VIP (R$ 850 total | 50% Pix: R$ 425)"
               >
-                {isPendingAction ? 'Salvando...' : 'Salvar Script'}
+                🩺 Médica/VIP (R$ 850)
               </button>
             </div>
+
+            {/* Badges de Confirmação Financeira por Etapa */}
+            {lead.status === 'consulta' && (
+              <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-2 text-xs flex items-center justify-between text-emerald-900 font-semibold">
+                <span>🟢 Sinal 50% Pix: <strong>R$ {category === 'indicacao_medica' ? '425,00' : '175,00'}</strong></span>
+                <span className="text-emerald-700 font-normal">Saldo na recepção: R$ {category === 'indicacao_medica' ? '425,00' : '175,00'}</span>
+              </div>
+            )}
+
+            {lead.status === 'consulta_realizada' && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 text-xs flex items-center justify-between text-blue-900 font-semibold">
+                <span>✅ Consulta Quitada: <strong>R$ {category === 'indicacao_medica' ? '850,00' : '350,00'}</strong></span>
+                <span className="text-blue-700 font-normal">Crédito 100% no plano cirúrgico</span>
+              </div>
+            )}
+
+            {/* Script Formal do Dr. Mário (Regra 50% Pix) */}
+            <button
+              type="button"
+              onClick={handleCopyDrMarioScript}
+              className="flex items-center justify-center gap-2 w-full py-2 px-3 bg-white hover:bg-slate-50 text-slate-800 rounded-lg border border-slate-300 text-xs font-semibold transition-all hover:border-slate-400 cursor-pointer shadow-2xs"
+              title="Copiar texto formal com dedicação de tempo, privacidade e crédito cirúrgico"
+            >
+              <span>{copiedScript ? '✓' : '📋'}</span>
+              <span>{copiedScript ? 'Script de 50% Pix Copiado!' : 'Copiar Texto Dr. Mário (Regra 50% Pix)'}</span>
+            </button>
           </div>
-        ) : (
-          <div className="bg-slate-50/80 rounded-xl p-2 border border-slate-100 text-xs">
-            {isPending ? (
-              <span className="text-slate-400 italic">Analisando com IA...</span>
-            ) : localNextAction ? (
-              <div>
-                <p className={`text-slate-700 font-normal leading-relaxed whitespace-pre-line ${!isExpandedAction && localNextAction.length > 120 ? 'line-clamp-2' : ''}`}>
-                  {localNextAction}
-                </p>
-                {localNextAction.length > 120 && (
+
+          {/* Script Concierge & Mensagem WhatsApp */}
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs uppercase tracking-wider text-slate-700 font-bold flex items-center gap-1">
+                  💬 Mensagem de WhatsApp
+                </span>
+                <button 
+                  type="button"
+                  onClick={handleGenerateAi} 
+                  disabled={isPending}
+                  className="hover:bg-slate-100 p-1 rounded-md text-xs text-purple-700 font-semibold transition-colors disabled:opacity-50 cursor-pointer"
+                  title="Gerar/Atualizar sugestão com IA Concierge"
+                >
+                  ✨ IA
+                </button>
+                <button 
+                  type="button"
+                  onClick={() => {
+                    setActionDraft(localNextAction);
+                    setIsEditingAction(!isEditingAction);
+                  }}
+                  className="hover:bg-slate-100 p-1 rounded-md text-xs text-slate-600 hover:text-black transition-colors cursor-pointer"
+                  title="Editar texto da mensagem"
+                >
+                  ✏️ Editar
+                </button>
+              </div>
+
+              {localNextAction && localNextAction !== '-' && (
+                <button
+                  type="button"
+                  onClick={handleCopyAction}
+                  className="text-xs text-slate-700 hover:text-black bg-slate-100 hover:bg-slate-200 px-2 py-1 rounded-md transition-all font-semibold flex items-center gap-1"
+                >
+                  <span>{copiedAction ? '✓' : '📋'}</span>
+                  <span>{copiedAction ? 'Copiado' : 'Copiar'}</span>
+                </button>
+              )}
+            </div>
+
+            {isEditingAction ? (
+              <div className="flex flex-col gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                <textarea
+                  rows={4}
+                  value={actionDraft}
+                  onChange={(e) => setActionDraft(e.target.value)}
+                  className="text-xs sm:text-[13px] p-2.5 border border-slate-300 rounded-lg w-full bg-white text-slate-900 focus:outline-none focus:ring-1 focus:ring-[#310f0e] leading-relaxed"
+                  placeholder="Digite ou ajuste a mensagem de WhatsApp..."
+                />
+                <div className="flex gap-2 justify-end">
                   <button 
                     type="button" 
-                    onClick={() => setIsExpandedAction(!isExpandedAction)}
-                    className="text-[10px] text-blue-600 hover:underline mt-1 font-medium block"
+                    onClick={() => setIsEditingAction(false)} 
+                    className="text-xs text-slate-600 hover:text-slate-900 px-2 py-1"
                   >
-                    {isExpandedAction ? '▲ Ver menos' : '▼ Ver mensagem completa...'}
+                    Cancelar
                   </button>
-                )}
+                  <button 
+                    type="button" 
+                    onClick={handleSaveAction} 
+                    disabled={isPendingAction} 
+                    className="text-xs bg-[#310f0e] text-white px-3 py-1 rounded-lg font-semibold disabled:opacity-50"
+                  >
+                    {isPendingAction ? 'Salvando...' : 'Salvar Script'}
+                  </button>
+                </div>
               </div>
             ) : (
-              <span className="text-slate-400 italic">Sem script definido. Clique em ✏️ para adicionar.</span>
+              <div className="bg-slate-50 rounded-xl p-3 border border-slate-200/70 text-xs sm:text-[13px] leading-relaxed">
+                {isPending ? (
+                  <span className="text-slate-400 italic">Consultando Inteligência Concierge...</span>
+                ) : localNextAction ? (
+                  <p className="text-slate-800 font-normal whitespace-pre-line">
+                    {localNextAction}
+                  </p>
+                ) : (
+                  <span className="text-slate-400 italic">Nenhum script configurado. Clique em ✏️ para digitar ou ✨ para IA.</span>
+                )}
+              </div>
             )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,19 +1,27 @@
 'use client';
 
-import React, { useState, startTransition } from 'react';
+import React, { useState, startTransition, useRef, useMemo } from 'react';
 import LeadCard, { Lead } from './LeadCard';
 import { updateLeadStatus } from '@/app/actions/crm';
 
 const COLUMNS = [
-  { id: 'triagem', title: 'Triagem / Descoberta' },
-  { id: 'qualificacao', title: 'Qualificação Concierge' },
-  { id: 'consulta', title: '📅 Agendado (Sinal 50% Pago)' },
-  { id: 'consulta_realizada', title: '✅ Consulta Realizada (Presencial)' },
-  { id: 'pos_consulta', title: 'Pós-Consulta (Decisão)' },
-  { id: 'deposito', title: '💎 Cirurgia Fechada (Depósito)' },
-  { id: 'pre_op', title: 'Pré-operatório' },
-  { id: 'pos_op', title: 'Pós-operatório / Recorrência' },
-  { id: 'arquivado', title: '🥶 Arquivado / Não Converteu' },
+  { id: 'triagem', title: 'Triagem / Descoberta', segment: 'ENTRADA' },
+  { id: 'qualificacao', title: 'Qualificação Concierge', segment: 'ENTRADA' },
+  { id: 'consulta', title: '📅 Agendado (Sinal 50% Pago)', segment: 'CONSULTAS' },
+  { id: 'consulta_realizada', title: '✅ Consulta Realizada (Presencial)', segment: 'CONSULTAS' },
+  { id: 'pos_consulta', title: 'Pós-Consulta (Decisão)', segment: 'CONSULTAS' },
+  { id: 'deposito', title: '💎 Cirurgia Fechada (Depósito)', segment: 'CIRURGIAS' },
+  { id: 'pre_op', title: 'Pré-operatório', segment: 'CIRURGIAS' },
+  { id: 'pos_op', title: 'Pós-operatório / Recorrência', segment: 'CIRURGIAS' },
+  { id: 'arquivado', title: '🥶 Arquivado / Não Converteu', segment: 'ARQUIVADOS' },
+];
+
+const SEGMENTS = [
+  { id: 'ALL', label: 'Todas as Fases', badge: '9' },
+  { id: 'ENTRADA', label: '🎯 Entrada & Triagem', badge: '2' },
+  { id: 'CONSULTAS', label: '📅 Consultas & Decisão', badge: '3' },
+  { id: 'CIRURGIAS', label: '💎 Cirurgias & Pós', badge: '3' },
+  { id: 'ARQUIVADOS', label: '🥶 Arquivados', badge: '1' },
 ];
 
 export interface DbLead {
@@ -35,8 +43,22 @@ export interface DbLead {
 }
 
 export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLead[] }) {
-  // Converte a lista plana de leads do BD para o formato de colunas do Kanban
-  const groupedLeads = React.useMemo(() => {
+  // Referência do container do Kanban para scroll suave
+  const boardRef = useRef<HTMLDivElement>(null);
+  const colRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  // Estados de Filtro e Busca
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeSegment, setActiveSegment] = useState<string>('ALL');
+  const [thermalFilter, setThermalFilter] = useState<'ALL' | 'HOT' | 'TODAY' | 'LATE'>('ALL');
+
+  // Estado de Drag & Drop
+  const [draggedLead, setDraggedLead] = useState<{ lead: Lead; fromColumnId: string } | null>(null);
+  const [dragOverColumnId, setDragOverColumnId] = useState<string | null>(null);
+  const [isArchiveOpen, setIsArchiveOpen] = useState(false);
+
+  // Converte e agrupa os leads do banco de dados
+  const groupedLeads = useMemo(() => {
     const columns: Record<string, Lead[]> = {
       'triagem': [], 'qualificacao': [], 'consulta': [], 'consulta_realizada': [], 'pos_consulta': [], 'deposito': [], 'pre_op': [], 'pos_op': [], 'arquivado': []
     };
@@ -50,15 +72,12 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
         }
       } catch { /* ignora */ }
 
-      // --- MOTOR DE LEAD SCORING (Cálculo Térmico) ---
-      let calculatedScore = lead.score || 50; // Pontuação base
+      // --- MOTOR DE LEAD SCORING ---
+      let calculatedScore = lead.score || 50;
       let isClinical = false;
       
-      // 1. Procedimento (Demonstra interesse ativo): +15 ou -30
       if (lead.procedure && lead.procedure.trim() !== '') {
         const procLower = lead.procedure.toLowerCase();
-        
-        // Identifica se é um procedimento não-cirúrgico / baixo ticket
         if (
           procLower.includes('botox') || 
           procLower.includes('toxina') || 
@@ -72,13 +91,12 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
           procLower.includes('consulta')
         ) {
           isClinical = true;
-          calculatedScore -= 30; // Penaliza pesadamente para sempre cair como COLD
+          calculatedScore -= 30;
         } else {
-          calculatedScore += 15; // Procedimentos cirúrgicos ganham pontos
+          calculatedScore += 15;
         }
       }
       
-      // 2. Urgência / Timeframe:
       if (lead.timeframe) {
         const timeLower = lead.timeframe.toLowerCase();
         if (timeLower.includes('< 1 mês') || timeLower.includes('menos') || timeLower.includes('imediato') || timeLower.includes('urgente')) {
@@ -88,7 +106,6 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
         }
       }
       
-      // 3. CEP de Alta Renda (Bairros focais de SP): +20
       if (lead.city) {
         const cityLower = lead.city.toLowerCase();
         if (cityLower.includes('alphaville') || cityLower.includes('itaim') || cityLower.includes('jardins') || cityLower.includes('moema') || cityLower.includes('vila mariana') || cityLower.includes('pinheiros')) {
@@ -96,11 +113,9 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
         }
       }
       
-      // 4. Orçamento Alinhado & Status Avançado:
       if (lead.status && ['consulta', 'consulta_realizada', 'pos_consulta', 'deposito', 'pre_op', 'pos_op'].includes(lead.status)) {
-        calculatedScore += 40; // Ganha pontos pesados por já estar avançado no funil
+        calculatedScore += 40;
       }
-      // ------------------------------------------------
 
       const status = lead.status || 'triagem';
       const mappedLead: Lead = {
@@ -161,23 +176,83 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
   }, [initialLeads]);
 
   const [columnsData, setColumnsData] = useState<Record<string, Lead[]>>(groupedLeads);
-  
-  // Atualiza as colunas se os leads do banco mudarem (ex: refresh da página)
+
   React.useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setColumnsData(groupedLeads);
   }, [groupedLeads]);
 
-  const [draggedLead, setDraggedLead] = useState<{ lead: Lead, fromColumnId: string } | null>(null);
-  const [isArchiveOpen, setIsArchiveOpen] = useState(false);
+  // Controles de Scroll Horizontal Suave
+  const scrollBoard = (offset: number) => {
+    if (boardRef.current) {
+      boardRef.current.scrollBy({ left: offset, behavior: 'smooth' });
+    }
+  };
 
+  const scrollToColumn = (colId: string) => {
+    const el = colRefs.current[colId];
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  };
+
+  // Auto-scroll durante Drag se aproximar das bordas do board
+  const handleBoardDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    if (!boardRef.current) return;
+    const rect = boardRef.current.getBoundingClientRect();
+    const threshold = 140;
+    if (e.clientX - rect.left < threshold) {
+      boardRef.current.scrollLeft -= 16;
+    } else if (rect.right - e.clientX < threshold) {
+      boardRef.current.scrollLeft += 16;
+    }
+  };
+
+  // Função Unificada para Mover Lead (Usada tanto por Drag & Drop quanto pelo Menu Rápido de 1 Clique)
+  const handleMoveLead = (leadId: string, toColumnId: string) => {
+    setColumnsData(prev => {
+      let targetLead: Lead | null = null;
+      let fromColId: string | null = null;
+
+      // Localiza o lead e a coluna de origem
+      for (const [colId, list] of Object.entries(prev)) {
+        const found = list.find(l => l.id === leadId);
+        if (found) {
+          targetLead = { ...found, status: toColumnId };
+          fromColId = colId;
+          break;
+        }
+      }
+
+      if (!targetLead || !fromColId || fromColId === toColumnId) return prev;
+
+      const sourceCol = prev[fromColId].filter(l => l.id !== leadId);
+      const targetCol = [...(prev[toColumnId] || []), targetLead];
+
+      // Dispara persistência assíncrona no Neon e telemetria CAPI
+      startTransition(() => {
+        updateLeadStatus(targetLead.id, toColumnId, targetLead);
+      });
+
+      return {
+        ...prev,
+        [fromColId]: sourceCol,
+        [toColumnId]: targetCol
+      };
+    });
+  };
+
+  // Drag Handlers
   const handleDragStart = (e: React.DragEvent, lead: Lead, fromColumnId: string) => {
     setDraggedLead({ lead, fromColumnId });
-    // Estética durante o drag
     e.dataTransfer.effectAllowed = 'move';
+    try {
+      e.dataTransfer.setData('text/plain', JSON.stringify({ leadId: lead.id, fromColumnId }));
+    } catch { /* fallback */ }
+
     setTimeout(() => {
       if (e.target instanceof HTMLElement) {
-        e.target.style.opacity = '0.5';
+        e.target.style.opacity = '0.4';
       }
     }, 0);
   };
@@ -187,112 +262,372 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
       e.target.style.opacity = '1';
     }
     setDraggedLead(null);
+    setDragOverColumnId(null);
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOverColumn = (e: React.DragEvent, colId: string) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
+    if (dragOverColumnId !== colId) {
+      setDragOverColumnId(colId);
+    }
   };
 
   const handleDrop = (e: React.DragEvent, toColumnId: string) => {
     e.preventDefault();
-    if (!draggedLead) return;
+    setDragOverColumnId(null);
 
-    const { lead, fromColumnId } = draggedLead;
+    let leadIdToMove = draggedLead?.lead.id;
+    try {
+      const dataStr = e.dataTransfer.getData('text/plain');
+      if (dataStr) {
+        const parsed = JSON.parse(dataStr);
+        if (parsed.leadId) leadIdToMove = parsed.leadId;
+      }
+    } catch { /* fallback */ }
 
-    // Se soltou na mesma coluna, não faz nada
-    if (fromColumnId === toColumnId) return;
-
-    setColumnsData(prev => {
-      const sourceCol = prev[fromColumnId].filter(l => l.id !== lead.id);
-      const targetCol = [...(prev[toColumnId] || []), lead];
-
-      // Dispara a chamada assíncrona pro Back-end de forma transparente na UI
-      startTransition(() => {
-        updateLeadStatus(lead.id, toColumnId, lead);
-      });
-
-      return {
-        ...prev,
-        [fromColumnId]: sourceCol,
-        [toColumnId]: targetCol
-      };
-    });
+    if (leadIdToMove) {
+      handleMoveLead(leadIdToMove, toColumnId);
+    }
+    setDraggedLead(null);
   };
 
+  // Filtragem Dinâmica dos Leads nas Colunas
+  const filteredColumnsData = useMemo(() => {
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const query = searchQuery.trim().toLowerCase();
+
+    const result: Record<string, Lead[]> = {};
+
+    Object.entries(columnsData).forEach(([colId, leads]) => {
+      result[colId] = leads.filter(lead => {
+        // Filtro de Texto (Nome, Telefone, Procedimento, Origem)
+        if (query) {
+          const matchName = lead.name.toLowerCase().includes(query);
+          const matchPhone = lead.phone.replace(/\D/g, '').includes(query.replace(/\D/g, ''));
+          const matchProc = lead.procedure.toLowerCase().includes(query);
+          const matchSource = lead.source.toLowerCase().includes(query);
+          if (!matchName && !matchPhone && !matchProc && !matchSource) {
+            return false;
+          }
+        }
+
+        // Filtro Térmico / Follow-up
+        if (thermalFilter === 'HOT') {
+          return lead.scoreLabel === 'HOT';
+        }
+        if (thermalFilter === 'TODAY') {
+          if (!lead.followupDate) return false;
+          const target = new Date(lead.followupDate);
+          target.setHours(0,0,0,0);
+          return target.getTime() === today.getTime();
+        }
+        if (thermalFilter === 'LATE') {
+          if (!lead.followupDate) return false;
+          const target = new Date(lead.followupDate);
+          target.setHours(0,0,0,0);
+          return target < today;
+        }
+
+        return true;
+      });
+    });
+
+    return result;
+  }, [columnsData, searchQuery, thermalFilter]);
+
+  // Colunas Visíveis de acordo com o Segmento de Funil
+  const visibleColumns = useMemo(() => {
+    if (activeSegment === 'ALL') return COLUMNS;
+    return COLUMNS.filter(c => c.segment === activeSegment);
+  }, [activeSegment]);
+
+  // Contagem Total de Leads Ativos visíveis
+  const totalVisibleLeads = useMemo(() => {
+    return Object.values(filteredColumnsData).reduce((acc, curr) => acc + curr.length, 0);
+  }, [filteredColumnsData]);
+
+  const hasActiveFilters = searchQuery !== '' || thermalFilter !== 'ALL' || activeSegment !== 'ALL';
+
   return (
-    <div className="flex gap-4 overflow-x-auto pb-8 pt-4 h-[calc(100vh-140px)] items-stretch snap-x select-none">
-      {COLUMNS.map((col) => {
-        const leads = columnsData[col.id] || [];
-        const isArchivedCol = col.id === 'arquivado';
-        const isCollapsed = isArchivedCol && !isArchiveOpen;
-        
-        return (
-          <div 
-            key={col.id} 
-            onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, col.id)}
-            className={`flex-shrink-0 flex flex-col overflow-hidden bg-white/60 backdrop-blur-md rounded-2xl border border-white/40 shadow-sm snap-center transition-all duration-300 hover:bg-white/80 ${isCollapsed ? 'w-16 cursor-pointer hover:bg-black/5' : 'w-[300px]'}`}
-            onClick={() => { if (isCollapsed) setIsArchiveOpen(true); }}
-            title={isCollapsed ? "Clique para expandir os Arquivados" : ""}
-          >
-            {isCollapsed ? (
-              <div className="flex flex-col items-center justify-start h-full w-full py-4 relative">
-                <span className="text-lg">🥶</span>
-                <span className="bg-black/10 text-black/60 text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full mt-3">
-                  {leads.length}
-                </span>
-                <div className="flex-1 flex items-center justify-center w-full relative mt-10">
-                  <div className="-rotate-90 whitespace-nowrap text-xs font-bold tracking-widest uppercase text-black/30">
-                    Arquivados
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <>
-                {/* Header da Coluna */}
-                <div className="p-4 flex items-center justify-between border-b border-black/5">
-                  <h2 className="font-semibold text-sm text-[#1d1d1f]">{col.title}</h2>
-                  <div className="flex items-center gap-2">
-                    <span className="bg-black/10 text-[#1d1d1f] text-xs font-semibold w-6 h-6 flex items-center justify-center rounded-full">
-                      {leads.length}
-                    </span>
-                    {isArchivedCol && (
-                      <button 
-                        onClick={(e) => { e.stopPropagation(); setIsArchiveOpen(false); }}
-                        className="text-black/40 hover:text-black/80 ml-1 p-1 rounded hover:bg-black/5 transition-colors"
-                        title="Ocultar coluna"
-                      >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                      </button>
-                    )}
-                  </div>
-                </div>
-                
-                {/* Corpo da Coluna (Lista de Cards) */}
-                <div className="flex-1 overflow-y-auto min-h-0 overscroll-contain p-3 space-y-3">
-                  {leads.map(lead => (
-                    <div
-                      key={lead.id}
-                      draggable
-                      onDragStart={(e) => handleDragStart(e, lead, col.id)}
-                      onDragEnd={handleDragEnd}
-                    >
-                      <LeadCard lead={lead} />
-                    </div>
-                  ))}
-                  
-                  {leads.length === 0 && (
-                    <div className="h-24 flex items-center justify-center border-2 border-dashed border-black/10 rounded-xl">
-                      <span className="text-xs text-black/40 font-medium">Solte aqui</span>
-                    </div>
-                  )}
-                </div>
-              </>
+    <div className="flex flex-col gap-3 w-full">
+      {/* BARRA SUPERIOR DE NAVEGAÇÃO, BUSCA E FILTROS */}
+      <div className="bg-white/90 backdrop-blur-md rounded-2xl border border-black/5 p-3 sm:p-4 shadow-xs flex flex-col gap-3">
+        {/* Linha 1: Abas de Segmentação de Funil + Botões de Scroll Horizontal */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-black/5 pb-3">
+          {/* Abas de Foco de Funil */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 crm-scrollbar">
+            {SEGMENTS.map(seg => {
+              const isActive = activeSegment === seg.id;
+              return (
+                <button
+                  key={seg.id}
+                  type="button"
+                  onClick={() => setActiveSegment(seg.id)}
+                  className={`px-3 py-1.5 rounded-xl text-xs sm:text-[13px] font-semibold transition-all shrink-0 flex items-center gap-1.5 cursor-pointer ${
+                    isActive
+                      ? 'bg-[#310f0e] text-white shadow-xs'
+                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  }`}
+                >
+                  <span>{seg.label}</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${isActive ? 'bg-white/20 text-white' : 'bg-black/5 text-slate-500'}`}>
+                    {seg.badge}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Controles de Navegação Horizontal Lateral (← e →) */}
+          <div className="flex items-center gap-2 shrink-0 self-end md:self-auto">
+            <span className="text-xs font-semibold text-slate-600 hidden sm:inline">Rolar colunas:</span>
+            <button
+              type="button"
+              onClick={() => scrollBoard(-360)}
+              className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 transition-all cursor-pointer shadow-2xs border border-slate-200 hover:border-slate-300 flex items-center gap-1 text-xs font-semibold"
+              title="Rolar para as colunas anteriores à esquerda"
+            >
+              <span>←</span>
+              <span className="hidden sm:inline">Anterior</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollBoard(360)}
+              className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 transition-all cursor-pointer shadow-2xs border border-slate-200 hover:border-slate-300 flex items-center gap-1 text-xs font-semibold"
+              title="Rolar para as próximas colunas à direita"
+            >
+              <span className="hidden sm:inline">Próxima</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Linha 2: Campo de Busca Instantânea + Filtros Térmicos */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+          {/* Campo de Pesquisa em Tempo Real */}
+          <div className="relative flex-1 max-w-md">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Buscar por paciente, telefone, cirurgia..."
+              className="w-full pl-9 pr-8 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-[13px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#310f0e]/20 focus:border-[#310f0e] transition-all"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer"
+              >
+                ✕
+              </button>
             )}
           </div>
-        );
-      })}
+
+          {/* Filtros de Temperatura e Retorno */}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mr-1 hidden sm:inline">Filtro:</span>
+            
+            <button
+              type="button"
+              onClick={() => setThermalFilter('ALL')}
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                thermalFilter === 'ALL'
+                  ? 'bg-slate-900 text-white'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              Todos ({totalVisibleLeads})
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setThermalFilter('HOT')}
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 cursor-pointer ${
+                thermalFilter === 'HOT'
+                  ? 'bg-red-700 text-white shadow-xs'
+                  : 'bg-red-50 text-red-700 hover:bg-red-100 border border-red-200'
+              }`}
+            >
+              <span>🔥</span>
+              <span>Leads HOT</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setThermalFilter('TODAY')}
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 cursor-pointer ${
+                thermalFilter === 'TODAY'
+                  ? 'bg-amber-600 text-white shadow-xs'
+                  : 'bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-200'
+              }`}
+            >
+              <span>🔔</span>
+              <span>Retorno Hoje</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setThermalFilter('LATE')}
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 cursor-pointer ${
+                thermalFilter === 'LATE'
+                  ? 'bg-red-800 text-white shadow-xs'
+                  : 'bg-red-50 text-red-800 hover:bg-red-100 border border-red-300'
+              }`}
+            >
+              <span>⚠️</span>
+              <span>Atrasados</span>
+            </button>
+
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery('');
+                  setThermalFilter('ALL');
+                  setActiveSegment('ALL');
+                }}
+                className="text-xs text-slate-500 hover:text-slate-800 font-semibold px-2 py-1 underline cursor-pointer"
+              >
+                Limpar filtros
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Linha 3: Pílulas de Salto Rápido para Colunas */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pt-1 crm-scrollbar text-xs">
+          <span className="text-slate-500 font-medium shrink-0">Ir para:</span>
+          {visibleColumns.map(col => {
+            const count = (filteredColumnsData[col.id] || []).length;
+            return (
+              <button
+                key={col.id}
+                type="button"
+                onClick={() => scrollToColumn(col.id)}
+                className="px-2 py-1 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 shrink-0 font-medium transition-colors flex items-center gap-1 border border-slate-200 cursor-pointer"
+              >
+                <span className="truncate max-w-[130px]">{col.title}</span>
+                <span className="font-bold text-slate-900 bg-white px-1.5 py-0.2 rounded-full text-[10px]">
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* O KANBAN BOARD CONTAINER (Scroll suave, sem snap-x travando, com auto-scroll no drag) */}
+      <div 
+        ref={boardRef}
+        onDragOver={handleBoardDragOver}
+        className="flex gap-4 overflow-x-auto pb-6 pt-1 h-[calc(100vh-270px)] min-h-[500px] items-stretch crm-scrollbar"
+      >
+        {visibleColumns.map((col) => {
+          const leads = filteredColumnsData[col.id] || [];
+          const isArchivedCol = col.id === 'arquivado';
+          const isCollapsed = isArchivedCol && !isArchiveOpen && activeSegment === 'ALL';
+          const isDragOver = dragOverColumnId === col.id;
+          
+          return (
+            <div 
+              key={col.id} 
+              ref={(el) => { colRefs.current[col.id] = el; }}
+              onDragOver={(e) => handleDragOverColumn(e, col.id)}
+              onDrop={(e) => handleDrop(e, col.id)}
+              className={`flex-shrink-0 flex flex-col h-full bg-white/80 backdrop-blur-md rounded-2xl border transition-all duration-200 ${
+                isDragOver 
+                  ? 'border-[#310f0e] ring-2 ring-[#310f0e]/20 bg-amber-50/40 shadow-md' 
+                  : 'border-black/5 hover:border-black/10 shadow-xs'
+              } ${isCollapsed ? 'w-16 cursor-pointer hover:bg-slate-100' : 'w-[320px]'}`}
+              onClick={() => { if (isCollapsed) setIsArchiveOpen(true); }}
+              title={isCollapsed ? "Clique para expandir os Arquivados" : ""}
+            >
+              {isCollapsed ? (
+                <div className="flex flex-col items-center justify-start h-full w-full py-4 relative">
+                  <span className="text-xl">🥶</span>
+                  <span className="bg-black/10 text-black/70 text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full mt-3">
+                    {leads.length}
+                  </span>
+                  <div className="flex-1 flex items-center justify-center w-full relative mt-10">
+                    <div className="-rotate-90 whitespace-nowrap text-xs font-bold tracking-widest uppercase text-black/40">
+                      Arquivados
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {/* Header da Coluna com Contagem e Botão Ocultar */}
+                  <div className="p-3.5 flex items-center justify-between border-b border-black/5 bg-slate-50/50 rounded-t-2xl shrink-0">
+                    <h2 className="font-semibold text-sm sm:text-[14px] text-[#1d1d1f] tracking-tight truncate pr-2">
+                      {col.title}
+                    </h2>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <span className="bg-[#310f0e]/10 text-[#310f0e] text-xs font-bold px-2 py-0.5 rounded-full">
+                        {leads.length}
+                      </span>
+                      {isArchivedCol && activeSegment === 'ALL' && (
+                        <button 
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); setIsArchiveOpen(false); }}
+                          className="text-black/40 hover:text-black/80 p-1 rounded hover:bg-black/5 transition-colors cursor-pointer"
+                          title="Recolher coluna de arquivados"
+                        >
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Indicador Visual de Drop Ativo */}
+                  {isDragOver && (
+                    <div className="mx-3 my-2 p-2 rounded-xl border-2 border-dashed border-[#310f0e] bg-[#310f0e]/5 text-center text-xs font-bold text-[#310f0e] animate-pulse">
+                      Soltar paciente nesta etapa
+                    </div>
+                  )}
+
+                  {/* CORPO DA COLUNA: Scroll Vertical 100% Fluido com crm-scrollbar */}
+                  <div 
+                    onDragOver={(e) => handleDragOverColumn(e, col.id)}
+                    className="flex-1 overflow-y-auto overscroll-y-auto min-h-0 p-3 space-y-3 crm-scrollbar"
+                  >
+                    {leads.map(lead => (
+                      <div
+                        key={lead.id}
+                        draggable
+                        onDragStart={(e) => handleDragStart(e, lead, col.id)}
+                        onDragEnd={handleDragEnd}
+                      >
+                        <LeadCard 
+                          lead={lead} 
+                          onMoveToColumn={handleMoveLead}
+                          columnsList={COLUMNS}
+                        />
+                      </div>
+                    ))}
+                    
+                    {leads.length === 0 && (
+                      <div className="h-32 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-2xl p-4 text-center">
+                        <span className="text-sm text-slate-400 font-medium">Nenhum paciente</span>
+                        <span className="text-[11px] text-slate-400 mt-0.5">Solte um card aqui</span>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
