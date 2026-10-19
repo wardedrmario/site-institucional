@@ -23,7 +23,7 @@ export async function GET() {
          OR phone LIKE '%997490298%' 
          OR phone LIKE '%999999999%' 
          OR phone LIKE '%111111111%'
-         OR utms LIKE '%teste_sintetico%'
+         OR (utms IS NOT NULL AND utms::text ILIKE '%teste%')
       RETURNING id, name, phone, procedure;
     `;
 

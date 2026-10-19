@@ -59,7 +59,7 @@ Algum desses momentos fica mais confortável para o senhor passar aqui na clíni
              OR phone LIKE '%997490298%' 
              OR phone LIKE '%999999999%' 
              OR phone LIKE '%111111111%'
-             OR utms LIKE '%teste_sintetico%';
+             OR (utms IS NOT NULL AND utms::text ILIKE '%teste%');
         `;
       } catch (e) {
         console.warn('Exclusão de testes:', e);
