@@ -88,6 +88,13 @@ export function LeadFormHomens({ onClose }: { onClose?: () => void }) {
         });
         console.log("🔥 EVENTOS 'Lead' e 'Contato_VIP' MASCULINO EMPURRADOS PARA O DATALAYER COM SUCESSO!", win.dataLayer);
 
+        // Extração de test_event_code para testes ao vivo no Meta Events Manager
+        let testCodeParam = '';
+        if (typeof window !== 'undefined') {
+          const urlParams = new URLSearchParams(window.location.search);
+          testCodeParam = urlParams.get('test_event_code') || urlParams.get('test_code') || '';
+        }
+
         // 🎯 DISPARO DIRETO DO META PIXEL CLIENT-SIDE (DUPLA CONEXÃO COM EVENT_ID PARA DEDUPLICAÇÃO PERFEITA CAPI)
         if (typeof win.fbq === 'function') {
           const sanitizedPayload = {
@@ -97,17 +104,22 @@ export function LeadFormHomens({ onClose }: { onClose?: () => void }) {
             currency: 'BRL',
             value: 0.00
           };
+          const trackOptions: Record<string, string> = { eventID: leadEventId };
+          if (testCodeParam) {
+            trackOptions.test_event_code = testCodeParam;
+          }
+
           // 1. Evento padrão Lead (processado pelo Pixel de CA limpo 9168277426523951)
-          win.fbq('track', 'Lead', sanitizedPayload, { eventID: leadEventId });
+          win.fbq('track', 'Lead', sanitizedPayload, trackOptions);
           // 2. Evento padrão Contact / Entrar em contato (100% nativo no Gerenciador da Meta, sem trava de saúde)
-          win.fbq('track', 'Contact', sanitizedPayload, { eventID: leadEventId });
+          win.fbq('track', 'Contact', sanitizedPayload, trackOptions);
           // 3. Evento customizado Contato_VIP (processado por ambos os pixels sem restrições)
-          win.fbq('trackCustom', 'Contato_VIP', sanitizedPayload, { eventID: leadEventId });
-          console.log("🔥 EVENTOS 'Lead', 'Contact' e 'Contato_VIP' MASCULINO DISPARADOS VIA FBQ CLIENT-SIDE COM SUCESSO!", leadEventId);
+          win.fbq('trackCustom', 'Contato_VIP', sanitizedPayload, trackOptions);
+          console.log("🔥 EVENTOS 'Lead', 'Contact' e 'Contato_VIP' MASCULINO DISPARADOS VIA FBQ CLIENT-SIDE COM SUCESSO!", leadEventId, trackOptions);
         }
       }
 
-      // Extração de test_event_code para testes ao vivo no Meta Events Manager
+      // Extração de test_event_code para testes ao vivo no Meta Events Manager (Server-side)
       let testCodeParam = '';
       if (typeof window !== 'undefined') {
         const urlParams = new URLSearchParams(window.location.search);
