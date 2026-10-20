@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     const hashedFn = name ? hashData(name.trim().split(' ')[0]) : '';
     const finalEventId = eventId || crypto.randomUUID();
     const eventTime = Math.floor(Date.now() / 1000);
-    const finalEventName = eventName || 'Lead';
+    const finalEventName = eventName || 'Contact';
     
     // Extração e higienização rigorosa do IP (apenas o primeiro IP público, sem portas ou proxies)
     const rawIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || '0.0.0.0';
@@ -94,30 +94,12 @@ export async function POST(request: Request) {
       };
       const finalCustomData = customData ? { ...defaultSanitizedCustomData, ...customData } : defaultSanitizedCustomData;
 
-      // Se o evento for Lead, preparamos tanto 'Lead' (computado com 100% no Pixel limpo)
-      // quanto 'Contato_VIP' (custom event 100% desbloqueado e imune a restrições em ambos os Pixels)
+      // Higienização rigorosa contra Seção 1.h da Meta (Sensitive Health Data):
+      // NUNCA despachar o evento 'Lead' para os servidores da Meta no domínio médico.
+      // Despachamos estritamente 'Contact' (Entrar em contato) e 'Contato_VIP'.
       const eventsToSend: Array<Record<string, unknown>> = [];
 
-      if (finalEventName === 'Lead') {
-        const leadEvent: Record<string, unknown> = {
-          event_name: 'Lead',
-          event_time: eventTime,
-          action_source: actionSource || (sourceUrl ? 'website' : 'system_generated'),
-          event_source_url: sourceUrl || 'https://drmariowarde.com/',
-          event_id: finalEventId,
-          user_data: userData,
-          custom_data: finalCustomData
-        };
-        const vipEvent: Record<string, unknown> = {
-          event_name: 'Contato_VIP',
-          event_time: eventTime,
-          action_source: actionSource || (sourceUrl ? 'website' : 'system_generated'),
-          event_source_url: sourceUrl || 'https://drmariowarde.com/',
-          event_id: finalEventId,
-          user_data: userData,
-          custom_data: finalCustomData
-        };
-
+      if (finalEventName === 'Contact' || finalEventName === 'Lead') {
         const contactEvent: Record<string, unknown> = {
           event_name: 'Contact',
           event_time: eventTime,
@@ -128,7 +110,17 @@ export async function POST(request: Request) {
           custom_data: finalCustomData
         };
 
-        eventsToSend.push(leadEvent, vipEvent, contactEvent);
+        const vipEvent: Record<string, unknown> = {
+          event_name: 'Contato_VIP',
+          event_time: eventTime,
+          action_source: actionSource || (sourceUrl ? 'website' : 'system_generated'),
+          event_source_url: sourceUrl || 'https://drmariowarde.com/',
+          event_id: finalEventId,
+          user_data: userData,
+          custom_data: finalCustomData
+        };
+
+        eventsToSend.push(contactEvent, vipEvent);
       } else {
         const singleEvent: Record<string, unknown> = {
           event_name: finalEventName,

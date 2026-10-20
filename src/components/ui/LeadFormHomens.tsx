@@ -67,7 +67,7 @@ export function LeadFormHomens({ onClose }: { onClose?: () => void }) {
         };
         win.dataLayer = win.dataLayer || [];
         win.dataLayer.push({
-          event: 'Lead',
+          event: 'Contact',
           event_id: leadEventId,
           user_data: {
             email: formData.email,
@@ -86,7 +86,7 @@ export function LeadFormHomens({ onClose }: { onClose?: () => void }) {
             city: formData.city
           }
         });
-        console.log("🔥 EVENTOS 'Lead' e 'Contato_VIP' MASCULINO EMPURRADOS PARA O DATALAYER COM SUCESSO!", win.dataLayer);
+        console.log("🔥 EVENTOS 'Contact' e 'Contato_VIP' MASCULINO EMPURRADOS PARA O DATALAYER COM SUCESSO!", win.dataLayer);
 
         // Extração de test_event_code para testes ao vivo no Meta Events Manager
         let testCodeParam = '';
@@ -109,13 +109,11 @@ export function LeadFormHomens({ onClose }: { onClose?: () => void }) {
             trackOptions.test_event_code = testCodeParam;
           }
 
-          // 1. Evento padrão Lead (processado pelo Pixel de CA limpo 9168277426523951)
-          win.fbq('track', 'Lead', sanitizedPayload, trackOptions);
-          // 2. Evento padrão Contact / Entrar em contato (100% nativo no Gerenciador da Meta, sem trava de saúde)
+          // 1. Evento padrão Contact / Entrar em contato (100% nativo no Gerenciador da Meta, sem restrição de saúde da Seção 1.h)
           win.fbq('track', 'Contact', sanitizedPayload, trackOptions);
-          // 3. Evento customizado Contato_VIP (processado por ambos os pixels sem restrições)
+          // 2. Evento customizado Contato_VIP (processado por ambos os pixels sem restrições)
           win.fbq('trackCustom', 'Contato_VIP', sanitizedPayload, trackOptions);
-          console.log("🔥 EVENTOS 'Lead', 'Contact' e 'Contato_VIP' MASCULINO DISPARADOS VIA FBQ CLIENT-SIDE COM SUCESSO!", leadEventId, trackOptions);
+          console.log("🔥 EVENTOS 'Contact' e 'Contato_VIP' MASCULINO DISPARADOS VIA FBQ CLIENT-SIDE COM SUCESSO!", leadEventId, trackOptions);
         }
       }
 
@@ -132,6 +130,7 @@ export function LeadFormHomens({ onClose }: { onClose?: () => void }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
+          eventName: 'Contact',
           sourceUrl: typeof window !== 'undefined' ? window.location.href : 'https://drmariowarde.com/homens-consulta1',
           eventId: leadEventId,
           testCode: testCodeParam || undefined
