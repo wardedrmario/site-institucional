@@ -458,13 +458,10 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
             <button
               type="button"
               onClick={() => setIsNewLeadModalOpen(true)}
-              className="px-3.5 py-1.5 rounded-xl bg-[#310f0e] hover:bg-[#4a1715] text-white text-xs sm:text-[13px] font-semibold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer shrink-0"
+              className="px-3.5 py-1.5 rounded-xl bg-[#310f0e] hover:bg-[#4a1715] text-white text-xs sm:text-[13px] font-semibold transition-all shadow-xs flex items-center justify-center cursor-pointer shrink-0"
               title="Cadastrar Novo Paciente (Entrada Manual: Indicação, Amigo do Dr. Mário, etc.)"
             >
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
-              </svg>
-              <span>+ Novo Paciente</span>
+              <span>Novo Paciente</span>
             </button>
 
             <span className="text-xs font-semibold text-slate-600 hidden sm:inline ml-1">Rolar colunas:</span>
