@@ -366,3 +366,137 @@ export async function updateLeadAction(leadId: string, actionText: string) {
   }
 }
 
+export interface CreateManualLeadInput {
+  name: string;
+  phone: string;
+  origin: string;
+  originDetails?: string;
+  procedure?: string;
+  status?: string;
+  followupDate?: string | null;
+  followupNote?: string | null;
+  consultationCategory?: 'internet' | 'indicacao' | 'indicacao_medica';
+  timeframe?: string;
+  email?: string;
+  city?: string;
+}
+
+export async function createManualLead(input: CreateManualLeadInput) {
+  try {
+    if (!input.name || !input.name.trim()) {
+      return { success: false, error: 'O nome do paciente é obrigatório.' };
+    }
+    if (!input.phone || !input.phone.trim()) {
+      return { success: false, error: 'O telefone/WhatsApp é obrigatório.' };
+    }
+
+    const dbUrl = getDbUrl();
+    if (!dbUrl) {
+      return { success: false, error: 'Nenhuma conexão de banco de dados encontrada.' };
+    }
+
+    const leadId = crypto.randomUUID();
+    const cleanPhoneStr = input.phone.trim();
+    const status = input.status || 'qualificacao';
+    const procedure = input.procedure && input.procedure.trim() ? input.procedure.trim() : 'Cirurgia Plástica';
+    const category = input.consultationCategory || (input.origin === 'medico_parceiro' ? 'indicacao_medica' : 'internet');
+
+    const originLabels: Record<string, string> = {
+      conhecido_pessoal: 'Conhecido Pessoal / Dr. Mário',
+      indicacao: 'Indicação de Paciente / Família',
+      whatsapp_direto: 'WhatsApp Direto (Sem Formulário)',
+      instagram_organico: 'Instagram Orgânico',
+      medico_parceiro: 'Indicação Médica / Colega',
+      telefone_fixo: 'Ligação Telefônica / Consultório',
+      outro: 'Entrada Manual'
+    };
+
+    const originLabel = originLabels[input.origin] || input.origin || 'Entrada Manual';
+    const campaignLabel = input.originDetails && input.originDetails.trim() 
+      ? `${originLabel}: ${input.originDetails.trim()}`
+      : originLabel;
+
+    const utms = {
+      source: 'manual',
+      origin: input.origin || 'manual',
+      origin_details: input.originDetails || null,
+      utm_source: 'manual',
+      utm_medium: 'concierge',
+      utm_campaign: campaignLabel,
+      created_by: 'crm_manual'
+    };
+
+    const utmsJson = JSON.stringify(utms);
+
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { neon } = require('@neondatabase/serverless');
+    const sql = neon(dbUrl as string);
+
+    // Garante que todas as colunas existem
+    try {
+      await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS consultation_category VARCHAR(50);`;
+      await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS followup_date TIMESTAMP WITH TIME ZONE;`;
+      await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS followup_note TEXT;`;
+      await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'triagem';`;
+      await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS ai_suggestion TEXT;`;
+    } catch (e) {
+      console.warn('Verificação de colunas em createManualLead:', e);
+    }
+
+    const initialAiSuggestion = input.followupNote || `Paciente cadastrado manualmente via ${originLabel}.`;
+
+    const insertedRows = await sql`
+      INSERT INTO leads (
+        id, name, phone, email, city, procedure, timeframe, utms, status, consultation_category, followup_date, followup_note, ai_suggestion
+      ) VALUES (
+        ${leadId},
+        ${input.name.trim()},
+        ${cleanPhoneStr},
+        ${input.email || ''},
+        ${input.city || 'São Paulo - SP'},
+        ${procedure},
+        ${input.timeframe || 'Imediato'},
+        ${utmsJson},
+        ${status},
+        ${category},
+        ${input.followupDate ? new Date(input.followupDate).toISOString() : null},
+        ${input.followupNote || null},
+        ${initialAiSuggestion}
+      )
+      RETURNING *;
+    `;
+
+    const newLead = insertedRows && insertedRows.length > 0 ? insertedRows[0] : null;
+
+    // Se o lead foi inserido diretamente como 'consulta' (Agendado com Sinal 50%), envia CAPI Offline
+    if (status === 'consulta') {
+      const isMedicalRef = category === 'indicacao_medica';
+      const depositValue = isMedicalRef ? 425.00 : 175.00;
+      try {
+        await sendMetaCapi('Schedule', depositValue, {
+          name: input.name.trim(),
+          phone: cleanPhoneStr,
+          email: input.email,
+          city: input.city,
+          procedure: procedure,
+          consultationCategory: category
+        }, leadId, {
+          content_name: 'Reserva de Atendimento (Sinal)',
+          status_etapa: 'Agendamento Confirmado',
+          tipo_evento: isMedicalRef ? 'Atendimento Personalizado (A)' : 'Atendimento Personalizado (B)',
+          categoria_consulta: isMedicalRef ? 'Categoria A' : 'Categoria B',
+          origem_manual: input.origin || 'manual'
+        });
+      } catch (capiErr) {
+        console.warn('Erro ao enviar CAPI para lead manual agendado:', capiErr);
+      }
+    }
+
+    revalidatePath('/admin');
+    return { success: true, lead: newLead };
+  } catch (err: any) {
+    console.error('Erro ao criar lead manual:', err);
+    return { success: false, error: err.message || 'Erro interno ao cadastrar paciente.' };
+  }
+}
+

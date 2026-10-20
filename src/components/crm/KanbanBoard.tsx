@@ -3,6 +3,7 @@
 import React, { useState, startTransition, useRef, useMemo } from 'react';
 import LeadCard, { Lead } from './LeadCard';
 import { updateLeadStatus } from '@/app/actions/crm';
+import NewLeadModal from './NewLeadModal';
 
 const COLUMNS = [
   { id: 'triagem', title: 'Triagem / Descoberta', segment: 'ENTRADA' },
@@ -56,6 +57,7 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
   const [draggedLead, setDraggedLead] = useState<{ lead: Lead; fromColumnId: string } | null>(null);
   const [dragOverColumnId, setDragOverColumnId] = useState<string | null>(null);
   const [isArchiveOpen, setIsArchiveOpen] = useState(false);
+  const [isNewLeadModalOpen, setIsNewLeadModalOpen] = useState(false);
 
   // Converte e agrupa os leads do banco de dados
   const groupedLeads = useMemo(() => {
@@ -273,6 +275,46 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
     });
   };
 
+  // Callback ao criar um novo paciente manualmente
+  const handleLeadCreated = (rawLead: any) => {
+    let source = 'Entrada Manual';
+    try {
+      if (rawLead.utms) {
+        const parsed = typeof rawLead.utms === 'string' ? JSON.parse(rawLead.utms) : rawLead.utms;
+        source = parsed.utm_campaign || parsed.origin || 'Entrada Manual';
+      }
+    } catch { /* ignora */ }
+
+    const targetCol = rawLead.status || 'qualificacao';
+
+    const mapped: Lead = {
+      id: rawLead.id,
+      name: rawLead.name,
+      phone: rawLead.phone,
+      procedure: rawLead.procedure || '-',
+      timeframe: rawLead.timeframe || '-',
+      source: source,
+      score: 100,
+      scoreLabel: 'HOT',
+      nextAction: rawLead.ai_suggestion || rawLead.followup_note || 'Qualificar via Whats',
+      createdAt: rawLead.created_at || new Date().toISOString(),
+      isClinical: false,
+      followupDate: rawLead.followup_date || null,
+      followupNote: rawLead.followup_note || null,
+      email: rawLead.email,
+      city: rawLead.city,
+      status: targetCol,
+      consultationCategory: rawLead.consultation_category || 'internet',
+    };
+
+    setColumnsData(prev => ({
+      ...prev,
+      [targetCol]: [mapped, ...(prev[targetCol] || [])]
+    }));
+
+    scrollToColumn(targetCol);
+  };
+
   // Drag Handlers
   const handleDragStart = (e: React.DragEvent, lead: Lead, fromColumnId: string) => {
     setDraggedLead({ lead, fromColumnId });
@@ -411,9 +453,21 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
             })}
           </div>
 
-          {/* Controles de Navegação Horizontal Lateral (← e →) */}
-          <div className="flex items-center gap-2 shrink-0 self-end md:self-auto">
-            <span className="text-xs font-semibold text-slate-600 hidden sm:inline">Rolar colunas:</span>
+          {/* Controles de Navegação Horizontal Lateral (← e →) + Novo Paciente */}
+          <div className="flex items-center gap-2 shrink-0 self-end md:self-auto flex-wrap">
+            <button
+              type="button"
+              onClick={() => setIsNewLeadModalOpen(true)}
+              className="px-3.5 py-1.5 rounded-xl bg-[#310f0e] hover:bg-[#4a1715] text-white text-xs sm:text-[13px] font-semibold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer shrink-0"
+              title="Cadastrar Novo Paciente (Entrada Manual: Indicação, Amigo do Dr. Mário, etc.)"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+              </svg>
+              <span>+ Novo Paciente</span>
+            </button>
+
+            <span className="text-xs font-semibold text-slate-600 hidden sm:inline ml-1">Rolar colunas:</span>
             <button
               type="button"
               onClick={() => scrollBoard(-360)}
@@ -670,6 +724,13 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
           );
         })}
       </div>
+
+      {/* Modal de Cadastro de Novo Paciente (Entrada Manual) */}
+      <NewLeadModal
+        isOpen={isNewLeadModalOpen}
+        onClose={() => setIsNewLeadModalOpen(false)}
+        onSuccess={handleLeadCreated}
+      />
     </div>
   );
 }
