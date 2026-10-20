@@ -18,11 +18,11 @@ const COLUMNS = [
 ];
 
 const SEGMENTS = [
-  { id: 'ALL', label: 'Todas as Fases', badge: '9' },
-  { id: 'ENTRADA', label: 'Entrada & Triagem', badge: '2' },
-  { id: 'CONSULTAS', label: 'Consultas & Decisão', badge: '3' },
-  { id: 'CIRURGIAS', label: 'Cirurgias & Pós', badge: '3' },
-  { id: 'ARQUIVADOS', label: 'Arquivados', badge: '1' },
+  { id: 'ALL', label: 'Todas as Fases' },
+  { id: 'ENTRADA', label: 'Entrada & Triagem' },
+  { id: 'CONSULTAS', label: 'Consultas & Decisão' },
+  { id: 'CIRURGIAS', label: 'Cirurgias & Pós' },
+  { id: 'ARQUIVADOS', label: 'Arquivados' },
 ];
 
 export interface DbLead {
@@ -438,16 +438,13 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
                   key={seg.id}
                   type="button"
                   onClick={() => setActiveSegment(seg.id)}
-                  className={`px-3 py-1.5 rounded-xl text-xs sm:text-[13px] font-semibold transition-all shrink-0 flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-xl text-xs sm:text-[13px] font-semibold transition-all shrink-0 flex items-center cursor-pointer ${
                     isActive
                       ? 'bg-[#310f0e] text-white shadow-xs'
                       : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                   }`}
                 >
                   <span>{seg.label}</span>
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${isActive ? 'bg-white/20 text-white' : 'bg-black/5 text-slate-500'}`}>
-                    {seg.badge}
-                  </span>
                 </button>
               );
             })}
