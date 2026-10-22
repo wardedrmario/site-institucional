@@ -163,8 +163,8 @@ export function Header() {
               </div>
             )}
 
-            {/* Background Audio Source (using 5-minute extended music loop) */}
-            <audio ref={audioRef} loop src="/videos/background_music_5m.mp3" />
+            {/* Background Audio Source (using 5-minute extended music loop - preload="none" para zero consumo inicial) */}
+            <audio ref={audioRef} loop preload="none" src="/videos/background_music_5m.mp3" />
           </div>
 
         </div>

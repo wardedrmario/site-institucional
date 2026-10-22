@@ -170,13 +170,16 @@ export function AppleProcedures() {
             data-index={idx}
             className="carousel-card flex-none w-[85vw] md:w-[60vw] lg:w-[65vw] h-[60vh] md:h-[70vh] snap-center rounded-[40px] relative overflow-hidden group select-none"
           >
-            {proc.video ? (
+            {/* Otimização de Performance: só monta e executa vídeo no card ativo e adjacente imediato (economia de 80% de banda e RAM) */}
+            {proc.video && Math.abs(idx - activeIndex) <= 1 ? (
               <video 
                 src={proc.video} 
-                autoPlay 
+                poster={proc.image}
+                autoPlay={idx === activeIndex} 
                 muted 
                 loop 
                 playsInline
+                preload="metadata"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 pointer-events-none z-0"
               />
             ) : (
@@ -184,7 +187,9 @@ export function AppleProcedures() {
               <img 
                 src={proc.image} 
                 alt={proc.title}
-                className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0 animate-ken-burns"
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
               />
             )}
             

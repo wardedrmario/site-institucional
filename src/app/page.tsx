@@ -47,6 +47,8 @@ export default function Home() {
           loop 
           muted 
           playsInline 
+          preload="metadata"
+          poster="/images/hero-poster.jpg"
           className="absolute inset-0 w-full h-full object-cover z-0 opacity-80"
         >
           <source src="/videos/hook.mp4" type="video/mp4" />
@@ -114,6 +116,8 @@ export default function Home() {
               <img 
                 src="/images/dr-mario/about.jpg" 
                 alt="Dr. Mário Warde - Cirurgião Plástico" 
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover object-top transition-transform duration-1000 group-hover:scale-105"
               />
             </div>
