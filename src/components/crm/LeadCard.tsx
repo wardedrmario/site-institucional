@@ -587,12 +587,12 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
               category === 'cortesia' ? (
                 <div className="bg-purple-50 border border-purple-200 rounded-lg p-2 text-xs flex items-center justify-between text-purple-950 font-semibold">
                   <span>Consulta Cortesia Concluída: <strong>R$ 0,00</strong></span>
-                  <span className="text-purple-700 font-normal">Crédito cirúrgico conforme alinhamento</span>
+                  <span className="text-purple-700 font-normal">Em decisão médica / avaliação</span>
                 </div>
               ) : (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 text-xs flex items-center justify-between text-blue-900 font-semibold">
                   <span>Consulta Quitada: <strong>R$ {category === 'indicacao_medica' ? '850,00' : '350,00'}</strong></span>
-                  <span className="text-blue-700 font-normal">Crédito 100% no plano cirúrgico</span>
+                  <span className="text-blue-700 font-normal">Em decisão (crédito válido se operar)</span>
                 </div>
               )
             )}
