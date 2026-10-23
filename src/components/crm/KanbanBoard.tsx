@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, startTransition, useRef, useMemo } from 'react';
+import React, { useState, useEffect, startTransition, useRef, useMemo } from 'react';
 import LeadCard, { Lead } from './LeadCard';
 import { updateLeadStatus } from '@/app/actions/crm';
 import NewLeadModal from './NewLeadModal';
+import PlaybookDrawer from './PlaybookDrawer';
 
 const COLUMNS = [
   { id: 'triagem', title: 'Triagem / Descoberta', segment: 'ENTRADA' },
@@ -44,7 +45,13 @@ export interface DbLead {
   courtesy_reason?: string;
 }
 
-export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLead[] }) {
+export default function KanbanBoard({ 
+  initialLeads = [], 
+  defaultPlaybookOpen = false 
+}: { 
+  initialLeads?: DbLead[]; 
+  defaultPlaybookOpen?: boolean;
+}) {
   // Referência do container do Kanban para scroll suave
   const boardRef = useRef<HTMLDivElement>(null);
   const colRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -59,6 +66,32 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
   const [dragOverColumnId, setDragOverColumnId] = useState<string | null>(null);
   const [isArchiveOpen, setIsArchiveOpen] = useState(false);
   const [isNewLeadModalOpen, setIsNewLeadModalOpen] = useState(false);
+  const [isPlaybookOpen, setIsPlaybookOpen] = useState(defaultPlaybookOpen);
+
+  // Sincroniza abertura se a query param mudar na URL
+  useEffect(() => {
+    if (defaultPlaybookOpen) {
+      setIsPlaybookOpen(true);
+    }
+  }, [defaultPlaybookOpen]);
+
+  const handleOpenPlaybook = () => {
+    setIsPlaybookOpen(true);
+    if (typeof window !== 'undefined' && !window.location.search.includes('playbook=open')) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('playbook', 'open');
+      window.history.replaceState({}, '', url.toString());
+    }
+  };
+
+  const handleClosePlaybook = () => {
+    setIsPlaybookOpen(false);
+    if (typeof window !== 'undefined' && window.location.search.includes('playbook=open')) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('playbook');
+      window.history.replaceState({}, '', url.toString());
+    }
+  };
 
   // Converte e agrupa os leads do banco de dados
   const groupedLeads = useMemo(() => {
@@ -453,8 +486,20 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
             })}
           </div>
 
-          {/* Controles de Navegação Horizontal Lateral (← e →) + Novo Paciente */}
+          {/* Controles de Navegação Horizontal Lateral (← e →) + Playbook Comercial + Novo Paciente */}
           <div className="flex items-center gap-2 shrink-0 self-end md:self-auto flex-wrap">
+            <button
+              type="button"
+              onClick={handleOpenPlaybook}
+              className="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-[#310f0e] border border-[#310f0e]/25 text-xs sm:text-[13px] font-semibold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer shrink-0"
+              title="Abrir Playbook Comercial Concierge (Roteiros rápidos, ligações e áudios)"
+            >
+              <svg className="w-3.5 h-3.5 text-[#310f0e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+              <span>Playbook Comercial</span>
+            </button>
+
             <button
               type="button"
               onClick={() => setIsNewLeadModalOpen(true)}
@@ -727,6 +772,12 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
         isOpen={isNewLeadModalOpen}
         onClose={() => setIsNewLeadModalOpen(false)}
         onSuccess={handleLeadCreated}
+      />
+
+      {/* Gaveta Lateral Integrada do Playbook Comercial Concierge */}
+      <PlaybookDrawer
+        isOpen={isPlaybookOpen}
+        onClose={handleClosePlaybook}
       />
     </div>
   );

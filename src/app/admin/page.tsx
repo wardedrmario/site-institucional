@@ -14,6 +14,7 @@ export default async function AdminPage({
 }) {
   const resolvedParams = await searchParams;
   const view = resolvedParams.view || 'kanban';
+  const isPlaybookOpen = resolvedParams.playbook === 'open';
 
   // Busca os leads
   let leads: DbLead[] = [];
@@ -132,15 +133,13 @@ Algum desses momentos fica mais confortável para o senhor passar aqui na clíni
               >
                 Manual CRM
               </a>
-              <a 
-                href="/playbook-comercial.html" 
-                target="_blank" 
-                rel="noreferrer"
+              <Link 
+                href={isPlaybookOpen ? (view === 'table' ? '/admin?view=table' : '/admin') : (view === 'table' ? '/admin?view=table&playbook=open' : '/admin?playbook=open')}
                 className="bg-white hover:bg-slate-50 text-[#310f0e] px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all shadow-2xs border border-[#310f0e]/20 hover:border-[#310f0e]/40 flex items-center cursor-pointer"
-                title="Abrir Playbook Comercial Concierge (Roteiros de WhatsApp)"
+                title="Abrir Playbook Comercial Concierge (Gaveta Integrada)"
               >
                 Playbook
-              </a>
+              </Link>
             </div>
 
             {/* Contador de Leads */}
@@ -156,7 +155,7 @@ Algum desses momentos fica mais confortável para o senhor passar aqui na clíni
 
         {/* ÁREA PRINCIPAL: KANBAN BOARD OU LISTA */}
         {view === 'kanban' ? (
-          <KanbanBoard initialLeads={leads} />
+          <KanbanBoard initialLeads={leads} defaultPlaybookOpen={isPlaybookOpen} />
         ) : (
           <div className="bg-white rounded-2xl shadow-xs border border-black/5 overflow-hidden">
             <div className="p-4 border-b border-slate-100 flex items-center justify-between">
