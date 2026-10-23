@@ -3,7 +3,7 @@ import React, { useState, useTransition, useRef, useEffect } from 'react';
 import { generateAiForLead, updateLeadFollowup, updateLeadConsultationCategory, updateLeadAction } from '@/app/actions/crm';
 
 type LeadScore = 'HOT' | 'WARM' | 'COLD';
-export type ConsultationCategory = 'internet' | 'indicacao' | 'indicacao_medica';
+export type ConsultationCategory = 'internet' | 'indicacao' | 'indicacao_medica' | 'cortesia';
 
 export interface Lead {
   id: string;
@@ -23,6 +23,7 @@ export interface Lead {
   city?: string;
   status?: string;
   consultationCategory?: ConsultationCategory;
+  courtesyReason?: string;
 }
 
 interface ColumnOption {
@@ -56,6 +57,9 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
   // Category and Financial states
   const [category, setCategory] = useState<ConsultationCategory>(
     lead.consultationCategory || 'internet'
+  );
+  const [courtesyReason, setCourtesyReason] = useState<string>(
+    lead.courtesyReason || 'voucher_evento'
   );
   const [isPendingCategory, startCategoryTransition] = useTransition();
   const [copiedScript, setCopiedScript] = useState(false);
@@ -98,11 +102,22 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
     });
   };
 
-  const handleCategoryChange = (newCat: ConsultationCategory) => {
+  const handleCategoryChange = (newCat: ConsultationCategory, reason?: string) => {
     setCategory(newCat);
+    const selectedReason = reason !== undefined ? reason : courtesyReason;
+    if (reason !== undefined) setCourtesyReason(reason);
     startCategoryTransition(async () => {
-      await updateLeadConsultationCategory(lead.id, newCat);
+      await updateLeadConsultationCategory(lead.id, newCat, newCat === 'cortesia' ? selectedReason : '');
       lead.consultationCategory = newCat;
+      if (newCat === 'cortesia') lead.courtesyReason = selectedReason;
+    });
+  };
+
+  const handleReasonChange = (newReason: string) => {
+    setCourtesyReason(newReason);
+    startCategoryTransition(async () => {
+      await updateLeadConsultationCategory(lead.id, 'cortesia', newReason);
+      lead.courtesyReason = newReason;
     });
   };
 
@@ -154,9 +169,15 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
         return `Perfeito, ${firstName}, compreendo perfeitamente. Essa queixa é justamente uma das maiores especialidades do Dr. Mário, buscando sempre um reposicionamento estruturado, natural e sem estigmas.\n\nPara o Dr. Mário avaliar a sua anatomia pessoalmente e desenhar o seu planejamento cirúrgico, você prefere agendar a sua Primeira Consulta presencialmente aqui na clínica (Vila Madalena) ou por vídeo (Telemedicina)?`;
 
       case 'contorno_preco':
+        if (category === 'cortesia') {
+          return `Compreendo perfeitamente a sua necessidade de planejamento, ${firstName}.\n\nComo o Dr. Mário realiza cirurgias personalizadas e opera exclusivamente em estrutura hospitalar de primeira linha (como Sírio-Libanês, Vila Nova Star e Albert Einstein), o planejamento cirúrgico é individualizado após ele avaliar a sua anatomia pessoalmente, inclusive por norma do Conselho Federal de Medicina.\n\nComo o seu atendimento é uma Cortesia Exclusiva, a sua Primeira Consulta está liberada de custos de honorários. Você prefere que eu reserve um horário presencial aqui na clínica (Vila Madalena) ou por vídeo (Telemedicina) esta semana?`;
+        }
         return `Compreendo perfeitamente a sua necessidade de planejamento, ${firstName}.\n\nComo o Dr. Mário realiza cirurgias personalizadas e opera exclusivamente em estrutura hospitalar de primeira linha (como Sírio-Libanês, Vila Nova Star e Albert Einstein), o orçamento cirúrgico não é padronizado e só pode ser definido após ele avaliar a sua anatomia em consulta, inclusive por norma do Conselho Federal de Medicina.\n\nO primeiro passo é a Primeira Consulta Médica detalhada (o valor é de R$ ${consultTotal}, sendo 100% revertido em crédito no seu plano cirúrgico). Você prefere que eu veja um horário presencial aqui na Vila Madalena ou por vídeo (Telemedicina) esta semana?`;
 
       case 'reserva_pix':
+        if (category === 'cortesia') {
+          return `Olá, ${firstName}! O Dr. Mário organiza a agenda com intervalos amplos entre os atendimentos, sem sobreposição de pacientes, para garantir total privacidade e uma consulta médica detalhada e sem pressa.\n\nComo o seu atendimento é uma Cortesia Exclusiva, o seu horário está pré-reservado diretamente na grade do Dr. Mário, sem necessidade de sinal financeiro via Pix.\n\nPosso confirmar a sua data e horário aqui na clínica (Vila Madalena)?`;
+        }
         return `Olá, ${firstName}! O Dr. Mário organiza a agenda com intervalos amplos entre os atendimentos, sem sobreposição de pacientes, para garantir total privacidade e uma consulta médica detalhada e sem pressa.\n\nPor essa razão, a confirmação do horário é formalizada mediante a reserva de 50% do valor da consulta via Pix (R$ ${depositVal}), e o saldo restante é acertado no dia do atendimento.\n\nUm diferencial da clínica: caso você decida realizar o procedimento cirúrgico com o Dr. Mário, o valor integral da consulta (R$ ${consultTotal}) é revertido em crédito no seu plano cirúrgico.\n\nPosso enviar a chave Pix da clínica para travarmos a sua data com o doutor?`;
 
       case 'endereco':
@@ -257,6 +278,12 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
           {lead.isClinical && (
             <span className="text-[11px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200 uppercase tracking-wider">
               Clínico
+            </span>
+          )}
+
+          {category === 'cortesia' && (
+            <span className="text-[11px] font-bold text-purple-900 bg-purple-50 px-2 py-0.5 rounded-full border border-purple-200 uppercase tracking-wider">
+              Cortesia (R$ 0)
             </span>
           )}
         </div>
@@ -467,7 +494,7 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
               {isPendingCategory && <span className="text-[11px] text-slate-400">Salvando...</span>}
             </div>
 
-            <div className="grid grid-cols-3 gap-1.5">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
               <button
                 type="button"
                 onClick={() => handleCategoryChange('internet')}
@@ -504,21 +531,70 @@ export default function LeadCard({ lead, onMoveToColumn, columnsList = [] }: Lea
               >
                 Médica / VIP (R$ 850)
               </button>
+              <button
+                type="button"
+                onClick={() => handleCategoryChange('cortesia')}
+                className={`text-xs py-1.5 px-2 rounded-lg font-semibold transition-all text-center truncate ${
+                  category === 'cortesia'
+                    ? 'bg-purple-900 text-white shadow-xs'
+                    : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+                }`}
+                title="Consulta Cortesia / Isenta de Honorários (R$ 0)"
+              >
+                Cortesia (R$ 0)
+              </button>
             </div>
 
-            {/* Badges de Confirmação Financeira por Etapa */}
-            {lead.status === 'consulta' && (
-              <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-2 text-xs flex items-center justify-between text-emerald-900 font-semibold">
-                <span>Sinal 50% Pix: <strong>R$ {category === 'indicacao_medica' ? '425,00' : '175,00'}</strong></span>
-                <span className="text-emerald-700 font-normal">Saldo na recepção: R$ {category === 'indicacao_medica' ? '425,00' : '175,00'}</span>
+            {/* Justificativa / Hipótese da Cortesia (Quando Selecionado) */}
+            {category === 'cortesia' && (
+              <div className="bg-[#310f0e]/5 border border-[#310f0e]/15 rounded-lg p-2 flex flex-col gap-1 transition-all">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold text-[#310f0e] uppercase tracking-wider">
+                    Hipótese da Isenção
+                  </span>
+                  <span className="text-[10px] text-slate-500 font-medium">Honorários R$ 0</span>
+                </div>
+                <select
+                  value={courtesyReason}
+                  onChange={(e) => handleReasonChange(e.target.value)}
+                  className="w-full text-xs bg-white text-slate-800 border border-[#310f0e]/20 rounded-md py-1 px-2 font-medium focus:outline-none focus:ring-1 focus:ring-[#310f0e]/30 cursor-pointer"
+                >
+                  <option value="voucher_evento">Voucher Evento Reinauguração (Sessão 2027)</option>
+                  <option value="convidado_mario">Convidado / Amigo do Dr. Mário</option>
+                  <option value="revisao_cirurgica">Retorno / Revisão Cirúrgica</option>
+                  <option value="excecao_comercial">Exceção Comercial de Fechamento</option>
+                  <option value="inadimplencia_pendencia">Inadimplência / Pendência na Recepção</option>
+                </select>
               </div>
             )}
 
+            {/* Badges de Confirmação Financeira por Etapa */}
+            {lead.status === 'consulta' && (
+              category === 'cortesia' ? (
+                <div className="bg-purple-50 border border-purple-200 rounded-lg p-2 text-xs flex items-center justify-between text-purple-950 font-semibold">
+                  <span>Atendimento Isento: <strong>Cortesia (R$ 0,00)</strong></span>
+                  <span className="text-purple-700 font-normal">Sem cobrança de sinal Pix</span>
+                </div>
+              ) : (
+                <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-2 text-xs flex items-center justify-between text-emerald-900 font-semibold">
+                  <span>Sinal 50% Pix: <strong>R$ {category === 'indicacao_medica' ? '425,00' : '175,00'}</strong></span>
+                  <span className="text-emerald-700 font-normal">Saldo na recepção: R$ {category === 'indicacao_medica' ? '425,00' : '175,00'}</span>
+                </div>
+              )
+            )}
+
             {lead.status === 'consulta_realizada' && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 text-xs flex items-center justify-between text-blue-900 font-semibold">
-                <span>Consulta Quitada: <strong>R$ {category === 'indicacao_medica' ? '850,00' : '350,00'}</strong></span>
-                <span className="text-blue-700 font-normal">Crédito 100% no plano cirúrgico</span>
-              </div>
+              category === 'cortesia' ? (
+                <div className="bg-purple-50 border border-purple-200 rounded-lg p-2 text-xs flex items-center justify-between text-purple-950 font-semibold">
+                  <span>Consulta Cortesia Concluída: <strong>R$ 0,00</strong></span>
+                  <span className="text-purple-700 font-normal">Crédito cirúrgico conforme alinhamento</span>
+                </div>
+              ) : (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 text-xs flex items-center justify-between text-blue-900 font-semibold">
+                  <span>Consulta Quitada: <strong>R$ {category === 'indicacao_medica' ? '850,00' : '350,00'}</strong></span>
+                  <span className="text-blue-700 font-normal">Crédito 100% no plano cirúrgico</span>
+                </div>
+              )
             )}
 
             {/* Central de Scripts Rápidos (Preenchidos com Nome e Procedimento, Sem Colchetes) */}

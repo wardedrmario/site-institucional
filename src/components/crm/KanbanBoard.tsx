@@ -41,6 +41,7 @@ export interface DbLead {
   followup_date?: string;
   followup_note?: string;
   consultation_category?: string;
+  courtesy_reason?: string;
 }
 
 export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLead[] }) {
@@ -169,6 +170,7 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
         city: lead.city,
         status: status,
         consultationCategory: (lead.consultation_category as any) || 'internet',
+        courtesyReason: lead.courtesy_reason || undefined,
       };
 
       if (columns[status]) {
@@ -305,6 +307,7 @@ export default function KanbanBoard({ initialLeads = [] }: { initialLeads?: DbLe
       city: rawLead.city,
       status: targetCol,
       consultationCategory: rawLead.consultation_category || 'internet',
+      courtesyReason: rawLead.courtesy_reason || undefined,
     };
 
     setColumnsData(prev => ({

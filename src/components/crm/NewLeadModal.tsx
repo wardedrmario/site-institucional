@@ -42,7 +42,8 @@ export default function NewLeadModal({ isOpen, onClose, onSuccess }: NewLeadModa
   const [originDetails, setOriginDetails] = useState('');
   const [procedure, setProcedure] = useState(PROCEDURES_OPTIONS[0]);
   const [status, setStatus] = useState('consulta'); // Padrão: Agendado ou Qualificação
-  const [consultationCategory, setConsultationCategory] = useState<'internet' | 'indicacao' | 'indicacao_medica'>('internet');
+  const [consultationCategory, setConsultationCategory] = useState<'internet' | 'indicacao' | 'indicacao_medica' | 'cortesia'>('internet');
+  const [courtesyReason, setCourtesyReason] = useState('voucher_evento');
   const [followupDate, setFollowupDate] = useState('');
   const [followupNote, setFollowupNote] = useState('');
 
@@ -87,6 +88,7 @@ export default function NewLeadModal({ isOpen, onClose, onSuccess }: NewLeadModa
         procedure,
         status,
         consultationCategory,
+        courtesyReason: consultationCategory === 'cortesia' ? courtesyReason : undefined,
         followupDate: followupDate ? new Date(followupDate).toISOString() : null,
         followupNote: followupNote.trim() || null,
         timeframe: status === 'consulta' ? 'Data Agendada' : 'Em Qualificação',
@@ -236,11 +238,11 @@ export default function NewLeadModal({ isOpen, onClose, onSuccess }: NewLeadModa
                 onChange={(e) => setStatus(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#310f0e]/20 focus:border-[#310f0e] transition-all cursor-pointer font-semibold"
               >
-                <option value="consulta">🟢 Agendado (Sinal 50% Pago)</option>
-                <option value="qualificacao">🟡 Qualificação Concierge</option>
-                <option value="triagem">⚪ Triagem / Descoberta</option>
-                <option value="consulta_realizada">🔵 Consulta Realizada (Presencial)</option>
-                <option value="deposito">🟣 Cirurgia Fechada (Depósito)</option>
+                <option value="consulta">Agendado (Sinal 50% Pago)</option>
+                <option value="qualificacao">Qualificação Concierge</option>
+                <option value="triagem">Triagem / Descoberta</option>
+                <option value="consulta_realizada">Consulta Realizada (Presencial)</option>
+                <option value="deposito">Cirurgia Fechada (Depósito)</option>
               </select>
             </div>
           </div>
@@ -254,10 +256,11 @@ export default function NewLeadModal({ isOpen, onClose, onSuccess }: NewLeadModa
               <select
                 value={consultationCategory}
                 onChange={(e) => setConsultationCategory(e.target.value as any)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#310f0e]/20 focus:border-[#310f0e] transition-all cursor-pointer"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#310f0e]/20 focus:border-[#310f0e] transition-all cursor-pointer font-medium"
               >
                 <option value="internet">Consulta Geral — R$ 350,00 (Sinal 50%: R$ 175,00)</option>
                 <option value="indicacao_medica">Consulta Médica / VIP — R$ 850,00 (Sinal 50%: R$ 425,00)</option>
+                <option value="cortesia">Consulta Cortesia / Isenta — R$ 0,00 (Sem Sinal Pix)</option>
               </select>
             </div>
 
@@ -273,6 +276,29 @@ export default function NewLeadModal({ isOpen, onClose, onSuccess }: NewLeadModa
               />
             </div>
           </div>
+
+          {/* Justificativa / Hipótese da Consulta Cortesia (Quando Selecionado) */}
+          {consultationCategory === 'cortesia' && (
+            <div className="bg-[#310f0e]/5 border border-[#310f0e]/15 rounded-2xl p-3.5 space-y-1.5 transition-all">
+              <label className="block text-xs font-bold text-[#310f0e] uppercase tracking-wider">
+                Hipótese / Justificativa da Isenção (Consulta Cortesia)
+              </label>
+              <select
+                value={courtesyReason}
+                onChange={(e) => setCourtesyReason(e.target.value)}
+                className="w-full px-3 py-2 rounded-xl border border-[#310f0e]/20 bg-white text-slate-800 text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#310f0e]/20 transition-all cursor-pointer"
+              >
+                <option value="voucher_evento">Voucher do Evento de Reinauguração (Sessão Exclusiva 2027)</option>
+                <option value="convidado_mario">Convidado Pessoal / Amigo do Dr. Mário Warde</option>
+                <option value="revisao_cirurgica">Retorno / Paciente Antiga em Revisão Cirúrgica</option>
+                <option value="excecao_comercial">Exceção Comercial (Viabilização de Cirurgia de Alto Valor)</option>
+                <option value="inadimplencia_pendencia">Inadimplência / Pendência de Pagamento na Recepção</option>
+              </select>
+              <p className="text-[11px] text-slate-500">
+                Diretriz de telemetria: consultas cortesia (R$ 0,00) têm disparo financeiro bloqueado na CAPI para não poluir o algoritmo de Value-Based Bidding da Meta.
+              </p>
+            </div>
+          )}
 
           {/* Linha 5: Notas Iniciais */}
           <div>

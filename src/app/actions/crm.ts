@@ -128,7 +128,8 @@ export async function updateLeadStatus(leadId: string, newStatus: string, leadDa
       const { neon } = require('@neondatabase/serverless');
       const sql = neon(dbUrl as string);
       await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS consultation_category VARCHAR(50);`;
-      const rows = await sql`UPDATE leads SET status = ${newStatus} WHERE id = ${leadId} RETURNING email, city, phone, name, procedure, consultation_category`;
+      await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS courtesy_reason VARCHAR(100);`;
+      const rows = await sql`UPDATE leads SET status = ${newStatus} WHERE id = ${leadId} RETURNING email, city, phone, name, procedure, consultation_category, courtesy_reason`;
       console.log(`✅ [CRM BACKEND] Lead ${leadId} atualizado no Neon Postgres para '${newStatus}'`);
       
       if (rows && rows.length > 0) {
@@ -147,33 +148,51 @@ export async function updateLeadStatus(leadId: string, newStatus: string, leadDa
     console.error('❌ [CRM BACKEND] Erro ao atualizar status no Neon:', err);
   }
   
-  // 2. SE O PACIENTE CHEGOU NA COLUNA DE AGENDADO COM SINAL PAGO (50%) -> DISPARA "Schedule"
+  // 2. SE O PACIENTE CHEGOU NA COLUNA DE AGENDADO -> DISPARA "Schedule"
   if (newStatus === 'consulta') {
-    const isMedicalRef = leadData.consultationCategory === 'indicacao_medica' ||
-                         (leadData.procedure && leadData.procedure.toLowerCase().includes('médic')) || 
-                         (leadData.city && leadData.city.toLowerCase().includes('médic'));
-    const depositValue = isMedicalRef ? 425.00 : 175.00; // 50% de R$ 850 ou R$ 350
+    const isCourtesy = leadData.consultationCategory === 'cortesia';
+    if (isCourtesy) {
+      // Paciente Cortesia / Isento (R$ 0,00) -> Dispara Schedule com valor R$ 0,00
+      // Blindagem CAPI: não envia valor monetário de compra para não poluir o Value-Based Bidding da Meta
+      await sendMetaCapi('Schedule', 0.00, leadData, leadId, {
+        content_name: 'Agendamento Cortesia / Isento',
+        status_etapa: 'Agendamento Confirmado',
+        tipo_evento: 'Atendimento Cortesia',
+        categoria_consulta: 'Cortesia'
+      });
+    } else {
+      const isMedicalRef = leadData.consultationCategory === 'indicacao_medica' ||
+                           (leadData.procedure && leadData.procedure.toLowerCase().includes('médic')) || 
+                           (leadData.city && leadData.city.toLowerCase().includes('médic'));
+      const depositValue = isMedicalRef ? 425.00 : 175.00; // 50% de R$ 850 ou R$ 350
 
-    await sendMetaCapi('Schedule', depositValue, leadData, leadId, {
-      content_name: `Reserva de Atendimento (Sinal)`,
-      status_etapa: 'Agendamento Confirmado',
-      tipo_evento: isMedicalRef ? 'Atendimento Personalizado (A)' : 'Atendimento Personalizado (B)',
-      categoria_consulta: isMedicalRef ? 'Categoria A' : 'Categoria B'
-    });
+      await sendMetaCapi('Schedule', depositValue, leadData, leadId, {
+        content_name: `Reserva de Atendimento (Sinal)`,
+        status_etapa: 'Agendamento Confirmado',
+        tipo_evento: isMedicalRef ? 'Atendimento Personalizado (A)' : 'Atendimento Personalizado (B)',
+        categoria_consulta: isMedicalRef ? 'Categoria A' : 'Categoria B'
+      });
+    }
   }
 
-  // 2.1 SE O PACIENTE CHEGOU NA COLUNA DE CONSULTA REALIZADA (QUITAÇÃO) -> DISPARA "Purchase" (Saldo restante de 50%)
+  // 2.1 SE O PACIENTE CHEGOU NA COLUNA DE CONSULTA REALIZADA -> DISPARA "Purchase" (Saldo restante de 50%)
   if (newStatus === 'consulta_realizada') {
-    const isMedicalRef = (leadData.procedure && leadData.procedure.toLowerCase().includes('médic')) || 
-                         (leadData.city && leadData.city.toLowerCase().includes('médic'));
-    const balanceValue = isMedicalRef ? 425.00 : 175.00; // Saldo de 50% na recepção
+    const isCourtesy = leadData.consultationCategory === 'cortesia';
+    if (isCourtesy) {
+      // NÃO envia Purchase monetário para consulta cortesia (R$ 0,00) para preservar o algoritmo
+      console.log(`[CAPI] Lead ${leadId} é Cortesia (R$ 0,00). Evento Purchase financeiro bloqueado.`);
+    } else {
+      const isMedicalRef = (leadData.procedure && leadData.procedure.toLowerCase().includes('médic')) || 
+                           (leadData.city && leadData.city.toLowerCase().includes('médic'));
+      const balanceValue = isMedicalRef ? 425.00 : 175.00; // Saldo de 50% na recepção
 
-    await sendMetaCapi('Purchase', balanceValue, leadData, leadId, {
-      content_name: `Atendimento Concluído`,
-      status_etapa: 'Atendimento Realizado Presencial',
-      tipo_evento: isMedicalRef ? 'Atendimento Personalizado (A)' : 'Atendimento Personalizado (B)',
-      categoria_consulta: isMedicalRef ? 'Categoria A' : 'Categoria B'
-    });
+      await sendMetaCapi('Purchase', balanceValue, leadData, leadId, {
+        content_name: `Atendimento Concluído`,
+        status_etapa: 'Atendimento Realizado Presencial',
+        tipo_evento: isMedicalRef ? 'Atendimento Personalizado (A)' : 'Atendimento Personalizado (B)',
+        categoria_consulta: isMedicalRef ? 'Categoria A' : 'Categoria B'
+      });
+    }
   }
 
   // 3. SE O PACIENTE CHEGOU NA COLUNA DE DEPÓSITO -> DISPARA EVENTO DE CIRURGIA DE ALTO VALOR!
@@ -327,7 +346,7 @@ export async function updateLeadFollowup(leadId: string, followupDate: string | 
   }
 }
 
-export async function updateLeadConsultationCategory(leadId: string, consultationCategory: string) {
+export async function updateLeadConsultationCategory(leadId: string, consultationCategory: string, courtesyReason?: string) {
   try {
     const dbUrl = getDbUrl();
     if (dbUrl) {
@@ -336,7 +355,13 @@ export async function updateLeadConsultationCategory(leadId: string, consultatio
       const sql = neon(dbUrl as string);
       
       await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS consultation_category VARCHAR(50);`;
-      await sql`UPDATE leads SET consultation_category = ${consultationCategory} WHERE id = ${leadId}`;
+      await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS courtesy_reason VARCHAR(100);`;
+      
+      if (courtesyReason !== undefined) {
+        await sql`UPDATE leads SET consultation_category = ${consultationCategory}, courtesy_reason = ${courtesyReason} WHERE id = ${leadId}`;
+      } else {
+        await sql`UPDATE leads SET consultation_category = ${consultationCategory} WHERE id = ${leadId}`;
+      }
       revalidatePath('/admin');
       return { success: true };
     }
@@ -375,7 +400,8 @@ export interface CreateManualLeadInput {
   status?: string;
   followupDate?: string | null;
   followupNote?: string | null;
-  consultationCategory?: 'internet' | 'indicacao' | 'indicacao_medica';
+  consultationCategory?: 'internet' | 'indicacao' | 'indicacao_medica' | 'cortesia';
+  courtesyReason?: string;
   timeframe?: string;
   email?: string;
   city?: string;
@@ -400,6 +426,7 @@ export async function createManualLead(input: CreateManualLeadInput) {
     const status = input.status || 'qualificacao';
     const procedure = input.procedure && input.procedure.trim() ? input.procedure.trim() : 'Cirurgia Plástica';
     const category = input.consultationCategory || (input.origin === 'medico_parceiro' ? 'indicacao_medica' : 'internet');
+    const courtesyReason = category === 'cortesia' ? (input.courtesyReason || 'voucher_evento') : null;
 
     const originLabels: Record<string, string> = {
       conhecido_pessoal: 'Conhecido Pessoal / Dr. Mário',
@@ -435,6 +462,7 @@ export async function createManualLead(input: CreateManualLeadInput) {
     // Garante que todas as colunas existem
     try {
       await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS consultation_category VARCHAR(50);`;
+      await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS courtesy_reason VARCHAR(100);`;
       await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS followup_date TIMESTAMP WITH TIME ZONE;`;
       await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS followup_note TEXT;`;
       await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'triagem';`;
@@ -447,7 +475,7 @@ export async function createManualLead(input: CreateManualLeadInput) {
 
     const insertedRows = await sql`
       INSERT INTO leads (
-        id, name, phone, email, city, procedure, timeframe, utms, status, consultation_category, followup_date, followup_note, ai_suggestion
+        id, name, phone, email, city, procedure, timeframe, utms, status, consultation_category, courtesy_reason, followup_date, followup_note, ai_suggestion
       ) VALUES (
         ${leadId},
         ${input.name.trim()},
@@ -459,6 +487,7 @@ export async function createManualLead(input: CreateManualLeadInput) {
         ${utmsJson},
         ${status},
         ${category},
+        ${courtesyReason},
         ${input.followupDate ? new Date(input.followupDate).toISOString() : null},
         ${input.followupNote || null},
         ${initialAiSuggestion}
@@ -468,27 +497,50 @@ export async function createManualLead(input: CreateManualLeadInput) {
 
     const newLead = insertedRows && insertedRows.length > 0 ? insertedRows[0] : null;
 
-    // Se o lead foi inserido diretamente como 'consulta' (Agendado com Sinal 50%), envia CAPI Offline
+    // Se o lead foi inserido diretamente como 'consulta', envia CAPI Offline
     if (status === 'consulta') {
-      const isMedicalRef = category === 'indicacao_medica';
-      const depositValue = isMedicalRef ? 425.00 : 175.00;
-      try {
-        await sendMetaCapi('Schedule', depositValue, {
-          name: input.name.trim(),
-          phone: cleanPhoneStr,
-          email: input.email,
-          city: input.city,
-          procedure: procedure,
-          consultationCategory: category
-        }, leadId, {
-          content_name: 'Reserva de Atendimento (Sinal)',
-          status_etapa: 'Agendamento Confirmado',
-          tipo_evento: isMedicalRef ? 'Atendimento Personalizado (A)' : 'Atendimento Personalizado (B)',
-          categoria_consulta: isMedicalRef ? 'Categoria A' : 'Categoria B',
-          origem_manual: input.origin || 'manual'
-        });
-      } catch (capiErr) {
-        console.warn('Erro ao enviar CAPI para lead manual agendado:', capiErr);
+      const isCourtesy = category === 'cortesia';
+      if (isCourtesy) {
+        try {
+          await sendMetaCapi('Schedule', 0.00, {
+            name: input.name.trim(),
+            phone: cleanPhoneStr,
+            email: input.email,
+            city: input.city,
+            procedure: procedure,
+            consultationCategory: category
+          }, leadId, {
+            content_name: 'Agendamento Cortesia / Isento',
+            status_etapa: 'Agendamento Confirmado',
+            tipo_evento: 'Atendimento Cortesia',
+            categoria_consulta: 'Cortesia',
+            origem_manual: input.origin || 'manual',
+            motivo_cortesia: courtesyReason
+          });
+        } catch (capiErr) {
+          console.warn('Erro ao enviar CAPI para lead manual cortesia:', capiErr);
+        }
+      } else {
+        const isMedicalRef = category === 'indicacao_medica';
+        const depositValue = isMedicalRef ? 425.00 : 175.00;
+        try {
+          await sendMetaCapi('Schedule', depositValue, {
+            name: input.name.trim(),
+            phone: cleanPhoneStr,
+            email: input.email,
+            city: input.city,
+            procedure: procedure,
+            consultationCategory: category
+          }, leadId, {
+            content_name: 'Reserva de Atendimento (Sinal)',
+            status_etapa: 'Agendamento Confirmado',
+            tipo_evento: isMedicalRef ? 'Atendimento Personalizado (A)' : 'Atendimento Personalizado (B)',
+            categoria_consulta: isMedicalRef ? 'Categoria A' : 'Categoria B',
+            origem_manual: input.origin || 'manual'
+          });
+        } catch (capiErr) {
+          console.warn('Erro ao enviar CAPI para lead manual agendado:', capiErr);
+        }
       }
     }
 
