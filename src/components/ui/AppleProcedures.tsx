@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
-
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 const procedures = [
@@ -21,6 +20,7 @@ export function AppleProcedures() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   
   // Drag to scroll states
   const isDragging = useRef(false);
@@ -46,50 +46,60 @@ export function AppleProcedures() {
         behavior: 'smooth'
       });
 
-      // Restore snap after smooth scroll duration (roughly 600ms)
+      // Restore snap after smooth scroll duration (roughly 500ms)
       setTimeout(() => {
         if (scrollRef.current) {
-          scrollRef.current.style.scrollSnapType = '';
+          scrollRef.current.style.scrollSnapType = 'x mandatory';
         }
-      }, 600);
+      }, 500);
     }
   }, []);
 
-  // Intersection Observer to update active dot when user scrolls manually
-  useEffect(() => {
+  // Sincronização em tempo real do card central no scroll (arrastar, swipe, trackpad e auto-play)
+  const handleScroll = useCallback(() => {
     const container = scrollRef.current;
     if (!container) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        let maxIntersection = 0;
-        let mostVisibleIndex = -1;
+    const cards = container.querySelectorAll('.carousel-card');
+    const containerCenter = container.scrollLeft + container.clientWidth / 2;
+    let closestIndex = 0;
+    let minDistance = Infinity;
 
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio > maxIntersection) {
-            maxIntersection = entry.intersectionRatio;
-            const index = Number(entry.target.getAttribute('data-index'));
-            mostVisibleIndex = index;
-          }
-        });
-
-        if (maxIntersection > 0.5 && mostVisibleIndex !== -1) {
-          setActiveIndex((prev) => prev !== mostVisibleIndex ? mostVisibleIndex : prev);
-        }
-      },
-      {
-        root: container,
-        threshold: [0.4, 0.5, 0.6, 0.9],
+    cards.forEach((card, idx) => {
+      const cardEl = card as HTMLElement;
+      const cardCenter = cardEl.offsetLeft - container.offsetLeft + cardEl.clientWidth / 2;
+      const dist = Math.abs(containerCenter - cardCenter);
+      if (dist < minDistance) {
+        minDistance = dist;
+        closestIndex = idx;
       }
-    );
+    });
 
-    const items = container.querySelectorAll('.carousel-card');
-    items.forEach((item) => observer.observe(item));
-
-    return () => observer.disconnect();
+    setActiveIndex((prev) => (prev !== closestIndex ? closestIndex : prev));
   }, []);
 
-  // Auto-play interval for robust carousel rotation
+  // Controle inteligente de reprodução dos vídeos: apenas o ativo toca, demais pausam e exibem poster cristalino
+  useEffect(() => {
+    videoRefs.current.forEach((video, idx) => {
+      if (!video) return;
+      if (idx === activeIndex) {
+        if (isPlaying) {
+          const playPromise = video.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(() => {
+              // Silencioso em caso de restrição do navegador
+            });
+          }
+        } else {
+          video.pause();
+        }
+      } else {
+        video.pause();
+      }
+    });
+  }, [activeIndex, isPlaying]);
+
+  // Auto-play interval para rotação do carrossel
   useEffect(() => {
     if (!isPlaying) return;
     
@@ -99,7 +109,7 @@ export function AppleProcedures() {
         scrollTo(nextIndex);
         return nextIndex;
       });
-    }, 4500); // 4.5 seconds per slide
+    }, 4500); // 4.5 segundos por slide
     
     return () => clearInterval(timer);
   }, [isPlaying, scrollTo]);
@@ -108,7 +118,7 @@ export function AppleProcedures() {
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!scrollRef.current) return;
     isDragging.current = true;
-    setIsPlaying(false); // Pause auto-play when user interacts
+    setIsPlaying(false); // Pausa auto-play quando o usuário interage
     startX.current = e.pageX - scrollRef.current.offsetLeft;
     scrollLeft.current = scrollRef.current.scrollLeft;
     scrollRef.current.style.scrollSnapType = 'none';
@@ -141,128 +151,138 @@ export function AppleProcedures() {
   
   const snapToNearest = () => {
     if (!scrollRef.current) return;
-    scrollTo(activeIndex);
+    const container = scrollRef.current;
+    const cards = container.querySelectorAll('.carousel-card');
+    const containerCenter = container.scrollLeft + container.clientWidth / 2;
+    let closestIndex = 0;
+    let minDistance = Infinity;
+
+    cards.forEach((card, idx) => {
+      const cardEl = card as HTMLElement;
+      const cardCenter = cardEl.offsetLeft - container.offsetLeft + cardEl.clientWidth / 2;
+      const dist = Math.abs(containerCenter - cardCenter);
+      if (dist < minDistance) {
+        minDistance = dist;
+        closestIndex = idx;
+      }
+    });
+
+    scrollTo(closestIndex);
   };
 
   return (
     <section id="procedimentos" className="w-full bg-[#310f0e] text-white py-24 overflow-hidden relative">
       
       {/* Section Header */}
-      <ScrollReveal delay={100}><div className="max-w-[1400px] mx-auto px-6 md:px-12 mb-12 flex items-end justify-between">
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white">
-          Procedimentos
-        </h2>
-      </div></ScrollReveal>
+      <ScrollReveal delay={100}>
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 mb-12 flex items-end justify-between">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white">
+            Procedimentos
+          </h2>
+        </div>
+      </ScrollReveal>
 
       {/* Horizontal Carousel */}
-      <ScrollReveal delay={300} direction="left"><div 
-        ref={scrollRef}
-        onMouseDown={handleMouseDown}
-        onMouseLeave={handleMouseLeave}
-        onMouseUp={handleMouseUp}
-        onMouseMove={handleMouseMove}
-        className="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 md:px-[15vw] pb-12 pt-4 no-scrollbar cursor-grab active:cursor-grabbing"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
-        {procedures.map((proc, idx) => (
-          <div 
-            key={proc.title}
-            data-index={idx}
-            className="carousel-card flex-none w-[85vw] md:w-[60vw] lg:w-[65vw] h-[60vh] md:h-[70vh] snap-center rounded-[40px] relative overflow-hidden group select-none"
-          >
-            {/* Otimização de Performance: só monta e executa vídeo no card ativo e adjacente imediato (economia de 80% de banda e RAM) */}
-            {proc.video && Math.abs(idx - activeIndex) <= 1 ? (
+      <ScrollReveal delay={300} direction="left">
+        <div 
+          ref={scrollRef}
+          onScroll={handleScroll}
+          onMouseDown={handleMouseDown}
+          onMouseLeave={handleMouseLeave}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
+          className="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 md:px-[15vw] pb-12 pt-4 no-scrollbar cursor-grab active:cursor-grabbing"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {procedures.map((proc, idx) => (
+            <div 
+              key={proc.title}
+              data-index={idx}
+              className="carousel-card flex-none w-[85vw] md:w-[60vw] lg:w-[65vw] h-[60vh] md:h-[70vh] snap-center rounded-[40px] relative overflow-hidden group select-none"
+            >
+              {/* Vídeo com poster oficial pré-carregado: zero tela preta e performance ultra-leve */}
               <video 
+                ref={(el) => { videoRefs.current[idx] = el; }}
                 src={proc.video} 
                 poster={proc.image}
-                autoPlay={idx === activeIndex} 
                 muted 
                 loop 
                 playsInline
-                preload="metadata"
+                preload={Math.abs(idx - activeIndex) <= 1 ? "metadata" : "none"}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 pointer-events-none z-0"
               />
-            ) : (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img 
-                src={proc.image} 
-                alt={proc.title}
-                loading="lazy"
-                decoding="async"
-                className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
-              />
-            )}
-            
-            {/* Gradient Overlay for Text Readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/40 pointer-events-none z-10" />
+              
+              {/* Gradient Overlay for Text Readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/40 pointer-events-none z-10" />
 
-            {/* Content inside the card */}
-            <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-between pointer-events-none z-20">
-              <div className="mt-auto">
-                <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight drop-shadow-lg">
-                  {proc.title}
-                </h3>
-                <p className="text-lg md:text-xl text-white/90 max-w-lg font-light leading-relaxed drop-shadow-md">
-                  {proc.desc}
-                </p>
+              {/* Content inside the card */}
+              <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-between pointer-events-none z-20">
+                <div className="mt-auto">
+                  <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight drop-shadow-lg">
+                    {proc.title}
+                  </h3>
+                  <p className="text-lg md:text-xl text-white/90 max-w-lg font-light leading-relaxed drop-shadow-md">
+                    {proc.desc}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Apple-style Navigation Controls */}
-      <div className="flex items-center justify-center gap-4 mt-2">
-        
-        {/* Pill Container for Dots */}
-        <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-3 rounded-full">
-          {procedures.map((_, idx) => {
-            const isActive = activeIndex === idx;
-            return (
-              <button
-                key={procedures[idx].title}
-                onClick={() => {
-                  setIsPlaying(false);
-                  scrollTo(idx);
-                }}
-                className={`h-2 rounded-full transition-all duration-500 ease-out relative overflow-hidden ${
-                  isActive ? 'w-10 bg-white/30' : 'w-2 bg-white/40 hover:bg-white/60'
-                }`}
-                aria-label={`Go to slide ${idx + 1}`}
-              >
-                {isActive && (
-                  <div 
-                    key={activeIndex}
-                    className="absolute top-0 left-0 h-full bg-white animate-fill"
-                    style={{ animationPlayState: isPlaying ? 'running' : 'paused' }}
-                  />
-                )}
-              </button>
-            );
-          })}
+          ))}
         </div>
 
-        {/* Play/Pause Button */}
-        <button 
-          onClick={() => setIsPlaying(!isPlaying)}
-          className="w-11 h-11 rounded-full bg-white/10 backdrop-blur-md hover:bg-white/20 flex items-center justify-center transition-colors text-white flex-shrink-0"
-          aria-label={isPlaying ? "Pause auto-play" : "Start auto-play"}
-        >
-          {isPlaying ? (
-            // Pause Icon
-            <svg width="12" height="14" viewBox="0 0 14 14" fill="currentColor">
-              <rect x="2" y="1" width="3" height="12" rx="1" />
-              <rect x="9" y="1" width="3" height="12" rx="1" />
-            </svg>
-          ) : (
-            // Play Icon
-            <svg width="12" height="14" viewBox="0 0 14 14" fill="currentColor" className="ml-1">
-              <path d="M3 1.5L12 7L3 12.5V1.5Z" />
-            </svg>
-          )}
-        </button>
+        {/* Apple-style Navigation Controls */}
+        <div className="flex items-center justify-center gap-4 mt-2">
+          
+          {/* Pill Container for Dots */}
+          <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-3 rounded-full">
+            {procedures.map((_, idx) => {
+              const isActive = activeIndex === idx;
+              return (
+                <button
+                  key={procedures[idx].title}
+                  onClick={() => {
+                    setIsPlaying(false);
+                    scrollTo(idx);
+                  }}
+                  className={`h-2 rounded-full transition-all duration-500 ease-out relative overflow-hidden ${
+                    isActive ? 'w-10 bg-white/30' : 'w-2 bg-white/40 hover:bg-white/60'
+                  }`}
+                  aria-label={`Go to slide ${idx + 1}`}
+                >
+                  {isActive && (
+                    <div 
+                      key={activeIndex}
+                      className="absolute top-0 left-0 h-full bg-white animate-fill"
+                      style={{ animationPlayState: isPlaying ? 'running' : 'paused' }}
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </div>
 
-      </div></ScrollReveal>
+          {/* Play/Pause Button */}
+          <button 
+            onClick={() => setIsPlaying(!isPlaying)}
+            className="w-11 h-11 rounded-full bg-white/10 backdrop-blur-md hover:bg-white/20 flex items-center justify-center transition-colors text-white flex-shrink-0"
+            aria-label={isPlaying ? "Pause auto-play" : "Start auto-play"}
+          >
+            {isPlaying ? (
+              // Pause Icon
+              <svg width="12" height="14" viewBox="0 0 14 14" fill="currentColor">
+                <rect x="2" y="1" width="3" height="12" rx="1" />
+                <rect x="9" y="1" width="3" height="12" rx="1" />
+              </svg>
+            ) : (
+              // Play Icon
+              <svg width="12" height="14" viewBox="0 0 14 14" fill="currentColor" className="ml-1">
+                <path d="M3 1.5L12 7L3 12.5V1.5Z" />
+              </svg>
+            )}
+          </button>
+
+        </div>
+      </ScrollReveal>
       
       {/* Styles for the progress bar animation, hiding scrollbar & ken burns */}
       <style dangerouslySetInnerHTML={{__html: `
