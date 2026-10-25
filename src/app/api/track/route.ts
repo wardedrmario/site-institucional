@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { isMetaAllowedHost } from '@/lib/metaPrivacy';
 
 function hashData(data: string): string {
   if (!data) return '';
@@ -47,6 +48,16 @@ export async function POST(request: Request) {
     const canonicalPixels = ["4376073622648258", "9168277426523951"];
     const envPixelList = rawPixelEnv ? rawPixelEnv.split(',').map((s: string) => s.trim()).filter(Boolean) : [];
     const targetPixelIds = Array.from(new Set([...canonicalPixels, ...envPixelList]));
+
+    // Seção 1.h: eventos vindos de URLs técnicas (*.vercel.app, localhost) não são enviados à Meta
+    if (!isMetaAllowedHost(request.headers.get('host'))) {
+      return NextResponse.json({
+        success: true,
+        eventId: finalEventId,
+        eventName: finalEventName,
+        message: 'Host fora do domínio oficial: envio à Meta ignorado.'
+      });
+    }
 
     // Se for apenas ping de teste de infraestrutura/conexão, não envia para o Pixel em produção para não poluir o Gerenciador
     if (finalEventName.toLowerCase().includes('ping') || finalEventName.toLowerCase().includes('teste')) {
