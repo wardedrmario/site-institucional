@@ -37,6 +37,8 @@ const montserrat = Montserrat({
 import { Footer } from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { SmoothScroll } from "@/components/SmoothScroll";
+import { MetaPixelPageView } from "@/components/MetaPixelPageView";
+import { META_RESTRICTED_PATH_REGEX } from "@/lib/metaPrivacy";
 
 
 export const viewport = {
@@ -75,9 +77,15 @@ export default function RootLayout({
           t.src=v;s=b.getElementsByTagName(e)[0];
           s.parentNode.insertBefore(t,s)}(window, document,'script',
           'https://connect.facebook.net/en_US/fbevents.js');
+          // Seção 1.h: sem PageView automático em pushState (URLs do blog) e sem coleta automática de botões/metadados
+          fbq.disablePushState = true;
+          fbq('set', 'autoConfig', false, '4376073622648258');
+          fbq('set', 'autoConfig', false, '9168277426523951');
           fbq('init', '4376073622648258'); // MD - Mario Warde (Dataset Primário)
           fbq('init', '9168277426523951'); // Pixel de CA - Mario Warde (OFICIAL LIMPO)
-          fbq('track', 'PageView');
+          if (!${META_RESTRICTED_PATH_REGEX}.test(window.location.pathname)) {
+            fbq('track', 'PageView');
+          }
         `}} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -99,6 +107,7 @@ export default function RootLayout({
         </noscript>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <SmoothScroll />
+          <MetaPixelPageView />
           <Header />
           {children}
           <Footer />

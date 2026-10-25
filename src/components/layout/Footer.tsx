@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { isMetaRestrictedPath } from '@/lib/metaPrivacy';
 
 export function Footer() {
   const pathname = usePathname();
@@ -31,7 +32,8 @@ export function Footer() {
         });
 
         // 2. Meta Pixel Client-Side (com eventID para deduplicação)
-        if (typeof win.fbq === 'function') {
+        // No blog o Pixel não dispara: ele enviaria a URL do post (nome do procedimento) à Meta
+        if (typeof win.fbq === 'function' && !isMetaRestrictedPath(pathname)) {
           win.fbq('track', 'Contact', {
             content_name: 'WhatsApp Footer Direct',
             event_source: 'footer'
@@ -46,7 +48,9 @@ export function Footer() {
         body: JSON.stringify({
           eventName: 'Contact',
           eventId: eventId,
-          sourceUrl: typeof window !== 'undefined' ? window.location.href : 'https://drmariowarde.com/',
+          sourceUrl: typeof window !== 'undefined' && !isMetaRestrictedPath(pathname)
+            ? window.location.href
+            : 'https://drmariowarde.com/',
           customData: {
             content_name: 'WhatsApp Footer Direct',
             click_source: 'footer'
