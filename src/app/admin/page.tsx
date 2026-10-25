@@ -51,21 +51,6 @@ Algum desses momentos fica mais confortável para o senhor passar aqui na clíni
         console.warn('Auto-resgate Cláudio:', e);
       }
 
-      // Exclusão definitiva dos leads de teste solicitada pelo usuário
-      try {
-        await sql`
-          DELETE FROM leads 
-          WHERE name ILIKE '%teste%' 
-             OR name ILIKE '%test%' 
-             OR phone LIKE '%997490298%' 
-             OR phone LIKE '%999999999%' 
-             OR phone LIKE '%111111111%'
-             OR (utms IS NOT NULL AND utms::text ILIKE '%teste%');
-        `;
-      } catch (e) {
-        console.warn('Exclusão de testes:', e);
-      }
-
       leads = (await sql`SELECT * FROM leads ORDER BY created_at DESC LIMIT 200`) as DbLead[];
     }
   } catch (error) {
